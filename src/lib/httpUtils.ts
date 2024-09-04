@@ -67,6 +67,8 @@ const request = async <T = Response>(
         }
       } else {
         //handle at server side
+        //TODO
+        // const accessToken = baseOptions
       }
     }
     throw new HttpError({
