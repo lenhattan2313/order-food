@@ -1,7 +1,7 @@
-import { sessionClient } from "@/actions/auth/token";
 import envConfig from "@/config";
 import { HTTP_METHOD, HTTP_OPTIONS } from "@/interface/http";
 import { EntityError, HttpError } from "@/lib/error";
+import { localStorageUtil } from "@/lib/storageUtils";
 import { isClient, normalizeUrl } from "@/lib/utils";
 import { StatusCodes } from "http-status-codes";
 import { redirect } from "next/navigation";
@@ -20,7 +20,7 @@ const request = async <T = Response>(
     "Content-Type": "application/json",
   };
   if (isClient()) {
-    const accessToken = sessionClient.get().accessToken;
+    const accessToken = localStorageUtil.get("accessToken");
     if (accessToken) {
       baseHeader.Authorization = `Bearer ${accessToken}`;
     }
@@ -52,12 +52,13 @@ const request = async <T = Response>(
               method: "POST",
               headers: baseHeader,
               body: JSON.stringify({
-                refreshToken: sessionClient.get().refreshToken,
+                refreshToken: localStorageUtil.get("refreshToken"),
               }),
             });
           await logoutRequest();
           logoutRequest = null;
-          sessionClient.set({ accessToken: "", refreshToken: "" });
+          localStorageUtil.remove("accessToken");
+          localStorageUtil.remove("refreshToken");
           redirect("/login");
         }
       } else {

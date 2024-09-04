@@ -1,11 +1,9 @@
+import ReactQueryProvider from "@/components/provider/react-query-provider";
+import { ThemeProvider } from "@/components/provider/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/components/provider/AuthProvider";
-import { cookies } from "next/headers";
-import { ThemeProvider } from "@/components/provider/theme-provider";
-import ReactQueryProvider from "@/components/provider/react-query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,25 +17,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken")?.value ?? "";
-  const refreshToken = cookieStore.get("refreshToken")?.value ?? "";
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <AuthProvider initialSessionToken={{ accessToken, refreshToken }}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <ReactQueryProvider>
-              {children}
-              <Toaster />
-            </ReactQueryProvider>
-          </ThemeProvider>
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ReactQueryProvider>
+            {children}
+            <Toaster />
+          </ReactQueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

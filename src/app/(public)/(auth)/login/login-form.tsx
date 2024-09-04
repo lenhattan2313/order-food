@@ -1,5 +1,4 @@
 "use client";
-import { sessionClient } from "@/actions/auth/token";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -37,15 +36,16 @@ export default function LoginForm() {
   const { mutateAsync, isLoading } = useLoginMutation();
   async function onSubmit(dataForm: LoginBodyType) {
     try {
-      const response = await mutateAsync(dataForm);
-      sessionClient.set({
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
-      });
+      const {
+        message,
+        data: { accessToken, refreshToken },
+      } = await mutateAsync(dataForm);
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
       toast({
-        description: response.message,
+        description: message,
       });
-      router.push("../me");
+      // router.push("../me");
     } catch (error) {
       handleApiError(error, setError);
     }

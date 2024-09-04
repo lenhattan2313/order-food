@@ -11,7 +11,7 @@ export function normalizeUrl(url: string) {
   return url.startsWith("/") ? url.slice(1) : url;
 }
 export function isClient() {
-  return typeof window !== undefined;
+  return typeof window !== "undefined";
 }
 export function handleApiError<T extends FieldValues>(
   error: unknown,
