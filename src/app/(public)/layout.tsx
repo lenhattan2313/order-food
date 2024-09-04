@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import DarkModeToggle from "@/components/dark-mode-toggle";
+import DarkModeToggle from "@/components/ui/dark-mode-toggle";
 import NavItems from "@/app/(public)/nav-items";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 

@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/components/auth/AuthProvider";
+import { AuthProvider } from "@/components/provider/AuthProvider";
 import { cookies } from "next/headers";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/provider/theme-provider";
+import ReactQueryProvider from "@/components/provider/react-query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,8 +32,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
-            <Toaster />
+            <ReactQueryProvider>
+              {children}
+              <Toaster />
+            </ReactQueryProvider>
           </ThemeProvider>
         </AuthProvider>
       </body>

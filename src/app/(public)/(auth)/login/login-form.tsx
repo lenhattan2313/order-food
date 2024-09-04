@@ -18,9 +18,10 @@ import {
 } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authActions } from "@/actions/auth/authActions";
-import { useToast } from "@/hooks/use-toast";
+import { toast, useToast } from "@/hooks/use-toast";
 import { sessionClient } from "@/actions/auth/token";
 import { useRouter } from "next/navigation";
+import { useLoginMutation } from "@/queries/useAuth";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -36,12 +37,16 @@ export default function LoginForm() {
     formState: { isValid },
     handleSubmit,
   } = form;
+  const { mutateAsync, isLoading } = useLoginMutation();
   async function onSubmit(dataForm: LoginBodyType) {
     try {
-      const response = await authActions.login(dataForm);
+      const response = await mutateAsync(dataForm);
       sessionClient.set({
         accessToken: response.data.accessToken,
         refreshToken: response.data.refreshToken,
+      });
+      toast({
+        description: response.message,
       });
       router.push("../me");
     } catch (error) {
@@ -106,7 +111,11 @@ export default function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={!isValid}>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!isValid || isLoading}
+              >
                 Đăng nhập
               </Button>
               <Button variant="outline" className="w-full" type="button">
