@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     return Response.json(response);
   } catch (error) {
     if (error instanceof HttpError) {
-      return Response.json(error.errors, {
+      return Response.json(error, {
         status: error.status,
       });
     }

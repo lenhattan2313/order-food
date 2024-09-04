@@ -1,4 +1,5 @@
 "use client";
+import { sessionClient } from "@/actions/auth/token";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,21 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import {
-  LoginBody,
-  LoginBodyType,
-  LoginResType,
-} from "@/schemaValidations/auth.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { authActions } from "@/actions/auth/authActions";
-import { toast, useToast } from "@/hooks/use-toast";
-import { sessionClient } from "@/actions/auth/token";
-import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/utils";
 import { useLoginMutation } from "@/queries/useAuth";
+import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -36,6 +32,7 @@ export default function LoginForm() {
   const {
     formState: { isValid },
     handleSubmit,
+    setError,
   } = form;
   const { mutateAsync, isLoading } = useLoginMutation();
   async function onSubmit(dataForm: LoginBodyType) {
@@ -50,7 +47,7 @@ export default function LoginForm() {
       });
       router.push("../me");
     } catch (error) {
-      console.error((error as Error).message);
+      handleApiError(error, setError);
     }
   }
   return (

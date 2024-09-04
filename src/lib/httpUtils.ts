@@ -1,10 +1,6 @@
 import { sessionClient } from "@/actions/auth/token";
 import envConfig from "@/config";
-import {
-  EntityErrorPayload,
-  HTTP_METHOD,
-  HTTP_OPTIONS,
-} from "@/interface/http";
+import { HTTP_METHOD, HTTP_OPTIONS } from "@/interface/http";
 import { EntityError, HttpError } from "@/lib/error";
 import { isClient, normalizeUrl } from "@/lib/utils";
 import { StatusCodes } from "http-status-codes";
@@ -42,11 +38,10 @@ const request = async <T = Response>(
 
   //handle error
   if (!response.ok) {
-    const data: EntityErrorPayload = await response.json();
+    const data: EntityError = await response.json();
+
     if (response.status === StatusCodes.UNPROCESSABLE_ENTITY) {
-      throw new EntityError({
-        errors: data.errors,
-      });
+      throw new EntityError(data);
     } else if (response.status === StatusCodes.UNAUTHORIZED) {
       //handle UNAUTHORIZED
       if (isClient()) {
@@ -71,9 +66,7 @@ const request = async <T = Response>(
         // const accessToken = baseOptions
       }
     }
-    throw new HttpError({
-      errors: data.errors,
-    });
+    throw new HttpError(data);
   }
   const data: T = await response.json();
 
