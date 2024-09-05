@@ -10,9 +10,8 @@ export function cn(...inputs: ClassValue[]) {
 export function normalizeUrl(url: string) {
   return url.startsWith("/") ? url.slice(1) : url;
 }
-export function isClient() {
-  return typeof window !== "undefined";
-}
+export const isClient = typeof window !== "undefined";
+
 export function handleApiError<T extends FieldValues>(
   error: unknown,
   setError?: UseFormSetError<T>

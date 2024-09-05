@@ -36,16 +36,12 @@ export default function LoginForm() {
   const { mutateAsync, isLoading } = useLoginMutation();
   async function onSubmit(dataForm: LoginBodyType) {
     try {
-      const {
-        message,
-        data: { accessToken, refreshToken },
-      } = await mutateAsync(dataForm);
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      const { message } = await mutateAsync(dataForm);
+
       toast({
         description: message,
       });
-      // router.push("../me");
+      router.push("/manage/dashboard");
     } catch (error) {
       handleApiError(error, setError);
     }

@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     const {
       data: { accessToken, refreshToken },
     } = response;
+
     setCookies("accessToken", accessToken);
     setCookies("refreshToken", refreshToken);
     return Response.json(response);

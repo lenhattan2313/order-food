@@ -3,6 +3,7 @@ import { HTTP_METHOD, HTTP_OPTIONS } from "@/interface/http";
 import { EntityError, HttpError } from "@/lib/error";
 import { localStorageUtil } from "@/lib/storageUtils";
 import { isClient, normalizeUrl } from "@/lib/utils";
+import { LoginResType } from "@/schemaValidations/auth.schema";
 import { StatusCodes } from "http-status-codes";
 import { redirect } from "next/navigation";
 
@@ -19,7 +20,7 @@ const request = async <T = Response>(
   const baseHeader: Record<string, string> = {
     "Content-Type": "application/json",
   };
-  if (isClient()) {
+  if (isClient) {
     const accessToken = localStorageUtil.get("accessToken");
     if (accessToken) {
       baseHeader.Authorization = `Bearer ${accessToken}`;
@@ -44,7 +45,7 @@ const request = async <T = Response>(
       throw new EntityError(data);
     } else if (response.status === StatusCodes.UNAUTHORIZED) {
       //handle UNAUTHORIZED
-      if (isClient()) {
+      if (isClient) {
         //handle at client side
         if (!logoutRequest) {
           logoutRequest = () =>
@@ -71,6 +72,18 @@ const request = async <T = Response>(
   }
   const data: T = await response.json();
 
+  if (isClient) {
+    if (normalizeUrl(url) === "api/auth/login") {
+      const {
+        data: { accessToken, refreshToken },
+      } = data as LoginResType;
+      localStorageUtil.set("accessToken", accessToken);
+      localStorageUtil.set("refreshToken", refreshToken);
+    } else if (normalizeUrl(url) === "api/auth/logout") {
+      localStorageUtil.remove("accessToken");
+      localStorageUtil.remove("refreshToken");
+    }
+  }
   return data;
 };
 
