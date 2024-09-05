@@ -1,7 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 export type HTTP_METHOD = "POST" | "GET" | "PUT" | "DELETE";
-export type HTTP_OPTIONS = Omit<RequestInit, "method"> & {
+export type IHttpOptions = Omit<RequestInit, "method" | "body"> & {
   baseUrl?: string;
+  body?: unknown;
 };
 export type EntityErrorPayload = {
   message: string;

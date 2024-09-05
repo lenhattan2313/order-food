@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { handleApiError } from "@/lib/utils";
-import { useGetAccount } from "@/queries/useAccount";
+import { useGetAccountMe } from "@/queries/useAccount";
 import { useLogoutMutation } from "@/queries/useAuth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ import { useMemo } from "react";
 
 export default function DropdownAvatar() {
   const router = useRouter();
-  const { data } = useGetAccount();
+  const { data } = useGetAccountMe();
   const account = useMemo(() => data?.data, [data]);
   const { mutateAsync, isLoading } = useLogoutMutation();
 

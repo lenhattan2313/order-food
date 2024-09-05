@@ -1,5 +1,5 @@
 import envConfig from "@/config";
-import { HTTP_METHOD, HTTP_OPTIONS } from "@/interface/http";
+import { HTTP_METHOD, IHttpOptions } from "@/interface/http";
 import { EntityError, HttpError } from "@/lib/error";
 import { localStorageUtil } from "@/lib/storageUtils";
 import { isClient, normalizeUrl } from "@/lib/utils";
@@ -12,14 +12,23 @@ let logoutRequest: (() => Promise<Response>) | null = null;
 const request = async <T = Response>(
   method: HTTP_METHOD,
   url: string,
-  options?: HTTP_OPTIONS
+  options?: IHttpOptions
 ): Promise<T> => {
+  const body = options?.body ?? undefined;
+  const bodyParams = body
+    ? body instanceof FormData
+      ? body
+      : JSON.stringify(body)
+    : undefined;
   //handle URL
   //empty baseURL => nextjs server, baseUrl => backend server
   const { baseUrl = "", ...restOption } = options ?? {};
-  const baseHeader: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
+  const baseHeader: Record<string, string> =
+    body instanceof FormData
+      ? {}
+      : {
+          "Content-Type": "application/json",
+        };
   if (isClient) {
     const accessToken = localStorageUtil.get("accessToken");
     if (accessToken) {
@@ -29,6 +38,7 @@ const request = async <T = Response>(
 
   const baseOptions: RequestInit = {
     ...restOption,
+    body: bodyParams,
     headers: { ...baseHeader, ...(restOption?.headers ?? {}) },
   };
   const fullUrl = `${baseUrl}/${normalizeUrl(url)}`;
@@ -88,13 +98,19 @@ const request = async <T = Response>(
 };
 
 const http = {
-  get<T>(url: string, options?: Omit<HTTP_OPTIONS, "body">) {
+  get<T>(url: string, options?: Omit<IHttpOptions, "body">) {
     return request<T>("GET", url, options);
   },
-  post<T, K>(url: string, body?: K, options?: HTTP_OPTIONS) {
+  post<T, K>(url: string, body?: K, options?: IHttpOptions) {
     return request<T>("POST", url, {
       ...options,
-      body: body ? JSON.stringify(body) : undefined,
+      body,
+    });
+  },
+  put<T, K>(url: string, body?: K, options?: IHttpOptions) {
+    return request<T>("PUT", url, {
+      ...options,
+      body,
     });
   },
 };
