@@ -10,6 +10,7 @@ import { handleApiError } from "@/lib/utils";
 import { useAccountMeMutation, useGetAccountMe } from "@/queries/useAccount";
 import { useUploadAvatar } from "@/queries/useMedia";
 import {
+  AccountResType,
   UpdateMeBody,
   UpdateMeBodyType,
 } from "@/schemaValidations/account.schema";
@@ -21,14 +22,11 @@ import { useForm } from "react-hook-form";
 export default function UpdateProfileForm() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
-  useGetAccountMe({
+  const { data } = useGetAccountMe({
     queryKey: ["account_profile", "settings"],
     onSuccess: (response) => {
       if (response) {
-        const {
-          data: { avatar, name },
-        } = response;
-        reset((pre) => ({ ...pre, name, avatar }));
+        handleReset(response);
       }
     },
   });
@@ -39,7 +37,13 @@ export default function UpdateProfileForm() {
       avatar: null,
     },
   });
-  const { watch, reset, handleSubmit, setError } = form;
+  const {
+    watch,
+    reset,
+    handleSubmit,
+    setError,
+    formState: {},
+  } = form;
   const [avatar, name] = watch(["avatar", "name"]);
   function handleChangeFile(e: ChangeEvent<HTMLInputElement>) {
     //TODO: validate type of file
@@ -74,12 +78,18 @@ export default function UpdateProfileForm() {
       handleApiError(error, setError);
     }
   }
+  function handleReset({ data: { avatar, name } }: AccountResType) {
+    setFile(null);
+    reset((pre) => ({ ...pre, name, avatar }));
+  }
+
   return (
     <Form {...form}>
       <form
         noValidate
         className="grid auto-rows-max items-start gap-4 md:gap-8"
         onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}
+        onReset={() => data && handleReset(data)}
       >
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>

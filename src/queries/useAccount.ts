@@ -7,14 +7,14 @@ import {
   useQueryClient,
 } from "react-query";
 
-const useGetAccountMe = (options?: UseQueryOptions<AccountResType>) =>
+export const useGetAccountMe = (options?: UseQueryOptions<AccountResType>) =>
   useQuery<AccountResType>({
     queryKey: ["account_profile"],
     queryFn: accountActions.getMe,
     ...options,
   });
 
-const useAccountMeMutation = () => {
+export const useAccountMeMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -24,5 +24,5 @@ const useAccountMeMutation = () => {
     },
   });
 };
-
-export { useGetAccountMe, useAccountMeMutation };
+export const useChangePassword = () =>
+  useMutation({ mutationFn: accountActions.changePassword });
