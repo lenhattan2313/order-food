@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       );
     }
     //call api backend Server
-    const response = await authActions.sLogout({ accessToken, refreshToken });
+    const response = await authActions.logout({ accessToken, refreshToken });
     return Response.json(response);
   } catch (error) {
     return Response.json(

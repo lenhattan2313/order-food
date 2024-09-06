@@ -74,8 +74,13 @@ const request = async <T = Response>(
         }
       } else {
         //handle at server side
-        //TODO
-        // const accessToken = baseOptions
+        const accessToken =
+          typeof baseOptions?.headers === "object" &&
+          "Authorization" in baseOptions.headers
+            ? baseOptions.headers.Authorization.split("Bearer ")[1]
+            : "";
+
+        accessToken && redirect(`/login?accessToken=${accessToken}`);
       }
     }
     throw new HttpError(data);
@@ -98,7 +103,7 @@ const request = async <T = Response>(
 };
 
 const http = {
-  get<T>(url: string, options?: Omit<IHttpOptions, "body">) {
+  get<T>(url: string, options?: IHttpOptions) {
     return request<T>("GET", url, options);
   },
   post<T, K>(url: string, body?: K, options?: IHttpOptions) {

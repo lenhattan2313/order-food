@@ -1,10 +1,12 @@
 import { authActions } from "@/actions/auth/authActions";
 import { useMutation } from "react-query";
 
-const useLoginMutation = () =>
+export const useLoginMutation = () =>
   useMutation({
     mutationFn: authActions.sLogin,
   });
-const useLogoutMutation = () => useMutation({ mutationFn: authActions.logout });
+export const useLogoutMutation = () =>
+  useMutation({ mutationFn: authActions.sLogout });
 
-export { useLoginMutation, useLogoutMutation };
+export const useLogoutBackendMutation = () =>
+  useMutation({ mutationFn: authActions.logout });

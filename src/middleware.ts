@@ -1,17 +1,30 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const publicRoutes = ["/login", "/register"];
+const unAuthRoutes = ["/login", "/register"];
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken")?.value;
-  const isPublicRoutes = publicRoutes.some((route) => route.includes(pathname));
+  const refreshToken = request.cookies.get("refreshToken")?.value;
+  const isPublicRoutes = unAuthRoutes.some((route) => route.includes(pathname));
+  //when not log in or accessToken expired
   if (!accessToken && !isPublicRoutes) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const url = new URL("/login", request.url);
+    if (refreshToken) {
+      url.searchParams.set("refreshToken", refreshToken);
+    }
+    return NextResponse.redirect(url);
   }
+
+  //try to navigate unAuthRoute when already logged in
   if (accessToken && isPublicRoutes) {
+    const params = searchParams.get("accessToken");
+    if (params) {
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/", request.url));
   }
+
   return NextResponse.next();
 }
 

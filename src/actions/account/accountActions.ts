@@ -10,6 +10,13 @@ export const accountActions = {
     http.get<AccountResType>("/accounts/me", {
       baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,
     }),
+  sGetMe: (accessToken: string) =>
+    http.get<AccountResType>("/accounts/me", {
+      baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
   updateMe: (body: UpdateMeBodyType) =>
     http.put<AccountResType, UpdateMeBodyType>("/accounts/me", body, {
       baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,

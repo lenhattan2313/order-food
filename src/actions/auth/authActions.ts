@@ -13,7 +13,8 @@ export const authActions = {
     http.post<LoginResType, LoginBodyType>("/auth/login", body, {
       baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,
     }),
-  sLogout: (body: LogoutBodyType & { accessToken: string }) =>
+  sLogout: () => http.post("/api/auth/logout", undefined),
+  logout: (body: LogoutBodyType & { accessToken: string }) =>
     http.post<Response, LogoutBodyType>(
       "/auth/logout",
       { refreshToken: body.refreshToken },
@@ -24,5 +25,4 @@ export const authActions = {
         },
       }
     ),
-  logout: () => http.post("/api/auth/logout", undefined),
 };
