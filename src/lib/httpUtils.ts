@@ -66,11 +66,15 @@ const request = async <T = Response>(
                 refreshToken: localStorageUtil.get("refreshToken"),
               }),
             });
-          await logoutRequest();
-          logoutRequest = null;
-          localStorageUtil.remove("accessToken");
-          localStorageUtil.remove("refreshToken");
-          redirect("/login");
+          try {
+            await logoutRequest();
+          } catch (error) {
+          } finally {
+            logoutRequest = null;
+            localStorageUtil.remove("accessToken");
+            localStorageUtil.remove("refreshToken");
+            redirect("/login");
+          }
         }
       } else {
         //handle at server side
