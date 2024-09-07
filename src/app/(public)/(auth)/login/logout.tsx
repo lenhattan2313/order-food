@@ -1,10 +1,12 @@
 "use client";
+import { useAuth } from "@/components/provider/auth-provider";
 import { localStorageUtil } from "@/lib/storageUtils";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useSearchParams } from "next/navigation";
 import { Suspense, memo, useEffect, useRef } from "react";
 
 const Logout = () => {
+  const { setIsAuth } = useAuth();
   const { mutateAsync } = useLogoutMutation();
   const searchParams = useSearchParams();
   const ref = useRef(false);
@@ -23,6 +25,8 @@ const Logout = () => {
           ref.current = true;
         }, 1000);
       });
+    } else {
+      setIsAuth(false);
     }
   }, [mutateAsync, refreshToken, accessToken]);
   return null;

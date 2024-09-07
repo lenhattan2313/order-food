@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/components/provider/auth-provider";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,11 +16,15 @@ import { handleApiError } from "@/lib/utils";
 import { useLoginMutation } from "@/queries/useAuth";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const clearToken = searchParams.get("clearToken");
+  const { setIsAuth } = useAuth();
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
     defaultValues: {
@@ -37,15 +42,21 @@ export default function LoginForm() {
   async function onSubmit(dataForm: LoginBodyType) {
     try {
       const { message } = await mutateAsync(dataForm);
-
+      setIsAuth(true);
       toast({
         description: message,
       });
+
       router.push("/manage/dashboard");
     } catch (error) {
       handleApiError(error, setError);
     }
   }
+  useEffect(() => {
+    if (clearToken === "true") {
+      setIsAuth(false);
+    }
+  }, [clearToken]);
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>

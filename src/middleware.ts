@@ -18,6 +18,8 @@ export function middleware(request: NextRequest) {
         url = new URL("/refresh-token", request.url);
         url.searchParams.set("refreshToken", refreshToken);
         url.searchParams.set("redirect", pathname);
+      } else {
+        url.searchParams.set("clearToken", "true"); //access private route but all token expired
       }
       return NextResponse.redirect(url);
     }

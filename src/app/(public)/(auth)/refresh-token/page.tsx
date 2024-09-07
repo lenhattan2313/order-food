@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/components/provider/auth-provider";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { localStorageUtil } from "@/lib/storageUtils";
 import { checkAccessTokenExpire } from "@/lib/utils";
@@ -6,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 export default function RefreshToken() {
+  const { setIsAuth } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -14,7 +16,10 @@ export default function RefreshToken() {
     searchParams.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN) ?? "/";
   useEffect(() => {
     const refreshToken = localStorageUtil.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
-    if (refreshToken !== refreshTokenUrl) return;
+    if (refreshToken !== refreshTokenUrl) {
+      setIsAuth(false);
+      return;
+    }
     checkAccessTokenExpire({
       onSuccess: () => {
         router.push(redirectPath);
