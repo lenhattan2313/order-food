@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { isClient } from "@/lib/utils";
 
 export const localStorageUtil = {
@@ -15,4 +16,8 @@ export const localStorageUtil = {
     if (!isClient) return;
     localStorage.removeItem(key);
   },
+};
+export const clearTokenFromLocalStorage = () => {
+  localStorageUtil.remove(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
+  localStorageUtil.remove(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
 };

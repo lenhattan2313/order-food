@@ -2,7 +2,10 @@ import { authActions } from "@/actions/auth/authActions";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { toast } from "@/hooks/use-toast";
 import { HttpError } from "@/lib/error";
-import { localStorageUtil } from "@/lib/storageUtils";
+import {
+  clearTokenFromLocalStorage,
+  localStorageUtil,
+} from "@/lib/storageUtils";
 import { clsx, type ClassValue } from "clsx";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { FieldValues, UseFormSetError } from "react-hook-form";
@@ -47,22 +50,28 @@ export const checkAccessTokenExpire = async (
   if (!accessToken) return;
   const now = Date.now() / 1000;
   const refreshTokenExpired = (jwt.decode(refreshToken) as JwtPayload).exp ?? 0;
-  //check refreshToken expired first
-  if (refreshTokenExpired <= now) return;
+  //check refreshToken expired first, logout if expired
   const { iat = 0, exp = 0 } = jwt.decode(accessToken) as JwtPayload;
-  //example: expired 10s, 2/3 of 10s = 6s, => 6s will call api refreshToken
-  //exp - now: thời gian còn lại
-  //exp - iat: thời gian hết hạn
-  if (exp - now < (exp - iat) / 3) {
-    try {
-      const {
-        data: { accessToken, refreshToken },
-      } = await authActions.refreshToken();
-      localStorageUtil.set(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken);
-      localStorageUtil.set(LOCAL_STORAGE_KEY.REFRESH_TOKEN, refreshToken);
-      params?.onSuccess && params.onSuccess();
-    } catch (error) {
-      params?.onError && params.onError();
+  if (refreshTokenExpired > now) {
+    //example: expired 10s, 2/3 of 10s = 6s, => 6s will call api refreshToken
+    //exp - now: thời gian còn lại
+    //exp - iat: thời gian hết hạn
+    if (exp - now < (exp - iat) / 3) {
+      try {
+        const {
+          data: { accessToken, refreshToken },
+        } = await authActions.refreshToken();
+        localStorageUtil.set(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken);
+        localStorageUtil.set(LOCAL_STORAGE_KEY.REFRESH_TOKEN, refreshToken);
+        params?.onSuccess && params.onSuccess();
+      } catch (error) {
+        params?.onError && params.onError();
+      }
     }
+    return;
+  }
+  if (exp < now - 1) {
+    clearTokenFromLocalStorage();
+    return params?.onError && params.onError();
   }
 };
