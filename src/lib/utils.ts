@@ -1,6 +1,10 @@
+import { authActions } from "@/actions/auth/authActions";
+import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { toast } from "@/hooks/use-toast";
 import { HttpError } from "@/lib/error";
+import { localStorageUtil } from "@/lib/storageUtils";
 import { clsx, type ClassValue } from "clsx";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { FieldValues, UseFormSetError } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
@@ -29,3 +33,36 @@ export function handleApiError<T extends FieldValues>(
     });
   }
 }
+
+export const checkAccessTokenExpire = async (
+  params?: Partial<{
+    onError: () => void;
+    onSuccess: () => void;
+  }>
+) => {
+  const accessToken =
+    localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? "";
+  const refreshToken =
+    localStorageUtil.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN) ?? "";
+  if (!accessToken) return;
+  const now = Date.now() / 1000;
+  const refreshTokenExpired = (jwt.decode(refreshToken) as JwtPayload).exp ?? 0;
+  //check refreshToken expired first
+  if (refreshTokenExpired <= now) return;
+  const { iat = 0, exp = 0 } = jwt.decode(accessToken) as JwtPayload;
+  //example: expired 10s, 2/3 of 10s = 6s, => 6s will call api refreshToken
+  //exp - now: thời gian còn lại
+  //exp - iat: thời gian hết hạn
+  if (exp - now < (exp - iat) / 3) {
+    try {
+      const {
+        data: { accessToken, refreshToken },
+      } = await authActions.refreshToken();
+      localStorageUtil.set(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken);
+      localStorageUtil.set(LOCAL_STORAGE_KEY.REFRESH_TOKEN, refreshToken);
+      params?.onSuccess && params.onSuccess();
+    } catch (error) {
+      params?.onError && params.onError();
+    }
+  }
+};

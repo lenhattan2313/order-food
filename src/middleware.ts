@@ -8,10 +8,15 @@ export function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get("refreshToken")?.value;
   const isPublicRoutes = unAuthRoutes.some((route) => route.includes(pathname));
   //when not log in or accessToken expired
-  if (!accessToken && !isPublicRoutes) {
-    const url = new URL("/login", request.url);
+  if (!accessToken) {
+    if (isPublicRoutes && refreshToken) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    let url = new URL("/login", request.url);
     if (refreshToken) {
+      url = new URL("/refresh-token", request.url);
       url.searchParams.set("refreshToken", refreshToken);
+      url.searchParams.set("redirect", pathname);
     }
     return NextResponse.redirect(url);
   }
