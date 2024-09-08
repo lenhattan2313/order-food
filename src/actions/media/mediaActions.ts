@@ -4,7 +4,5 @@ import { UploadImageResType } from "@/schemaValidations/media.schema";
 
 export const mediaActions = {
   uploadAvatar: (form: FormData) =>
-    http.post<UploadImageResType, FormData>("/media/upload", form, {
-      baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,
-    }),
+    http.post<UploadImageResType, FormData>("/media/upload", form),
 };

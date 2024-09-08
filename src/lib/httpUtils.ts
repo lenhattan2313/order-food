@@ -22,7 +22,8 @@ const request = async <T = Response>(
     : undefined;
   //handle URL
   //empty baseURL => nextjs server, baseUrl => backend server
-  const { baseUrl = "", ...restOption } = options ?? {};
+  const { baseUrl = envConfig.NEXT_PUBLIC_API_ENDPOINT, ...restOption } =
+    options ?? {};
   const baseHeader: Record<string, string> =
     body instanceof FormData
       ? {}
@@ -121,6 +122,9 @@ const http = {
       ...options,
       body,
     });
+  },
+  delete<T>(url: string, options?: IHttpOptions) {
+    return request<T>("DELETE", url, options);
   },
 };
 

@@ -10,18 +10,17 @@ import {
 export const authActions = {
   refreshTokenRequest: null as Promise<LoginResType> | null,
   sLogin: (body: LoginBodyType) =>
-    http.post<LoginResType, LoginBodyType>("/api/auth/login", body),
-  login: (body: LoginBodyType) =>
-    http.post<LoginResType, LoginBodyType>("/auth/login", body, {
-      baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,
+    http.post<LoginResType, LoginBodyType>("/api/auth/login", body, {
+      baseUrl: "",
     }),
-  sLogout: () => http.post("/api/auth/logout", undefined),
+  login: (body: LoginBodyType) =>
+    http.post<LoginResType, LoginBodyType>("/auth/login", body),
+  sLogout: () => http.post("/api/auth/logout", undefined, { baseUrl: "" }),
   logout: (body: LogoutBodyType & { accessToken: string }) =>
     http.post<Response, LogoutBodyType>(
       "/auth/logout",
       { refreshToken: body.refreshToken },
       {
-        baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,
         headers: {
           Authorization: `Bearer ${body.accessToken}`,
         },
@@ -34,7 +33,8 @@ export const authActions = {
     }
     this.refreshTokenRequest = http.post<LoginResType, undefined>(
       "/api/auth/refresh-token",
-      undefined
+      undefined,
+      { baseUrl: "" }
     );
     const result = await this.refreshTokenRequest;
 
@@ -43,7 +43,5 @@ export const authActions = {
     return result;
   },
   sRefreshToken: (body: RefreshTokenBodyType) =>
-    http.post<LoginResType, RefreshTokenBodyType>("/auth/refresh-token", body, {
-      baseUrl: envConfig.NEXT_PUBLIC_API_ENDPOINT,
-    }),
+    http.post<LoginResType, RefreshTokenBodyType>("/auth/refresh-token", body),
 };
