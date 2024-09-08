@@ -25,7 +25,7 @@ export default function ChangePasswordForm() {
     },
   });
   const { handleSubmit, setError, reset } = form;
-  const { mutateAsync, isLoading } = useChangePassword();
+  const { mutateAsync, isPending } = useChangePassword();
   async function onSubmit(data: ChangePasswordBodyType) {
     try {
       const { message } = await mutateAsync(data);
@@ -112,7 +112,7 @@ export default function ChangePasswordForm() {
                 <Button variant="outline" size="sm" type="reset">
                   Hủy
                 </Button>
-                <Button size="sm" type="submit" isLoading={isLoading}>
+                <Button size="sm" type="submit" isLoading={isPending}>
                   Lưu thông tin
                 </Button>
               </div>

@@ -24,12 +24,8 @@ export default function UpdateProfileForm() {
   const [file, setFile] = useState<File | null>(null);
   const { data } = useGetAccountMe({
     queryKey: ["account_profile", "settings"],
-    onSuccess: (response) => {
-      if (response) {
-        handleReset(response);
-      }
-    },
   });
+
   const form = useForm<UpdateMeBodyType>({
     resolver: zodResolver(UpdateMeBody),
     defaultValues: {
@@ -45,6 +41,11 @@ export default function UpdateProfileForm() {
     formState: {},
   } = form;
   const [avatar, name] = watch(["avatar", "name"]);
+  useMemo(() => {
+    if (data) {
+      handleReset(data);
+    }
+  }, [data]);
   function handleChangeFile(e: ChangeEvent<HTMLInputElement>) {
     //TODO: validate type of file
     const inputFile = e.target.files?.[0];
@@ -58,9 +59,9 @@ export default function UpdateProfileForm() {
     }
     return avatar ?? "";
   }, [avatar, file]);
-  const { mutateAsync: uploadAvatar, isLoading: isUploadAvatarLoading } =
+  const { mutateAsync: uploadAvatar, isPending: isUploadAvatarLoading } =
     useUploadAvatar();
-  const { mutateAsync: updateAccountMe, isLoading: isAccountMeUpdateLoading } =
+  const { mutateAsync: updateAccountMe, isPending: isAccountMeUpdateLoading } =
     useAccountMeMutation();
   async function onSubmit(dataForm: UpdateMeBodyType) {
     try {

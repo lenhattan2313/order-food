@@ -5,7 +5,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from "react-query";
+} from "@tanstack/react-query";
 
 export const useGetAccountMe = (options?: UseQueryOptions<AccountResType>) =>
   useQuery<AccountResType>({
@@ -20,7 +20,10 @@ export const useAccountMeMutation = () => {
   return useMutation({
     mutationFn: accountActions.updateMe,
     onSuccess: () => {
-      queryClient.invalidateQueries(["account_profile"], { exact: true });
+      queryClient.invalidateQueries({
+        queryKey: ["account_profile"],
+        exact: true,
+      });
     },
   });
 };

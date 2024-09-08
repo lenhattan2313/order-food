@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/components/provider/auth-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +21,13 @@ export default function DropdownAvatar() {
   const router = useRouter();
   const { data } = useGetAccountMe();
   const account = useMemo(() => data?.data, [data]);
-  const { mutateAsync, isLoading } = useLogoutMutation();
+  const { setIsAuth } = useAuth();
+  const { mutateAsync, isPending } = useLogoutMutation();
 
   async function handleLogout() {
     try {
       await mutateAsync();
+      setIsAuth(false);
       router.push("/");
     } catch (error) {
       handleApiError(error);
@@ -59,7 +62,7 @@ export default function DropdownAvatar() {
         </DropdownMenuItem>
         <DropdownMenuItem>Hỗ trợ</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} disabled={isLoading}>
+        <DropdownMenuItem onClick={handleLogout} disabled={isPending}>
           Đăng xuất
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -38,7 +38,7 @@ function LoginForm() {
     handleSubmit,
     setError,
   } = form;
-  const { mutateAsync, isLoading } = useLoginMutation();
+  const { mutateAsync, isPending } = useLoginMutation();
   async function onSubmit(dataForm: LoginBodyType) {
     try {
       const { message } = await mutateAsync(dataForm);
@@ -118,7 +118,8 @@ function LoginForm() {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={!isValid || isLoading}
+                disabled={!isValid}
+                isLoading={isPending}
               >
                 Đăng nhập
               </Button>
