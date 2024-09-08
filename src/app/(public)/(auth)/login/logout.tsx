@@ -28,7 +28,7 @@ const Logout = () => {
     } else {
       setIsAuth(false);
     }
-  }, [mutateAsync, refreshToken, accessToken]);
+  }, [mutateAsync, refreshToken, accessToken, setIsAuth]);
   return null;
 };
 export default memo(function LogoutPage() {

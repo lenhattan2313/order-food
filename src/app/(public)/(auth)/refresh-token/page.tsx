@@ -4,9 +4,9 @@ import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { localStorageUtil } from "@/lib/storageUtils";
 import { checkAccessTokenExpire } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, memo, useEffect } from "react";
 
-export default function RefreshToken() {
+function RefreshToken() {
   const { setIsAuth } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -25,6 +25,14 @@ export default function RefreshToken() {
         router.push(redirectPath);
       },
     });
-  }, [pathname, refreshTokenUrl]);
+  }, [pathname, refreshTokenUrl, setIsAuth, router, redirectPath]);
   return null;
 }
+
+export default memo(function RefreshTokenPage() {
+  return (
+    <Suspense>
+      <RefreshToken />
+    </Suspense>
+  );
+});

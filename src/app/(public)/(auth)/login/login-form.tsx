@@ -17,10 +17,10 @@ import { useLoginMutation } from "@/queries/useAuth";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-export default function LoginForm() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const clearToken = searchParams.get("clearToken");
@@ -56,7 +56,7 @@ export default function LoginForm() {
     if (clearToken === "true") {
       setIsAuth(false);
     }
-  }, [clearToken]);
+  }, [clearToken, setIsAuth]);
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -132,3 +132,10 @@ export default function LoginForm() {
     </Card>
   );
 }
+export default memo(function LoginFormMemo() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
+});
