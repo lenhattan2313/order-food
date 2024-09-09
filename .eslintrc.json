@@ -4,7 +4,12 @@
     "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "rules": {
-    "no-unused-vars": "warn",
+    "no-unused-vars": [
+      "error",
+      {
+        "args": "none"
+      }
+    ],
     "@tanstack/query/exhaustive-deps": "error"
   }
 }

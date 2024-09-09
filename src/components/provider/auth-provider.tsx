@@ -20,7 +20,7 @@ export type IAuthContext = {
 };
 const initialAuth: IAuthContext = {
   isAuth: false,
-  setIsAuth: (_value: boolean) => {},
+  setIsAuth: (value: boolean) => {},
 };
 const AuthContext = createContext<IAuthContext>(initialAuth);
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {

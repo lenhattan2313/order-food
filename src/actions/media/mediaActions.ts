@@ -1,4 +1,3 @@
-import envConfig from "@/config";
 import http from "@/lib/httpUtils";
 import { UploadImageResType } from "@/schemaValidations/media.schema";
 

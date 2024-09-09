@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuth } from "@/components/provider/auth-provider";
 import { REFRESH_TOKEN_TIMEOUT } from "@/constants/common";
 import { UNAUTHORIZED_URL } from "@/constants/url";
 import { checkAccessTokenExpire } from "@/lib/utils";
@@ -10,7 +9,6 @@ import { useEffect } from "react";
 export default function RefreshToken() {
   const pathname = usePathname();
   const router = useRouter();
-  const { setIsAuth } = useAuth();
   useEffect(() => {
     if (UNAUTHORIZED_URL.includes(pathname)) return;
     let intervalId: ReturnType<typeof setInterval> | undefined = undefined;
@@ -19,7 +17,6 @@ export default function RefreshToken() {
         checkAccessTokenExpire({
           onError: () => {
             clearInterval(intervalId);
-            // setIsAuth(false);
             router.push("/login");
           },
         }),

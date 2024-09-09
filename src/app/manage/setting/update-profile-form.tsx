@@ -16,7 +16,7 @@ import {
 } from "@/schemaValidations/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function UpdateProfileForm() {
@@ -41,11 +41,7 @@ export default function UpdateProfileForm() {
     formState: {},
   } = form;
   const [avatar, name] = watch(["avatar", "name"]);
-  useMemo(() => {
-    if (data) {
-      handleReset(data);
-    }
-  }, [data]);
+
   function handleChangeFile(e: ChangeEvent<HTMLInputElement>) {
     //TODO: validate type of file
     const inputFile = e.target.files?.[0];
@@ -79,10 +75,18 @@ export default function UpdateProfileForm() {
       handleApiError(error, setError);
     }
   }
-  function handleReset({ data: { avatar, name } }: AccountResType) {
-    setFile(null);
-    reset((pre) => ({ ...pre, name, avatar }));
-  }
+  const handleReset = useCallback(
+    ({ data: { avatar, name } }: AccountResType) => {
+      setFile(null);
+      reset((pre) => ({ ...pre, name, avatar }));
+    },
+    [reset]
+  );
+  useMemo(() => {
+    if (data) {
+      handleReset(data);
+    }
+  }, [data, handleReset]);
 
   return (
     <Form {...form}>
@@ -101,7 +105,7 @@ export default function UpdateProfileForm() {
               <FormField
                 control={form.control}
                 name="avatar"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <div className="flex gap-2 items-start justify-start">
                       <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">

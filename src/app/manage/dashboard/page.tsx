@@ -1,5 +1,4 @@
 import { accountActions } from "@/actions/account/accountActions";
-import { authActions } from "@/actions/auth/authActions";
 import { cookies } from "next/headers";
 
 export default async function Dashboard() {

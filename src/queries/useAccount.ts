@@ -36,10 +36,11 @@ export const useGetAccountList = () =>
     queryFn: accountActions.getList,
   });
 
-export const useGetEmployeeDetail = ({ id }: { id: number }) =>
+export const useGetEmployeeDetail = ({ id }: { id?: number }) =>
   useQuery({
     queryKey: [QUERY_KEYS.ACCOUNTS, id],
-    queryFn: () => accountActions.getEmployeeDetail({ id }),
+    queryFn: () => accountActions.getEmployeeDetail({ id: id! }),
+    enabled: Boolean(id),
   });
 export const useCreateEmployee = () => {
   const queryClient = useQueryClient();
@@ -59,6 +60,7 @@ export const useUpdateEmployee = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.ACCOUNTS],
+        exact: true,
       });
     },
   });

@@ -4,7 +4,7 @@ import { setCookies } from "@/lib/cookieUtils";
 import { StatusCodes } from "http-status-codes";
 import { cookies } from "next/headers";
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
   try {
     const cookieStore = cookies();
     const refreshToken = cookieStore.get("refreshToken")?.value;

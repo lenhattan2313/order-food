@@ -3,7 +3,7 @@ import { authActions } from "@/actions/auth/authActions";
 import { StatusCodes } from "http-status-codes";
 import { cookies } from "next/headers";
 //logout: remove cookies at Next server, and localStorage Next client
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
   try {
     //check accessToken & refreshToken
     const cookieStore = cookies();
