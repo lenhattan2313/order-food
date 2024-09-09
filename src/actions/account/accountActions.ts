@@ -45,5 +45,5 @@ export const accountActions = {
       body
     ),
   deleteEmployee: ({ id }: AccountIdParamType) =>
-    http.delete<AccountResType>(`${PREFIX_URL.ACCOUNT}/detail/${id}`),
+    http.delete<AccountResType>(`${PREFIX_URL.ACCOUNT}/${id}`),
 };
