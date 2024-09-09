@@ -34,19 +34,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getVietnameseTableStatus } from "@/app/manage/tables/utils/tablesUtils";
-
+import { useCreateTable } from "@/queries/useTable";
+import { toast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/utils";
+const defaultTable = {
+  number: 0,
+  capacity: 2,
+  status: TableStatus.Hidden,
+};
 export default function AddTable() {
   const [open, setOpen] = useState(false);
   const form = useForm<CreateTableBodyType>({
     resolver: zodResolver(CreateTableBody),
-    defaultValues: {
-      number: 0,
-      capacity: 2,
-      status: TableStatus.Hidden,
-    },
+    defaultValues: defaultTable,
   });
+  const { setError, reset, handleSubmit } = form;
+  const { mutateAsync: createTable, isPending: isCreatePending } =
+    useCreateTable();
+  async function onSubmit(dataForm: CreateTableBodyType) {
+    try {
+      const { message } = await createTable(dataForm);
+
+      toast({ description: message });
+      handleReset();
+    } catch (error) {
+      handleApiError(error, setError);
+    }
+  }
+  function handleReset() {
+    reset(defaultTable);
+    setOpen((pre) => !pre);
+  }
   return (
-    <Dialog onOpenChange={setOpen} open={open}>
+    <Dialog onOpenChange={handleReset} open={open}>
       <DialogTrigger asChild>
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
@@ -55,10 +75,7 @@ export default function AddTable() {
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className="sm:max-w-[600px] max-h-screen overflow-auto"
-        onCloseAutoFocus={() => form.reset()}
-      >
+      <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
           <DialogTitle>Thêm bàn</DialogTitle>
         </DialogHeader>
@@ -67,6 +84,7 @@ export default function AddTable() {
             noValidate
             className="grid auto-rows-max items-start gap-4 md:gap-8"
             id="add-table-form"
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid gap-4 py-4">
               <FormField
@@ -145,7 +163,11 @@ export default function AddTable() {
           </form>
         </Form>
         <DialogFooter>
-          <Button type="submit" form="add-table-form">
+          <Button
+            type="submit"
+            form="add-table-form"
+            isLoading={isCreatePending}
+          >
             Thêm
           </Button>
         </DialogFooter>

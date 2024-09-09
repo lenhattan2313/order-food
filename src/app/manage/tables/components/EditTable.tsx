@@ -3,6 +3,7 @@ import {
   getTableLink,
   getVietnameseTableStatus,
 } from "@/app/manage/tables/utils/tablesUtils";
+import { QRCodeCanvas } from "@/components/_client/QRCode";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -29,13 +30,17 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { TableStatus, TableStatusValues } from "@/constants/type";
-import { useTableContext } from "@/context/tableContext";
+import { TableItem, useTableContext } from "@/context/tableContext";
+import { toast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/utils";
+import { useGetTableDetail, useUpdateTable } from "@/queries/useTable";
 import {
   UpdateTableBody,
   UpdateTableBodyType,
 } from "@/schemaValidations/table.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 export default function EditTable() {
@@ -48,8 +53,42 @@ export default function EditTable() {
       changeToken: false,
     },
   });
-  const tableNumber = 0;
+  const { setError, reset, handleSubmit } = form;
+  const { data } = useGetTableDetail({ number: tableIdEdit });
+  const handleReset = useCallback(
+    (data: TableItem) => {
+      reset({ ...data, changeToken: false });
+    },
+    [reset]
+  );
+  useMemo(() => {
+    if (data) {
+      handleReset(data.data);
+    }
+  }, [data, handleReset]);
+  const { mutateAsync: updateTable, isPending: isUpdatePending } =
+    useUpdateTable();
+  async function onSubmit(dataForm: UpdateTableBodyType) {
+    if (!tableIdEdit) return;
+    try {
+      const { message } = await updateTable({
+        number: tableIdEdit,
+        ...dataForm,
+      });
 
+      toast({ description: message });
+      handleCloseModal(false);
+    } catch (error) {
+      handleApiError(error, setError);
+    }
+  }
+
+  function handleCloseModal(value: boolean) {
+    if (!value) {
+      setTableIdEdit(undefined);
+      data && handleReset(data.data);
+    }
+  }
   return (
     <Dialog
       open={Boolean(tableIdEdit)}
@@ -74,6 +113,7 @@ export default function EditTable() {
             noValidate
             className="grid auto-rows-max items-start gap-4 md:gap-8"
             id="edit-table-form"
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid gap-4 py-4">
               <FormItem>
@@ -84,8 +124,8 @@ export default function EditTable() {
                       id="number"
                       type="number"
                       className="w-full"
-                      value={tableNumber}
-                      readOnly
+                      value={data?.data.number ?? 0}
+                      disabled
                     />
                     <FormMessage />
                   </div>
@@ -122,6 +162,7 @@ export default function EditTable() {
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
+                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -168,26 +209,35 @@ export default function EditTable() {
               <FormItem>
                 <div className="grid grid-cols-4 items-center justify-items-start gap-4">
                   <Label>QR Code</Label>
-                  <div className="col-span-3 w-full space-y-2"></div>
+                  <div className="col-span-3 w-full space-y-2">
+                    {data && (
+                      <QRCodeCanvas
+                        token={data.data.token}
+                        tableNumber={data.data.number}
+                      />
+                    )}
+                  </div>
                 </div>
               </FormItem>
               <FormItem>
                 <div className="grid grid-cols-4 items-center justify-items-start gap-4">
                   <Label>URL gọi món</Label>
                   <div className="col-span-3 w-full space-y-2">
-                    <Link
-                      href={getTableLink({
-                        token: "123123123",
-                        tableNumber: tableNumber,
-                      })}
-                      target="_blank"
-                      className="break-all"
-                    >
-                      {getTableLink({
-                        token: "123123123",
-                        tableNumber: tableNumber,
-                      })}
-                    </Link>
+                    {data && (
+                      <Link
+                        href={getTableLink({
+                          token: data.data.token,
+                          tableNumber: data.data.number,
+                        })}
+                        target="_blank"
+                        className="break-all"
+                      >
+                        {getTableLink({
+                          token: data.data.token,
+                          tableNumber: data.data.number,
+                        })}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </FormItem>
@@ -195,7 +245,11 @@ export default function EditTable() {
           </form>
         </Form>
         <DialogFooter>
-          <Button type="submit" form="edit-table-form">
+          <Button
+            type="submit"
+            form="edit-table-form"
+            isLoading={isUpdatePending}
+          >
             Lưu
           </Button>
         </DialogFooter>

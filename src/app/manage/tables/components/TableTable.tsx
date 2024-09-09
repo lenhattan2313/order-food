@@ -32,7 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 import AddTable from "@/app/manage/tables/components/AddTable";
 import EditTable from "@/app/manage/tables/components/EditTable";
@@ -46,6 +46,9 @@ import {
 } from "@/context/tableContext";
 import { useSearchParams } from "next/navigation";
 import { DeleteTable } from "@/app/manage/tables/components/DeleteTable";
+import { useGetTableList } from "@/queries/useTable";
+import { Skeleton } from "@/components/ui/skeleton";
+import { QRCodeCanvas } from "@/components/_client/QRCode";
 
 export const columns: ColumnDef<TableItem>[] = [
   {
@@ -72,7 +75,12 @@ export const columns: ColumnDef<TableItem>[] = [
   {
     accessorKey: "token",
     header: "QR Code",
-    cell: ({ row }) => <div>{row.getValue("number")}</div>,
+    cell: ({ row }) => (
+      <QRCodeCanvas
+        token={row.getValue("token")}
+        tableNumber={row.getValue("number")}
+      />
+    ),
   },
   {
     id: "actions",
@@ -112,8 +120,11 @@ export default function TableTable() {
     ? Number(searchParam.get("page"))
     : defaultPagination.page;
   const pageIndex = page - 1;
-
-  const data: any[] = [];
+  const { data: tableList, isPending } = useGetTableList();
+  const data = useMemo(
+    () => tableList?.data ?? Array(defaultPagination.pageSize).fill({}),
+    [tableList]
+  );
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -123,9 +134,19 @@ export default function TableTable() {
     pageSize: defaultPagination.pageSize, //default page size
   });
 
+  const columnsMemo = useMemo(
+    () =>
+      isPending
+        ? columns.map((column) => ({
+            ...column,
+            cell: () => <Skeleton className="h-4 w-12" />,
+          }))
+        : columns,
+    [isPending]
+  );
   const table = useReactTable({
     data,
-    columns,
+    columns: columnsMemo,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

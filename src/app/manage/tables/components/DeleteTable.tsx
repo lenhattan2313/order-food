@@ -10,8 +10,22 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useTableContext } from "@/context/tableContext";
+import { toast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/utils";
+import { useDeleteTable } from "@/queries/useTable";
 export function DeleteTable() {
   const { tableDelete, setTableDelete } = useTableContext();
+  const { mutateAsync, isPending } = useDeleteTable();
+
+  async function handleDelete() {
+    if (!tableDelete) return;
+    try {
+      const { message } = await mutateAsync({ number: tableDelete.number });
+      toast({ description: message });
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
   return (
     <AlertDialog
       open={Boolean(tableDelete)}
@@ -34,7 +48,9 @@ export function DeleteTable() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete} disabled={isPending}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
