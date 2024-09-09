@@ -1,4 +1,4 @@
-import { useAccountContext } from "@/app/context/accountContext";
+import { useAccountContext } from "@/context/accountContext";
 import {
   AlertDialog,
   AlertDialogAction,

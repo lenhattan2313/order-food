@@ -1,6 +1,7 @@
 "use client";
 
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,13 +15,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-
-import { AccountProvider, useAccountContext } from "@/context/accountContext";
-import AddEmployee from "@/app/manage/accounts/components/AddEmployee";
-import { DeleteAccountModal } from "@/app/manage/accounts/components/DeleteAccountModal";
-import EditEmployee from "@/app/manage/accounts/components/EditEmployee";
+import AddDish from "@/app/manage/dishes/components/AddDish";
+import EditDish from "@/app/manage/dishes/components/EditDish";
+import { getVietnameseDishStatus } from "@/app/manage/dishes/utils/dishesUtils";
 import AutoPagination from "@/components/auto-pagination";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -31,7 +30,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -40,24 +38,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { defaultPagination } from "@/constants/common";
-import { useGetAccountList } from "@/queries/useAccount";
-import { AccountType } from "@/schemaValidations/account.schema";
+import { DishItem, DishProvider, useDishContext } from "@/context/dishContext";
+import { formatCurrency } from "@/lib/currency";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { DeleteDish } from "@/app/manage/dishes/components/DeleteDish";
+import { defaultPagination } from "@/constants/common";
 
-export const columns: ColumnDef<AccountType>[] = [
+export const columns: ColumnDef<DishItem>[] = [
   {
     accessorKey: "id",
     header: "ID",
   },
   {
-    accessorKey: "avatar",
-    header: "Avatar",
+    accessorKey: "image",
+    header: "Ảnh",
     cell: ({ row }) => (
       <div>
         <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
-          <AvatarImage src={row.getValue("avatar")} />
+          <AvatarImage src={row.getValue("image")} />
           <AvatarFallback className="rounded-none">
             {row.original.name}
           </AvatarFallback>
@@ -71,31 +70,40 @@ export const columns: ColumnDef<AccountType>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "price",
+    header: "Giá cả",
+    cell: ({ row }) => (
+      <div className="capitalize">{formatCurrency(row.getValue("price"))}</div>
+    ),
+  },
+  {
+    accessorKey: "description",
+    header: "Mô tả",
+    cell: ({ row }) => (
+      <div
+        dangerouslySetInnerHTML={{ __html: row.getValue("description") }}
+        className="whitespace-pre-line"
+      />
+    ),
+  },
+  {
+    accessorKey: "status",
+    header: "Trạng thái",
+    cell: ({ row }) => (
+      <div>{getVietnameseDishStatus(row.getValue("status"))}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: function Actions({ row }) {
-      const { setEmployeeIdEdit, setEmployeeDelete } = useAccountContext();
-      const openEditEmployee = () => {
-        setEmployeeIdEdit(row.original.id);
+      const { setDishIdEdit, setDishDelete } = useDishContext();
+      const openEditDish = () => {
+        setDishIdEdit(row.original.id);
       };
 
-      const openDeleteEmployee = () => {
-        setEmployeeDelete(row.original);
+      const openDeleteDish = () => {
+        setDishDelete(row.original);
       };
       return (
         <DropdownMenu modal={false}>
@@ -108,10 +116,8 @@ export const columns: ColumnDef<AccountType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={openEditEmployee}>Sửa</DropdownMenuItem>
-            <DropdownMenuItem onClick={openDeleteEmployee}>
-              Xóa
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={openEditDish}>Sửa</DropdownMenuItem>
+            <DropdownMenuItem onClick={openDeleteDish}>Xóa</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -119,18 +125,13 @@ export const columns: ColumnDef<AccountType>[] = [
   },
 ];
 
-export default function AccountTable() {
+export default function DishTable() {
   const searchParam = useSearchParams();
   const page = searchParam.get("page")
     ? Number(searchParam.get("page"))
     : defaultPagination.page;
   const pageIndex = page - 1;
-
-  const { data: accountList, isPending } = useGetAccountList();
-  const data = useMemo(
-    () => accountList?.data ?? Array(defaultPagination.pageSize).fill({}),
-    [accountList]
-  );
+  const data: any[] = [];
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -139,20 +140,10 @@ export default function AccountTable() {
     pageIndex, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
     pageSize: defaultPagination.pageSize, //default page size
   });
-  //TODO make a common component for table
-  const columnsMemo = useMemo(
-    () =>
-      isPending
-        ? columns.map((column) => ({
-            ...column,
-            cell: () => <Skeleton className="h-4 w-12" />,
-          }))
-        : columns,
-    [isPending]
-  );
+
   const table = useReactTable({
     data,
-    columns: columnsMemo,
+    columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -178,22 +169,23 @@ export default function AccountTable() {
       pageSize: defaultPagination.pageSize,
     });
   }, [table, pageIndex]);
+
   return (
-    <AccountProvider>
+    <DishProvider>
       <div className="w-full">
-        <EditEmployee />
-        <DeleteAccountModal />
+        <EditDish />
+        <DeleteDish />
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            placeholder="Lọc tên"
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn("name")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
           <div className="ml-auto flex items-center gap-2">
-            <AddEmployee />
+            <AddDish />
           </div>
         </div>
         <div className="rounded-md border">
@@ -256,11 +248,11 @@ export default function AccountTable() {
             <AutoPagination
               page={table.getState().pagination.pageIndex + 1}
               pageSize={table.getPageCount()}
-              pathname="/manage/accounts"
+              pathname="/manage/dishes"
             />
           </div>
         </div>
       </div>
-    </AccountProvider>
+    </DishProvider>
   );
 }

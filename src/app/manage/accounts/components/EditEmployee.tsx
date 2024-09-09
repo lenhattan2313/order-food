@@ -1,5 +1,5 @@
 "use client";
-import { AccountItem, useAccountContext } from "@/app/context/accountContext";
+import { AccountItem, useAccountContext } from "@/context/accountContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
