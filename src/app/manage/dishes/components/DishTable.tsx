@@ -20,6 +20,7 @@ import EditDish from "@/app/manage/dishes/components/EditDish";
 import { getVietnameseDishStatus } from "@/app/manage/dishes/utils/dishesUtils";
 import AutoPagination from "@/components/auto-pagination";
 
+import { DeleteDish } from "@/app/manage/dishes/components/DeleteDish";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -30,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -38,12 +40,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { defaultPagination } from "@/constants/common";
 import { DishItem, DishProvider, useDishContext } from "@/context/dishContext";
 import { formatCurrency } from "@/lib/currency";
+import { useGetDishList } from "@/queries/useDish";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { DeleteDish } from "@/app/manage/dishes/components/DeleteDish";
-import { defaultPagination } from "@/constants/common";
+import { useEffect, useMemo, useState } from "react";
 
 export const columns: ColumnDef<DishItem>[] = [
   {
@@ -131,7 +133,11 @@ export default function DishTable() {
     ? Number(searchParam.get("page"))
     : defaultPagination.page;
   const pageIndex = page - 1;
-  const data: any[] = [];
+  const { data: dishList, isPending } = useGetDishList();
+  const data = useMemo(
+    () => dishList?.data ?? Array(defaultPagination.pageSize).fill({}),
+    [dishList]
+  );
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -140,10 +146,20 @@ export default function DishTable() {
     pageIndex, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
     pageSize: defaultPagination.pageSize, //default page size
   });
-
+  //TODO make a common component for table
+  const columnsMemo = useMemo(
+    () =>
+      isPending
+        ? columns.map((column) => ({
+            ...column,
+            cell: () => <Skeleton className="h-4 w-12" />,
+          }))
+        : columns,
+    [isPending]
+  );
   const table = useReactTable({
     data,
-    columns,
+    columns: columnsMemo,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

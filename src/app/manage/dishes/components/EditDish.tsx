@@ -28,14 +28,18 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { DishStatus, DishStatusValues } from "@/constants/type";
-import { useDishContext } from "@/context/dishContext";
+import { DishItem, useDishContext } from "@/context/dishContext";
+import { toast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/utils";
+import { useGetDishDetail, useUpdateDish } from "@/queries/useDish";
+import { useUploadAvatar } from "@/queries/useMedia";
 import {
   UpdateDishBody,
   UpdateDishBodyType,
 } from "@/schemaValidations/dish.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function EditDish() {
@@ -52,6 +56,8 @@ export default function EditDish() {
       status: DishStatus.Unavailable,
     },
   });
+  const { setError, reset, handleSubmit } = form;
+
   const image = form.watch("image");
   const name = form.watch("name");
   const previewAvatarFromFile = useMemo(() => {
@@ -60,15 +66,61 @@ export default function EditDish() {
     }
     return image;
   }, [file, image]);
+  const { data } = useGetDishDetail({ id: dishIdEdit });
+  const handleReset = useCallback(
+    ({ image, id, ...data }: DishItem) => {
+      setFile(null);
+      reset((pre) => ({ ...pre, ...data, image: image ?? undefined }));
+    },
+    [reset]
+  );
+  useMemo(() => {
+    if (data) {
+      handleReset(data.data);
+    }
+  }, [data, handleReset]);
+  function handleChangeFile(e: ChangeEvent<HTMLInputElement>) {
+    //TODO: validate type of file
+    const inputFile = e.target.files?.[0];
+    if (inputFile) {
+      setFile(inputFile);
+    }
+  }
+  const { mutateAsync: uploadAvatar, isPending: isUploadPending } =
+    useUploadAvatar();
+  const { mutateAsync: updateDish, isPending: isUpdatePending } =
+    useUpdateDish();
+  async function onSubmit(dataForm: UpdateDishBodyType) {
+    if (!dishIdEdit) return;
+    try {
+      let body = { ...dataForm };
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const { data } = await uploadAvatar(formData);
+        body.image = data;
+      }
+      const { message } = await updateDish({
+        id: dishIdEdit,
+        ...body,
+      });
+
+      toast({ description: message });
+      handleCloseModal(false);
+    } catch (error) {
+      handleApiError(error, setError);
+    }
+  }
+
+  function handleCloseModal(value: boolean) {
+    if (!value) {
+      setDishIdEdit(undefined);
+      data && handleReset(data.data);
+    }
+  }
+
   return (
-    <Dialog
-      open={Boolean(dishIdEdit)}
-      onOpenChange={(value) => {
-        if (!value) {
-          setDishIdEdit(undefined);
-        }
-      }}
-    >
+    <Dialog open={Boolean(dishIdEdit)} onOpenChange={handleCloseModal}>
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
           <DialogTitle>Cập nhật món ăn</DialogTitle>
@@ -81,6 +133,7 @@ export default function EditDish() {
             noValidate
             className="grid auto-rows-max items-start gap-4 md:gap-8"
             id="edit-dish-form"
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid gap-4 py-4">
               <FormField
@@ -99,15 +152,7 @@ export default function EditDish() {
                         type="file"
                         accept="image/*"
                         ref={imageInputRef}
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            setFile(file);
-                            field.onChange(
-                              "http://localhost:3000/" + file.name
-                            );
-                          }
-                        }}
+                        onChange={handleChangeFile}
                         className="hidden"
                       />
                       <button
@@ -188,6 +233,7 @@ export default function EditDish() {
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
+                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -213,7 +259,11 @@ export default function EditDish() {
           </form>
         </Form>
         <DialogFooter>
-          <Button type="submit" form="edit-dish-form">
+          <Button
+            type="submit"
+            form="edit-dish-form"
+            isLoading={isUpdatePending || isUploadPending}
+          >
             Lưu
           </Button>
         </DialogFooter>

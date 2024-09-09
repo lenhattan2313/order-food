@@ -9,8 +9,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/utils";
+import { useDeleteDish } from "@/queries/useDish";
 export function DeleteDish() {
   const { setDishDelete, dishDelete } = useDishContext();
+  const { mutateAsync, isPending } = useDeleteDish();
+
+  async function handleDelete() {
+    if (!dishDelete) return;
+    try {
+      const { message } = await mutateAsync({ id: dishDelete.id });
+      toast({ description: message });
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
   return (
     <AlertDialog
       open={Boolean(dishDelete)}
@@ -33,7 +47,9 @@ export function DeleteDish() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete} disabled={isPending}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

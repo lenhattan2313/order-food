@@ -14,12 +14,9 @@ export const dishActions = {
     http.post<DishResType, CreateDishBodyType>(`${PREFIX_URL.DISH}`, body),
 
   getDishDetail: ({ id }: DishParamsType) =>
-    http.get<DishResType>(`${PREFIX_URL.DISH}/detail/${id}`),
+    http.get<DishResType>(`${PREFIX_URL.DISH}/${id}`),
   updateDish: ({ id, ...body }: IUpdateDishType) =>
-    http.put<DishResType, UpdateDishBodyType>(
-      `${PREFIX_URL.DISH}/detail/${id}`,
-      body
-    ),
+    http.put<DishResType, UpdateDishBodyType>(`${PREFIX_URL.DISH}/${id}`, body),
   deleteDish: ({ id }: DishParamsType) =>
     http.delete<DishResType>(`${PREFIX_URL.DISH}/${id}`),
 };
