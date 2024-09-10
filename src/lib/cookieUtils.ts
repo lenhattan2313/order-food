@@ -12,3 +12,7 @@ export function setCookies(name: string, value: string) {
     expires: expires * 1000,
   });
 }
+export function removeCookies(name: string) {
+  const cookieStore = cookies();
+  cookieStore.delete(name);
+}

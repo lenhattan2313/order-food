@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, memo, useEffect, useRef } from "react";
 
 const Logout = () => {
-  const { setIsAuth } = useAuth();
+  const { setRole } = useAuth();
   const { mutateAsync } = useLogoutMutation();
   const searchParams = useSearchParams();
   const ref = useRef(false);
@@ -26,9 +26,9 @@ const Logout = () => {
         }, 1000);
       });
     } else {
-      setIsAuth(false);
+      setRole(undefined);
     }
-  }, [mutateAsync, refreshToken, accessToken, setIsAuth]);
+  }, [mutateAsync, refreshToken, accessToken, setRole]);
   return null;
 };
 export default memo(function LogoutPage() {

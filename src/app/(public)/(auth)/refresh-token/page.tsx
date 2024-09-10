@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, memo, useEffect } from "react";
 
 function RefreshToken() {
-  const { setIsAuth } = useAuth();
+  const { setRole } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -17,7 +17,7 @@ function RefreshToken() {
   useEffect(() => {
     const refreshToken = localStorageUtil.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
     if (refreshToken !== refreshTokenUrl) {
-      setIsAuth(false);
+      setRole(undefined);
       return;
     }
     checkAccessTokenExpire({
@@ -25,7 +25,7 @@ function RefreshToken() {
         router.push(redirectPath);
       },
     });
-  }, [pathname, refreshTokenUrl, setIsAuth, router, redirectPath]);
+  }, [pathname, refreshTokenUrl, setRole, router, redirectPath]);
   return null;
 }
 

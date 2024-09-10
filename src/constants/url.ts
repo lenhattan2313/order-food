@@ -3,4 +3,5 @@ export const PREFIX_URL = {
   ACCOUNT: "/accounts",
   DISH: "/dishes",
   TABLE: "/tables",
+  GUEST: "/guest",
 };

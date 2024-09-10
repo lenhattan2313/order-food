@@ -12,7 +12,8 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
+import { TokenPayload } from "@/interface/IAuth";
+import { decodeJWT, handleApiError } from "@/lib/utils";
 import { useLoginMutation } from "@/queries/useAuth";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +25,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const clearToken = searchParams.get("clearToken");
-  const { setIsAuth } = useAuth();
+  const { setRole } = useAuth();
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
     defaultValues: {
@@ -41,8 +42,12 @@ function LoginForm() {
   const { mutateAsync, isPending } = useLoginMutation();
   async function onSubmit(dataForm: LoginBodyType) {
     try {
-      const { message } = await mutateAsync(dataForm);
-      setIsAuth(true);
+      const {
+        message,
+        data: { accessToken },
+      } = await mutateAsync(dataForm);
+      const decodeRole = decodeJWT<TokenPayload>(accessToken);
+      decodeRole && setRole(decodeRole.role);
       toast({
         description: message,
       });
@@ -54,9 +59,9 @@ function LoginForm() {
   }
   useEffect(() => {
     if (clearToken === "true") {
-      setIsAuth(false);
+      setRole(undefined);
     }
-  }, [clearToken, setIsAuth]);
+  }, [clearToken, setRole]);
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>

@@ -93,13 +93,17 @@ const request = async <T = Response>(
   const data: T = await response.json();
 
   if (isClient) {
-    if (normalizeUrl(url) === "api/auth/login") {
+    if (
+      ["api/auth/login", "api/guest/auth/login"].includes(normalizeUrl(url))
+    ) {
       const {
         data: { accessToken, refreshToken },
       } = data as LoginResType;
       localStorageUtil.set("accessToken", accessToken);
       localStorageUtil.set("refreshToken", refreshToken);
-    } else if (normalizeUrl(url) === "api/auth/logout") {
+    } else if (
+      ["api/auth/logout", "api/guest/auth/logout"].includes(normalizeUrl(url))
+    ) {
       localStorageUtil.remove("accessToken");
       localStorageUtil.remove("refreshToken");
     }

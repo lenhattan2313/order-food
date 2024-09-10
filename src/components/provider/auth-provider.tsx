@@ -1,10 +1,12 @@
 "use client";
 
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
+import { RoleType, TokenPayload } from "@/interface/IAuth";
 import {
   clearTokenFromLocalStorage,
   localStorageUtil,
 } from "@/lib/storageUtils";
+import { decodeJWT } from "@/lib/utils";
 import {
   FC,
   PropsWithChildren,
@@ -12,33 +14,40 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 export type IAuthContext = {
+  role?: RoleType;
   isAuth: boolean;
-  setIsAuth: (value: boolean) => void;
+  setRole: (value?: RoleType) => void;
 };
 const initialAuth: IAuthContext = {
+  role: undefined,
   isAuth: false,
-  setIsAuth: (value: boolean) => {},
+  setRole: (value?: RoleType) => {},
 };
 const AuthContext = createContext<IAuthContext>(initialAuth);
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [role, setRole] = useState<RoleType>();
   useEffect(() => {
-    const accessToken = localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
-    accessToken && setIsAuth(true);
+    const accessToken =
+      localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? "";
+    const decodeRole = decodeJWT<TokenPayload>(accessToken);
+
+    decodeRole && setRole(decodeRole.role);
   }, []);
-  const setAuth = useCallback((auth: boolean) => {
-    if (auth) {
-      setIsAuth(true);
+  const setRoleType = useCallback((value?: RoleType) => {
+    if (value) {
+      setRole(value);
     } else {
       clearTokenFromLocalStorage();
-      setIsAuth(false);
+      setRole(undefined);
     }
   }, []);
+  const isAuth = useMemo(() => Boolean(role), [role]);
   return (
-    <AuthContext.Provider value={{ isAuth, setIsAuth: setAuth }}>
+    <AuthContext.Provider value={{ isAuth, setRole: setRoleType }}>
       {children}
     </AuthContext.Provider>
   );

@@ -75,3 +75,13 @@ export const checkAccessTokenExpire = async (
     return params?.onError && params.onError();
   }
 };
+
+export function decodeJWT<T extends JwtPayload>(token: string): T | null {
+  try {
+    const decoded = jwt.decode(token) as T;
+    return decoded;
+  } catch (error) {
+    console.error("Invalid JWT token:", error);
+    return null;
+  }
+}

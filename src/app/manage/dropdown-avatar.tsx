@@ -21,13 +21,13 @@ export default function DropdownAvatar() {
   const router = useRouter();
   const { data } = useGetAccountMe();
   const account = useMemo(() => data?.data, [data]);
-  const { setIsAuth } = useAuth();
+  const { setRole } = useAuth();
   const { mutateAsync, isPending } = useLogoutMutation();
 
   async function handleLogout() {
     try {
       await mutateAsync();
-      setIsAuth(false);
+      setRole(undefined);
       router.push("/");
     } catch (error) {
       handleApiError(error);
