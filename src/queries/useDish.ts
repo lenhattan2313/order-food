@@ -22,6 +22,7 @@ export const useCreateDish = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.DISHES],
       });
+      dishActions.revalidate("dishes");
     },
   });
 };
@@ -34,6 +35,7 @@ export const useUpdateDish = () => {
         queryKey: [QUERY_KEYS.DISHES],
         exact: true,
       });
+      dishActions.revalidate("dishes");
     },
   });
 };
@@ -47,6 +49,7 @@ export const useDeleteDish = () => {
         queryKey: [QUERY_KEYS.DISHES],
         exact: true,
       });
+      dishActions.revalidate("dishes");
     },
   });
 };

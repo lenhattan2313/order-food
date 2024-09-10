@@ -45,6 +45,6 @@ export function QRCodeCanvas({ tableNumber, token, width = 300 }: Props) {
       if (error) console.error(error);
       canvasContext.drawImage(virtualCanvas, 0, 0);
     });
-  }, [token, tableNumber]);
+  }, [token, tableNumber, width]);
   return <canvas ref={canvasRef} />;
 }

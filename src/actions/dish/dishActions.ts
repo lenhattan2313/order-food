@@ -9,7 +9,10 @@ import {
 } from "@/schemaValidations/dish.schema";
 type IUpdateDishType = DishParamsType & UpdateDishBodyType;
 export const dishActions = {
-  getList: () => http.get<DishListResType>(`${PREFIX_URL.DISH}`),
+  getList: () =>
+    http.get<DishListResType>(`${PREFIX_URL.DISH}`, {
+      next: { tags: ["dishes"] },
+    }),
   createDish: (body: CreateDishBodyType) =>
     http.post<DishResType, CreateDishBodyType>(`${PREFIX_URL.DISH}`, body),
 
@@ -19,4 +22,9 @@ export const dishActions = {
     http.put<DishResType, UpdateDishBodyType>(`${PREFIX_URL.DISH}/${id}`, body),
   deleteDish: ({ id }: DishParamsType) =>
     http.delete<DishResType>(`${PREFIX_URL.DISH}/${id}`),
+
+  revalidate: (tag: string) =>
+    http.get(`/api/dishes/revalidate?tag=${tag}`, {
+      baseUrl: "",
+    }),
 };

@@ -32,23 +32,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import AddTable from "@/app/manage/tables/components/AddTable";
+import { DeleteTable } from "@/app/manage/tables/components/DeleteTable";
 import EditTable from "@/app/manage/tables/components/EditTable";
 import { getVietnameseTableStatus } from "@/app/manage/tables/utils/tablesUtils";
+import { QRCodeCanvas } from "@/components/_client/QRCode";
 import AutoPagination from "@/components/auto-pagination";
+import { Skeleton } from "@/components/ui/skeleton";
 import { defaultPagination } from "@/constants/common";
 import {
   TableItem,
   TableProvider,
   useTableContext,
 } from "@/context/tableContext";
-import { useSearchParams } from "next/navigation";
-import { DeleteTable } from "@/app/manage/tables/components/DeleteTable";
 import { useGetTableList } from "@/queries/useTable";
-import { Skeleton } from "@/components/ui/skeleton";
-import { QRCodeCanvas } from "@/components/_client/QRCode";
+import { useSearchParams } from "next/navigation";
 
 export const columns: ColumnDef<TableItem>[] = [
   {
