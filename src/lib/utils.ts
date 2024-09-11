@@ -1,7 +1,7 @@
 import { authActions } from "@/actions/auth/authActions";
 import { guestActions } from "@/actions/guest/guestActions";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { Role } from "@/constants/type";
+import { OrderStatus, Role } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
 import { TokenPayload } from "@/interface/IAuth";
 import { HttpError } from "@/lib/error";
@@ -91,3 +91,20 @@ export function decodeJWT<T extends TokenPayload>(token: string): T | null {
     return null;
   }
 }
+
+export const getVietnameseOrderStatus = (
+  status: (typeof OrderStatus)[keyof typeof OrderStatus]
+) => {
+  switch (status) {
+    case OrderStatus.Delivered:
+      return "Đã phục vụ";
+    case OrderStatus.Paid:
+      return "Đã thanh toán";
+    case OrderStatus.Pending:
+      return "Chờ xử lý";
+    case OrderStatus.Processing:
+      return "Đang nấu";
+    default:
+      return "Từ chối";
+  }
+};

@@ -7,6 +7,9 @@ import {
 } from "@/schemaValidations/auth.schema";
 import { MessageResType } from "@/schemaValidations/common.schema";
 import {
+  GuestCreateOrdersBodyType,
+  GuestCreateOrdersResType,
+  GuestGetOrdersResType,
   GuestLoginBodyType,
   GuestLoginResType,
 } from "@/schemaValidations/guest.schema";
@@ -63,4 +66,13 @@ export const guestActions = {
     this.refreshTokenRequest = null;
     return response;
   },
+
+  orderList: () =>
+    http.get<GuestGetOrdersResType>(`${PREFIX_URL.GUEST}/orders`),
+
+  createOrder: (body: GuestCreateOrdersBodyType) =>
+    http.post<GuestCreateOrdersResType, GuestCreateOrdersBodyType>(
+      `${PREFIX_URL.GUEST}/orders`,
+      body
+    ),
 };
