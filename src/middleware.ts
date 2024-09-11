@@ -1,7 +1,11 @@
+import { Role } from "@/constants/type";
 import { getTokenCookies } from "@/lib/serverUtils";
+import { decodeJWT } from "@/lib/utils";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+const guestPaths = ["/guest"];
+const managePaths = ["/manage"];
 const unAuthRoutes = ["/login", "/register"];
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
@@ -26,17 +30,30 @@ export function middleware(request: NextRequest) {
   }
 
   //try to navigate unAuthRoute when already logged in
-  if (accessToken && isPublicRoutes) {
-    const params = searchParams.get("accessToken");
-    if (params) {
-      return NextResponse.next();
+  if (accessToken) {
+    if (isPublicRoutes) {
+      const params = searchParams.get("accessToken");
+      if (params) {
+        return NextResponse.next();
+      }
+      return NextResponse.redirect(new URL("/", request.url));
     }
-    return NextResponse.redirect(new URL("/", request.url));
+    //try to access path without permission
+    const role = decodeJWT(accessToken)?.role;
+    const isGuestPaths = guestPaths.some((route) => pathname.includes(route));
+    const isManagePaths = managePaths.some((route) => pathname.includes(route));
+    if (
+      role &&
+      ((role === Role.Guest && !isGuestPaths) ||
+        (role === Role.Owner && !isManagePaths))
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/manage/:path*"],
+  matcher: ["/login", "/register", "/manage/:path*", "/guest/:path*"],
 };

@@ -25,7 +25,7 @@ export const authActions = {
         },
       }
     ),
-  refreshToken: async function () {
+  sRefreshToken: async function () {
     //only call 1 time
     if (this.refreshTokenRequest) {
       return this.refreshTokenRequest;
@@ -41,6 +41,6 @@ export const authActions = {
 
     return result;
   },
-  sRefreshToken: (body: RefreshTokenBodyType) =>
+  refreshToken: (body: RefreshTokenBodyType) =>
     http.post<LoginResType, RefreshTokenBodyType>("/auth/refresh-token", body),
 };

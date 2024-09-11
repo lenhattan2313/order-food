@@ -47,7 +47,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
   const isAuth = useMemo(() => Boolean(role), [role]);
   return (
-    <AuthContext.Provider value={{ isAuth, setRole: setRoleType }}>
+    <AuthContext.Provider value={{ isAuth, setRole: setRoleType, role }}>
       {children}
     </AuthContext.Provider>
   );

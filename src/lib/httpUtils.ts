@@ -115,7 +115,7 @@ const http = {
   get<T>(url: string, options?: IHttpOptions) {
     return request<T>("GET", url, options);
   },
-  post<T, K>(url: string, body?: K, options?: IHttpOptions) {
+  post<T, K = Request>(url: string, body?: K, options?: IHttpOptions) {
     return request<T>("POST", url, {
       ...options,
       body,

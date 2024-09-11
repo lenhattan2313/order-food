@@ -1,13 +1,16 @@
 import { authActions } from "@/actions/auth/authActions";
+import { guestActions } from "@/actions/guest/guestActions";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
+import { Role } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
+import { TokenPayload } from "@/interface/IAuth";
 import { HttpError } from "@/lib/error";
 import {
   clearTokenFromLocalStorage,
   localStorageUtil,
 } from "@/lib/storageUtils";
 import { clsx, type ClassValue } from "clsx";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { FieldValues, UseFormSetError } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
@@ -49,9 +52,9 @@ export const checkAccessTokenExpire = async (
     localStorageUtil.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN) ?? "";
   if (!accessToken) return;
   const now = Date.now() / 1000;
-  const refreshTokenExpired = (jwt.decode(refreshToken) as JwtPayload).exp ?? 0;
+  const refreshTokenExpired = decodeJWT(refreshToken)?.exp ?? 0;
   //check refreshToken expired first, logout if expired
-  const { iat = 0, exp = 0 } = jwt.decode(accessToken) as JwtPayload;
+  const { iat = 0, exp = 0, role } = decodeJWT(accessToken) ?? {};
   if (refreshTokenExpired > now) {
     //example: expired 10s, 2/3 of 10s = 6s, => 6s will call api refreshToken
     //exp - now: thời gian còn lại
@@ -60,7 +63,10 @@ export const checkAccessTokenExpire = async (
       try {
         const {
           data: { accessToken, refreshToken },
-        } = await authActions.refreshToken();
+        } =
+          role === Role.Guest
+            ? await guestActions.sRefreshToken()
+            : await authActions.sRefreshToken();
         localStorageUtil.set(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken);
         localStorageUtil.set(LOCAL_STORAGE_KEY.REFRESH_TOKEN, refreshToken);
         params?.onSuccess && params.onSuccess();
@@ -76,7 +82,7 @@ export const checkAccessTokenExpire = async (
   }
 };
 
-export function decodeJWT<T extends JwtPayload>(token: string): T | null {
+export function decodeJWT<T extends TokenPayload>(token: string): T | null {
   try {
     const decoded = jwt.decode(token) as T;
     return decoded;

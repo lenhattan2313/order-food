@@ -40,8 +40,8 @@ export const guestActions = {
       }
     ),
   //remove cookies
-  sLogout: (body: LogoutBodyType) =>
-    http.post<MessageResType, LogoutBodyType>(`api/guest/auth/logout`, body, {
+  sLogout: () =>
+    http.post<MessageResType>(`api/guest/auth/logout`, undefined, {
       baseUrl: "",
     }),
 
