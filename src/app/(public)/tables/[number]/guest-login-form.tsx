@@ -42,7 +42,7 @@ export default function GuestLoginForm() {
       const decodeRole = decodeJWT<TokenPayload>(accessToken);
       decodeRole && setRole(decodeRole.role);
       toast({ description: message });
-      router.push("/guest");
+      router.push("/guest/menu");
     } catch (error) {
       handleApiError(error, form.setError);
     }

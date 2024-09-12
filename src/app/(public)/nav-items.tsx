@@ -9,7 +9,17 @@ import { useGuestLogout } from "@/queries/useGuest";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 const menuItems: {
   title: string;
   href: string;
@@ -74,16 +84,35 @@ export default function NavItems({ className }: { className?: string }) {
   });
   if (role) {
     menu.push(
-      <div
-        onClick={handleLogout}
-        key="logout"
-        className={cn(className, "cursor-pointer", {
-          "opacity-50 pointer-events-none":
-            isGuestLogoutPending || isLogoutPending,
-        })}
-      >
-        Đăng xuất
-      </div>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <div
+            key="logout"
+            className="cursor-pointer text-muted-foreground hover:text-foreground"
+          >
+            Đăng xuất
+          </div>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Đăng xuất</AlertDialogTitle>
+            <AlertDialogDescription>
+              {role === Role.Guest
+                ? "Bạn có thể sẽ mất đơn hàng của mình"
+                : "Bạn muốn đăng xuất?"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleLogout}
+              disabled={isGuestLogoutPending || isLogoutPending}
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     );
     return menu;
   }
