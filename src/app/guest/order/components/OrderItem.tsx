@@ -1,8 +1,8 @@
 "use client";
 
+import { getVietnameseOrderStatus } from "@/app/manage/orders/utils/orderUtils";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/currency";
-import { getVietnameseOrderStatus } from "@/lib/utils";
 import { GetOrdersResType } from "@/schemaValidations/order.schema";
 import Image from "next/image";
 

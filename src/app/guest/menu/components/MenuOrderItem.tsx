@@ -1,12 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import Quantity from "@/app/guest/menu/components/Quantity";
 import { DishStatus } from "@/constants/type";
 import { formatCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 import { DishResType } from "@/schemaValidations/dish.schema";
-import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 
 type IOrderItem = {
@@ -19,6 +17,9 @@ export default function MenuOrderItem({
   onChange,
   quantity,
 }: IOrderItem) {
+  function handleChange(value: number) {
+    onChange(dish.id, value);
+  }
   return (
     <div
       key={dish.id}
@@ -47,35 +48,7 @@ export default function MenuOrderItem({
         <p className="text-xs font-semibold">{formatCurrency(dish.price)}</p>
       </div>
       <div className="flex-shrink-0 ml-auto flex justify-center items-center">
-        <div className="flex gap-1 ">
-          <Button
-            className="h-6 w-6 p-0"
-            disabled={quantity === 0}
-            onClick={() => onChange(dish.id, quantity - 1)}
-          >
-            <Minus className="w-3 h-3" />
-          </Button>
-          <Input
-            type="text"
-            pattern="[0-9]*"
-            inputMode="numeric"
-            className="h-6 p-1 w-8 text-center"
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (isNaN(value)) {
-                return;
-              }
-              onChange(dish.id, value);
-            }}
-            value={quantity}
-          />
-          <Button
-            className="h-6 w-6 p-0"
-            onClick={() => onChange(dish.id, quantity + 1)}
-          >
-            <Plus className="w-3 h-3" />
-          </Button>
-        </div>
+        <Quantity value={quantity} onChange={handleChange} />
       </div>
     </div>
   );

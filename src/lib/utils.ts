@@ -1,7 +1,7 @@
 import { authActions } from "@/actions/auth/authActions";
 import { guestActions } from "@/actions/guest/guestActions";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { OrderStatus, Role } from "@/constants/type";
+import { Role } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
 import { TokenPayload } from "@/interface/IAuth";
 import { HttpError } from "@/lib/error";
@@ -92,19 +92,16 @@ export function decodeJWT<T extends TokenPayload>(token: string): T | null {
   }
 }
 
-export const getVietnameseOrderStatus = (
-  status: (typeof OrderStatus)[keyof typeof OrderStatus]
-) => {
-  switch (status) {
-    case OrderStatus.Delivered:
-      return "Đã phục vụ";
-    case OrderStatus.Paid:
-      return "Đã thanh toán";
-    case OrderStatus.Pending:
-      return "Chờ xử lý";
-    case OrderStatus.Processing:
-      return "Đang nấu";
-    default:
-      return "Từ chối";
-  }
+export function removeAccents(str: string) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+}
+
+export const simpleMatchText = (fullText: string, matchText: string) => {
+  return removeAccents(fullText.toLowerCase()).includes(
+    removeAccents(matchText.trim().toLowerCase())
+  );
 };
