@@ -1,4 +1,21 @@
 "use client";
+import AddOrder from "@/app/manage/orders/components/AddOrder";
+import EditOrder from "@/app/manage/orders/components/EditOrder";
+import OrderStatics from "@/app/manage/orders/components/OrderStatics";
+import orderTableColumns from "@/app/manage/orders/components/OrderColumns";
+import { useOrderService } from "@/app/manage/orders/hooks/useOrderService";
+import AutoPagination from "@/components/auto-pagination";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { OrderStatusValues } from "@/constants/type";
+import { GetOrdersResType } from "@/schemaValidations/order.schema";
 import {
   ColumnFiltersState,
   SortingState,
@@ -10,32 +27,11 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  GetOrdersResType,
-  PayGuestOrdersResType,
-  UpdateOrderResType,
-} from "@/schemaValidations/order.schema";
-import AddOrder from "@/app/manage/orders/add-order";
-import EditOrder from "@/app/manage/orders/edit-order";
-import { createContext, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import AutoPagination from "@/components/auto-pagination";
-import { OrderStatusValues } from "@/constants/type";
-import OrderStatics from "@/app/manage/orders/order-statics";
-import orderTableColumns from "@/app/manage/orders/order-table-columns";
-import { useOrderService } from "@/app/manage/orders/order.service";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { createContext, useEffect, useMemo, useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { getVietnameseOrderStatus } from "@/app/manage/orders/utils/orderUtils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -48,22 +44,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { defaultPagination } from "@/constants/common";
+import { OrderProvider } from "@/context/orderContext";
+import { cn } from "@/lib/utils";
+import { useGetOrderList } from "@/queries/useOrder";
+import { useGetTableList } from "@/queries/useTable";
 import { endOfDay, format, startOfDay } from "date-fns";
-import TableSkeleton from "@/app/manage/orders/table-skeleton";
-import { GuestCreateOrdersResType } from "@/schemaValidations/guest.schema";
-import { getVietnameseOrderStatus } from "@/app/manage/orders/utils/orderUtils";
-
-export const OrderTableContext = createContext({
-  setOrderIdEdit: (value: number | undefined) => {},
-  orderIdEdit: undefined as number | undefined,
-  changeStatus: (payload: {
-    orderId: number;
-    dishId: number;
-    status: (typeof OrderStatusValues)[number];
-    quantity: number;
-  }) => {},
-  orderObjectByGuestId: {} as OrderObjectByGuestID,
-});
 
 export type StatusCountObject = Record<
   (typeof OrderStatusValues)[number],
@@ -73,10 +59,7 @@ export type Statics = {
   status: StatusCountObject;
   table: Record<number, Record<number, StatusCountObject>>;
 };
-export type OrderObjectByGuestID = Record<number, GetOrdersResType["data"]>;
-export type ServingGuestByTableNumber = Record<number, OrderObjectByGuestID>;
 
-const PAGE_SIZE = 10;
 const initFromDate = startOfDay(new Date());
 const initToDate = endOfDay(new Date());
 export default function OrderTable() {
@@ -84,13 +67,20 @@ export default function OrderTable() {
   const [openStatusFilter, setOpenStatusFilter] = useState(false);
   const [fromDate, setFromDate] = useState(initFromDate);
   const [toDate, setToDate] = useState(initToDate);
-  const page = searchParam.get("page") ? Number(searchParam.get("page")) : 1;
+  const page = searchParam.get("page")
+    ? Number(searchParam.get("page"))
+    : defaultPagination.page;
   const pageIndex = page - 1;
   const [orderIdEdit, setOrderIdEdit] = useState<number | undefined>();
-  const orderList: any = [];
-  const tableList: any = [];
-  const tableListSortedByNumber = tableList.sort(
-    (a: any, b: any) => a.number - b.number
+  const { data: orders, isPending: isGetOrderListPending } = useGetOrderList({
+    fromDate,
+    toDate,
+  });
+  const { data: tables, isPending: isGetTableListPending } = useGetTableList();
+  const orderList = useMemo(() => orders?.data ?? [], [orders]);
+  const tableList = useMemo(
+    () => (tables?.data ?? []).sort((a, b) => a.number - b.number),
+    [tables]
   );
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -98,18 +88,10 @@ export default function OrderTable() {
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({
     pageIndex, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
-    pageSize: PAGE_SIZE, //default page size
+    pageSize: defaultPagination.pageSize, //default page size
   });
 
-  const { statics, orderObjectByGuestId, servingGuestByTableNumber } =
-    useOrderService(orderList);
-
-  const changeStatus = async (body: {
-    orderId: number;
-    dishId: number;
-    status: (typeof OrderStatusValues)[number];
-    quantity: number;
-  }) => {};
+  const { statics, servingGuestByTableNumber } = useOrderService(orderList);
 
   const table = useReactTable({
     data: orderList,
@@ -136,7 +118,7 @@ export default function OrderTable() {
   useEffect(() => {
     table.setPagination({
       pageIndex,
-      pageSize: PAGE_SIZE,
+      pageSize: defaultPagination.pageSize,
     });
   }, [table, pageIndex]);
 
@@ -146,20 +128,9 @@ export default function OrderTable() {
   };
 
   return (
-    <OrderTableContext.Provider
-      value={{
-        orderIdEdit,
-        setOrderIdEdit,
-        changeStatus,
-        orderObjectByGuestId,
-      }}
-    >
+    <OrderProvider>
       <div className="w-full">
-        <EditOrder
-          id={orderIdEdit}
-          setId={setOrderIdEdit}
-          onSubmitSuccess={() => {}}
-        />
+        <EditOrder id={orderIdEdit} setId={setOrderIdEdit} />
         <div className=" flex items-center">
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center">
@@ -268,10 +239,9 @@ export default function OrderTable() {
         </div>
         <OrderStatics
           statics={statics}
-          tableList={tableListSortedByNumber}
+          tableList={tableList}
           servingGuestByTableNumber={servingGuestByTableNumber}
         />
-        {/* <TableSkeleton /> */}
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -337,6 +307,6 @@ export default function OrderTable() {
           </div>
         </div>
       </div>
-    </OrderTableContext.Provider>
+    </OrderProvider>
   );
 }

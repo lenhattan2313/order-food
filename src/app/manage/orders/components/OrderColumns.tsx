@@ -29,11 +29,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { OrderTableContext } from "@/app/manage/orders/order-table";
-import OrderGuestDetail from "@/app/manage/orders/order-guest-detail";
+import OrderGuestDetail from "@/app/manage/orders/components/OrderGuestDetail";
 import { formatCurrency } from "@/lib/currency";
 import { getVietnameseOrderStatus } from "@/app/manage/orders/utils/orderUtils";
 import { formatDateTimeToLocaleString } from "@/lib/dateUtils";
+import { useOrderContext } from "@/context/orderContext";
 
 type OrderItem = GetOrdersResType["data"][0];
 const orderTableColumns: ColumnDef<OrderItem>[] = [
@@ -53,7 +53,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
     id: "guestName",
     header: "Khách hàng",
     cell: function Cell({ row }) {
-      const { orderObjectByGuestId } = useContext(OrderTableContext);
+      const { orderObjectByGuestId } = useOrderContext();
       const guest = row.original.guest;
       return (
         <div>
@@ -73,7 +73,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
               <PopoverContent className="w-[320px] sm:w-[440px]">
                 <OrderGuestDetail
                   guest={guest}
-                  orders={orderObjectByGuestId[guest.id]}
+                  orders={orderObjectByGuestId?.[guest.id] ?? []}
                 />
               </PopoverContent>
             </Popover>
@@ -146,7 +146,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
     accessorKey: "status",
     header: "Trạng thái",
     cell: function Cell({ row }) {
-      const { changeStatus } = useContext(OrderTableContext);
+      const { changeStatus } = useOrderContext();
       const changeOrderStatus = async (
         status: (typeof OrderStatusValues)[number]
       ) => {
@@ -204,7 +204,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
     id: "actions",
     enableHiding: false,
     cell: function Actions({ row }) {
-      const { setOrderIdEdit } = useContext(OrderTableContext);
+      const { setOrderIdEdit } = useOrderContext();
       const openEditOrder = () => {
         setOrderIdEdit(row.original.id);
       };

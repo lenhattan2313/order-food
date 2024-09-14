@@ -31,7 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DishesDialog } from "@/app/manage/orders/dishes-dialog";
+import { DishesDialog } from "@/app/manage/orders/components/DishesDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { DishListResType } from "@/schemaValidations/dish.schema";
@@ -79,11 +79,9 @@ const fakeOrderDetail = {
 export default function EditOrder({
   id,
   setId,
-  onSubmitSuccess,
 }: {
   id?: number | undefined;
   setId: (value: number | undefined) => void;
-  onSubmitSuccess?: () => void;
 }) {
   const [selectedDish, setSelectedDish] = useState<DishListResType["data"][0]>(
     fakeOrderDetail.dishSnapshot as any

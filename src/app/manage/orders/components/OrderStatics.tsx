@@ -1,9 +1,8 @@
-import OrderGuestDetail from "@/app/manage/orders/order-guest-detail";
+import OrderGuestDetail from "@/app/manage/orders/components/OrderGuestDetail";
 import {
-  ServingGuestByTableNumber,
   Statics,
   StatusCountObject,
-} from "@/app/manage/orders/order-table";
+} from "@/app/manage/orders/components/OrderTable";
 import {
   OrderStatusIcon,
   getVietnameseOrderStatus,
@@ -27,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { TableListResType } from "@/schemaValidations/table.schema";
 import { Users } from "lucide-react";
 import { Fragment, useState } from "react";
+import { ServingGuestByTableNumber } from "@/context/orderContext";
 
 // Ví dụ:
 // const statics: Statics = {
