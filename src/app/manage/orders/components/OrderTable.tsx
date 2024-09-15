@@ -15,7 +15,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { OrderStatusValues } from "@/constants/type";
-import { GetOrdersResType } from "@/schemaValidations/order.schema";
+import {
+  CreateOrdersResType,
+  GetOrdersResType,
+  UpdateOrderResType,
+} from "@/schemaValidations/order.schema";
 import {
   ColumnFiltersState,
   SortingState,
@@ -50,6 +54,10 @@ import { cn } from "@/lib/utils";
 import { useGetOrderList } from "@/queries/useOrder";
 import { useGetTableList } from "@/queries/useTable";
 import { endOfDay, format, startOfDay } from "date-fns";
+import { socket } from "@/lib/socket";
+import { SOCKET_EVENT } from "@/constants/socket";
+import { toast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 export type StatusCountObject = Record<
   (typeof OrderStatusValues)[number],
@@ -72,7 +80,11 @@ export default function OrderTable() {
     : defaultPagination.page;
   const pageIndex = page - 1;
   const [orderIdEdit, setOrderIdEdit] = useState<number | undefined>();
-  const { data: orders, isPending: isGetOrderListPending } = useGetOrderList({
+  const {
+    data: orders,
+    isPending: isGetOrderListPending,
+    refetch: refetchGetOrderList,
+  } = useGetOrderList({
     fromDate,
     toDate,
   });
@@ -127,10 +139,65 @@ export default function OrderTable() {
     setToDate(initToDate);
   };
 
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect();
+    }
+    function onConnect() {
+      console.log(socket.id);
+    }
+    function onDisconnect() {
+      console.log("Socket disconnected");
+    }
+    function handleUpdateOrder(data: UpdateOrderResType["data"]) {
+      refetchGetOrderList();
+      toast({
+        variant: "destructive",
+        description: `Bàn số ${data.tableNumber} vừa được cập nhật bởi ${data.orderHandler?.name}`,
+      });
+    }
+    function getInfoTableOrder(data: CreateOrdersResType["data"]) {
+      const tables = data.reduce((acc: Record<string, number>, cur) => {
+        if (!cur.tableNumber) {
+          return acc;
+        }
+        const tableNumber = cur.tableNumber.toString();
+        acc[tableNumber] = cur.quantity + (acc?.[tableNumber] ?? 0);
+        return acc;
+      }, {});
+
+      return tables;
+    }
+    function handleNewOrder(data: CreateOrdersResType["data"]) {
+      refetchGetOrderList();
+      const tables = getInfoTableOrder(data);
+      const description = Object.entries(tables).map(
+        ([tableNumber, dishCount]) => (
+          <p key={tableNumber}>
+            Bàn số <Badge>{tableNumber}</Badge> vừa đặt
+            <Badge>{dishCount}</Badge> món
+          </p>
+        )
+      );
+
+      toast({ description });
+    }
+    socket.on(SOCKET_EVENT.UPDATE_ORDER, handleUpdateOrder);
+    socket.on(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
+    socket.on(SOCKET_EVENT.CONNECT, onConnect);
+    socket.on(SOCKET_EVENT.DISCONNECT, onConnect);
+
+    return () => {
+      socket.off(SOCKET_EVENT.CONNECT, onConnect);
+      socket.off(SOCKET_EVENT.DISCONNECT, onDisconnect);
+      socket.off(SOCKET_EVENT.UPDATE_ORDER, handleUpdateOrder);
+      socket.off(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
+    };
+  }, []);
   return (
     <OrderProvider>
       <div className="w-full">
-        <EditOrder id={orderIdEdit} setId={setOrderIdEdit} />
+        <EditOrder />
         <div className=" flex items-center">
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center">

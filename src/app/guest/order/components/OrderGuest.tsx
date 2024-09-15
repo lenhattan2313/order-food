@@ -1,8 +1,9 @@
 "use client";
 
-import OrderItem from "@/app/guest/order/components/OrderItem";
+import OrderItem from "@/app/guest/order/components/OrderGuestItem";
 import { Spinner } from "@/components/_client/Spinner";
 import { Button } from "@/components/ui/button";
+import { SOCKET_EVENT } from "@/constants/socket";
 import { toast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/currency";
 import { socket } from "@/lib/socket";
@@ -20,31 +21,34 @@ export default function Order() {
 
     function onConnect() {
       console.log(socket.id);
-      socket.on("update-order", (data: UpdateOrderResType["data"]) => {
-        // const foundIndex = orders.findIndex((order) => data.id === order.id);
-        // if (foundIndex === -1) {
-        //   return;
-        // }
-        // const order = { ...orders[foundIndex] };
-        // order.status = data.status;
-        // setOrders((prev) =>
-        //   prev.map((item) => (item.id === data.id ? order : item))
-        // );
-        refetch();
-        toast({ description: "Trạng thái được cập nhật" });
-      });
     }
 
     function onDisconnect() {
-      console.log("disconnect");
+      console.log(SOCKET_EVENT.DISCONNECT);
     }
 
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
+    function handleRefetchStatus() {
+      refetch();
+      toast({ description: "Trạng thái được cập nhật" });
+    }
+    socket.on(SOCKET_EVENT.CONNECT, onConnect);
+    socket.on(SOCKET_EVENT.DISCONNECT, onDisconnect);
+    socket.on(SOCKET_EVENT.UPDATE_ORDER, (data: UpdateOrderResType["data"]) => {
+      // const foundIndex = orders.findIndex((order) => data.id === order.id);
+      // if (foundIndex === -1) {
+      //   return;
+      // }
+      // const order = { ...orders[foundIndex] };
+      // order.status = data.status;
+      // setOrders((prev) =>
+      //   prev.map((item) => (item.id === data.id ? order : item))
+      // );
+      handleRefetchStatus();
+    });
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
+      socket.off(SOCKET_EVENT.CONNECT, onConnect);
+      socket.off(SOCKET_EVENT.DISCONNECT, onDisconnect);
+      socket.off(SOCKET_EVENT.UPDATE_ORDER, handleRefetchStatus);
     };
   }, []);
   const { data, isPending, refetch } = useGuestGetOrder();

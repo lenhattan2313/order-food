@@ -6,11 +6,11 @@ import { NextResponse } from "next/server";
 
 const guestPaths = ["/guest"];
 const managePaths = ["/manage"];
-const unAuthRoutes = ["/login", "/register"];
+const unAuthRoutes = ["/login", "/register", "/tables"];
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   const { accessToken, refreshToken } = getTokenCookies();
-  const isPublicRoutes = unAuthRoutes.some((route) => route.includes(pathname));
+  const isPublicRoutes = unAuthRoutes.some((route) => pathname.includes(route));
   //when not log in or accessToken expired
   if (!accessToken) {
     if (isPublicRoutes && refreshToken) {
@@ -55,5 +55,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/manage/:path*", "/guest/:path*"],
+  matcher: [
+    "/login",
+    "/register",
+    "/manage/:path*",
+    "/guest/:path*",
+    "/tables/:path*",
+  ],
 };

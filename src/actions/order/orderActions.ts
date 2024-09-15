@@ -1,11 +1,17 @@
 import { PREFIX_URL } from "@/constants/url";
 import http from "@/lib/httpUtils";
 import {
+  CreateOrdersBodyType,
+  CreateOrdersResType,
+  GetOrderDetailResType,
   GetOrdersQueryParamsType,
   GetOrdersResType,
+  OrderParamType,
+  UpdateOrderBodyType,
+  UpdateOrderResType,
 } from "@/schemaValidations/order.schema";
 import queryString from "query-string";
-
+export type UpdateOrderType = UpdateOrderBodyType & OrderParamType;
 export const orderActions = {
   getList: (queryParams?: GetOrdersQueryParamsType) => {
     const params = queryParams
@@ -18,4 +24,18 @@ export const orderActions = {
       `${PREFIX_URL.ORDER}?${queryString.stringify(params ?? {})}`
     );
   },
+  getDetail: ({ orderId }: OrderParamType) =>
+    http.get<GetOrderDetailResType>(`${PREFIX_URL.ORDER}/${orderId}`),
+
+  update: ({ orderId, ...body }: UpdateOrderType) =>
+    http.put<UpdateOrderResType, UpdateOrderBodyType>(
+      `${PREFIX_URL.ORDER}/${orderId}`,
+      body
+    ),
+
+  create: (body: CreateOrdersBodyType) =>
+    http.post<CreateOrdersResType, CreateOrdersBodyType>(
+      PREFIX_URL.ORDER,
+      body
+    ),
 };

@@ -33,60 +33,21 @@ import {
 } from "@/components/ui/select";
 import { DishesDialog } from "@/app/manage/orders/components/DishesDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import { getVietnameseOrderStatus } from "@/app/manage/orders/utils/orderUtils";
+import { useOrderContext } from "@/context/orderContext";
+import { useGetOrderDetail, useUpdateOrder } from "@/queries/useOrder";
+import { handleApiError } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
+import { Spinner } from "@/components/_client/Spinner";
 
-const fakeOrderDetail = {
-  id: 30,
-  guestId: 70,
-  guest: {
-    id: 70,
-    name: "An",
-    tableNumber: 2,
-    createdAt: "2024-07-11T04:30:32.728Z",
-    updatedAt: "2024-07-11T05:00:34.131Z",
-  },
-  tableNumber: 2,
-  dishSnapshotId: 36,
-  dishSnapshot: {
-    id: 36,
-    name: "Spaghetti 5",
-    price: 50000,
-    image: "http://localhost:4000/static/e0001b7e08604e0dbabf0d8f95e6174a.jpg",
-    description: "Mỳ ý",
-    status: "Available",
-    dishId: 2,
-    createdAt: "2024-07-11T04:30:57.450Z",
-    updatedAt: "2024-07-11T04:30:57.450Z",
-  },
-  quantity: 1,
-  orderHandlerId: null,
-  orderHandler: null,
-  status: "Paid",
-  createdAt: "2024-07-11T04:30:57.450Z",
-  updatedAt: "2024-07-11T04:31:38.806Z",
-  table: {
-    number: 2,
-    capacity: 10,
-    status: "Reserved",
-    token: "667f3b1ce5e4429990dacea1809d20e7",
-    createdAt: "2024-06-21T06:52:26.847Z",
-    updatedAt: "2024-07-03T04:36:51.130Z",
-  },
-};
-
-export default function EditOrder({
-  id,
-  setId,
-}: {
-  id?: number | undefined;
-  setId: (value: number | undefined) => void;
-}) {
-  const [selectedDish, setSelectedDish] = useState<DishListResType["data"][0]>(
-    fakeOrderDetail.dishSnapshot as any
-  );
-  const orderDetail = fakeOrderDetail;
+export default function EditOrder() {
+  const [selectedDish, setSelectedDish] = useState<
+    DishListResType["data"][0] | undefined
+  >();
+  const { setOrderIdEdit, orderIdEdit } = useOrderContext();
+  const { data: orderDetail, isPending } = useGetOrderDetail(orderIdEdit);
   const form = useForm<UpdateOrderBodyType>({
     resolver: zodResolver(UpdateOrderBody),
     defaultValues: {
@@ -95,19 +56,47 @@ export default function EditOrder({
       quantity: 1,
     },
   });
+  const { reset, setError } = form;
+  useEffect(() => {
+    if (!orderDetail) {
+      return;
+    }
+    const {
+      data: {
+        status,
+        dishSnapshot: { dishId },
+        quantity,
+      },
+    } = orderDetail;
+    reset((preState) => ({ ...preState, status, dishId: dishId!, quantity }));
+    setSelectedDish(orderDetail.data.dishSnapshot);
+  }, [orderDetail, reset]);
+  const { mutateAsync, isPending: isUpdatePending } = useUpdateOrder();
+  const onSubmit = async (values: UpdateOrderBodyType) => {
+    if (!orderIdEdit) {
+      return;
+    }
+    try {
+      const { message } = await mutateAsync({
+        ...values,
+        orderId: orderIdEdit,
+      });
+      toast({ description: message });
+    } catch (error) {
+      handleApiError(error, setError);
+    }
+  };
 
-  const onSubmit = async (values: UpdateOrderBodyType) => {};
-
-  const reset = () => {
-    setId(undefined);
+  const handleReset = () => {
+    setOrderIdEdit(undefined);
   };
 
   return (
     <Dialog
-      open={Boolean(id)}
+      open={Boolean(orderIdEdit)}
       onOpenChange={(value) => {
         if (!value) {
-          reset();
+          handleReset();
         }
       }}
     >
@@ -115,104 +104,111 @@ export default function EditOrder({
         <DialogHeader>
           <DialogTitle>Cập nhật đơn hàng</DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            noValidate
-            className="grid auto-rows-max items-start gap-4 md:gap-8"
-            id="edit-order-form"
-            onSubmit={form.handleSubmit(onSubmit, console.log)}
-          >
-            <div className="grid gap-4 py-4">
-              <FormField
-                control={form.control}
-                name="dishId"
-                render={({ field }) => (
-                  <FormItem className="grid grid-cols-4 items-center justify-items-start gap-4">
-                    <FormLabel>Món ăn</FormLabel>
-                    <div className="flex items-center col-span-2 space-x-4">
-                      <Avatar className="aspect-square w-[50px] h-[50px] rounded-md object-cover">
-                        <AvatarImage src={selectedDish?.image} />
-                        <AvatarFallback className="rounded-none">
-                          {selectedDish?.name}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>{selectedDish?.name}</div>
-                    </div>
+        {isPending && <Spinner type="box" className="w-full" />}
+        {!isPending && (
+          <Form {...form}>
+            <form
+              noValidate
+              className="grid auto-rows-max items-start gap-4 md:gap-8"
+              id="edit-order-form"
+              onSubmit={form.handleSubmit(onSubmit, console.log)}
+            >
+              <div className="grid gap-4 py-4">
+                <FormField
+                  control={form.control}
+                  name="dishId"
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-4 items-center justify-items-start gap-4">
+                      <FormLabel>Món ăn</FormLabel>
+                      <div className="flex items-center col-span-2 space-x-4">
+                        <Avatar className="aspect-square w-[50px] h-[50px] rounded-md object-cover">
+                          <AvatarImage src={selectedDish?.image} />
+                          <AvatarFallback className="rounded-none">
+                            {selectedDish?.name}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>{selectedDish?.name}</div>
+                      </div>
 
-                    <DishesDialog
-                      onChoose={(dish) => {
-                        field.onChange(dish.id);
-                        setSelectedDish(dish);
-                      }}
-                    />
-                  </FormItem>
-                )}
-              />
+                      <DishesDialog
+                        onChoose={(dish) => {
+                          field.onChange(dish.id);
+                          setSelectedDish(dish);
+                        }}
+                      />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="quantity"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="quantity">Số lượng</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Input
-                          id="quantity"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          className="w-16 text-center"
-                          {...field}
+                <FormField
+                  control={form.control}
+                  name="quantity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                        <Label htmlFor="quantity">Số lượng</Label>
+                        <div className="col-span-3 w-full space-y-2">
+                          <Input
+                            id="quantity"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            className="w-16 text-center"
+                            {...field}
+                            value={field.value}
+                            onChange={(e) => {
+                              let value = e.target.value;
+                              const numberValue = Number(value);
+                              if (isNaN(numberValue)) {
+                                return;
+                              }
+                              field.onChange(numberValue);
+                            }}
+                          />
+                          <FormMessage />
+                        </div>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                        <FormLabel>Trạng thái</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
                           value={field.value}
-                          onChange={(e) => {
-                            let value = e.target.value;
-                            const numberValue = Number(value);
-                            if (isNaN(numberValue)) {
-                              return;
-                            }
-                            field.onChange(numberValue);
-                          }}
-                        />
+                        >
+                          <FormControl className="col-span-3">
+                            <SelectTrigger className="w-[200px]">
+                              <SelectValue placeholder="Trạng thái" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {OrderStatusValues.map((status) => (
+                              <SelectItem key={status} value={status}>
+                                {getVietnameseOrderStatus(status)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </div>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <FormLabel>Trạng thái</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl className="col-span-3">
-                          <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Trạng thái" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {OrderStatusValues.map((status) => (
-                            <SelectItem key={status} value={status}>
-                              {getVietnameseOrderStatus(status)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </form>
-        </Form>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </form>
+          </Form>
+        )}
         <DialogFooter>
-          <Button type="submit" form="edit-order-form">
+          <Button
+            type="submit"
+            form="edit-order-form"
+            isLoading={isUpdatePending}
+          >
             Lưu
           </Button>
         </DialogFooter>

@@ -36,7 +36,7 @@ export const Spinner = ({
   // Box-level spinner
   if (type === "box") {
     return (
-      <div className="relative h-32 w-32 border border-gray-300 rounded-md flex items-center justify-center">
+      <div className="relative h-32 w-full flex items-center justify-center">
         {icon}
       </div>
     );
