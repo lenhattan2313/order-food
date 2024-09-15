@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { OrderProvider } from "@/context/orderContext";
 
 import { Suspense } from "react";
 
@@ -20,7 +21,9 @@ export default function AccountsPage() {
           </CardHeader>
           <CardContent>
             <Suspense>
-              <OrderTable />
+              <OrderProvider>
+                <OrderTable />
+              </OrderProvider>
             </Suspense>
           </CardContent>
         </Card>

@@ -6,9 +6,14 @@ import {
   AccountResType,
   ChangePasswordBodyType,
   CreateEmployeeAccountBodyType,
+  CreateGuestBodyType,
+  CreateGuestResType,
+  GetGuestListQueryParamsType,
+  GetListGuestsResType,
   UpdateEmployeeAccountBodyType,
   UpdateMeBodyType,
 } from "@/schemaValidations/account.schema";
+import queryString from "query-string";
 type IUpdateAccountType = AccountIdParamType & UpdateEmployeeAccountBodyType;
 export const accountActions = {
   getMe: () => http.get<AccountResType>(`${PREFIX_URL.ACCOUNT}/me`),
@@ -46,4 +51,22 @@ export const accountActions = {
     ),
   deleteEmployee: ({ id }: AccountIdParamType) =>
     http.delete<AccountResType>(`${PREFIX_URL.ACCOUNT}/detail/${id}`),
+
+  //guest
+  createGuest: (body: CreateGuestBodyType) =>
+    http.post<CreateGuestResType, CreateGuestBodyType>(
+      `${PREFIX_URL.ACCOUNT}/guests`,
+      body
+    ),
+  getGuestList: (queryParams: GetGuestListQueryParamsType) => {
+    const params = queryParams
+      ? {
+          fromDate: queryParams.fromDate?.toJSON() ?? "",
+          toDate: queryParams.toDate?.toJSON() ?? "",
+        }
+      : {};
+    return http.get<GetListGuestsResType>(
+      `${PREFIX_URL.ACCOUNT}/guests?${queryString.stringify(params)}`
+    );
+  },
 };

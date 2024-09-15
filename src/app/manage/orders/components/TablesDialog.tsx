@@ -1,3 +1,5 @@
+import { getVietnameseTableStatus } from "@/app/manage/tables/utils/tablesUtils";
+import AutoPagination from "@/components/auto-pagination";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -14,8 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AutoPagination from "@/components/auto-pagination";
-import { useEffect, useState } from "react";
+import { defaultPagination } from "@/constants/common";
+import { TableStatus } from "@/constants/type";
+import { cn, simpleMatchText } from "@/lib/utils";
+import { useGetTableList } from "@/queries/useTable";
+import { TableListResType } from "@/schemaValidations/table.schema";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -28,11 +34,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { cn, simpleMatchText } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { TableListResType } from "@/schemaValidations/table.schema";
-import { TableStatus } from "@/constants/type";
-import { getVietnameseTableStatus } from "@/app/manage/tables/utils/tablesUtils";
+import { useEffect, useMemo, useState } from "react";
 
 type TableItem = TableListResType["data"][0];
 
@@ -64,26 +66,30 @@ export const columns: ColumnDef<TableItem>[] = [
   },
 ];
 
-const PAGE_SIZE = 10;
-
 export function TablesDialog({
   onChoose,
 }: {
   onChoose: (table: TableItem) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const data: TableListResType["data"] = [];
+  const { data, isPending } = useGetTableList();
+  const tables = useMemo(
+    () =>
+      data?.data.filter((table) => table.status === TableStatus.Available) ??
+      [],
+    [data]
+  );
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({
     pageIndex: 0, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
-    pageSize: PAGE_SIZE, //default page size
+    pageSize: defaultPagination.pageSize, //default page size
   });
 
   const table = useReactTable({
-    data,
+    data: tables,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -107,7 +113,7 @@ export function TablesDialog({
   useEffect(() => {
     table.setPagination({
       pageIndex: 0,
-      pageSize: PAGE_SIZE,
+      pageSize: defaultPagination.pageSize,
     });
   }, [table]);
 
@@ -208,7 +214,7 @@ export function TablesDialog({
               <div className="text-xs text-muted-foreground py-4 flex-1 ">
                 Hiển thị{" "}
                 <strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
-                trong <strong>{data.length}</strong> kết quả
+                trong <strong>{tables.length}</strong> kết quả
               </div>
               <div>
                 <AutoPagination

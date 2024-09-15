@@ -1,13 +1,16 @@
+"use client";
 import { Statics } from "@/app/manage/orders/components/OrderTable";
 import { OrderStatus } from "@/constants/type";
 import {
   OrderObjectByGuestID,
   ServingGuestByTableNumber,
+  useOrderContext,
 } from "@/context/orderContext";
 import { GetOrdersResType } from "@/schemaValidations/order.schema";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 export const useOrderService = (orderList: GetOrdersResType["data"]) => {
+  const { setOrderObjectByGuestId } = useOrderContext();
   const result = useMemo(() => {
     const statics: Statics = {
       status: {
@@ -78,11 +81,20 @@ export const useOrderService = (orderList: GetOrdersResType["data"]) => {
         servingGuestByTableNumber[Number(tableNumber)] = servingGuestObject;
       }
     }
+
     return {
       statics,
       orderObjectByGuestId,
       servingGuestByTableNumber,
     };
   }, [orderList]);
+
+  useEffect(() => {
+    setOrderObjectByGuestId(
+      Object.keys(result.orderObjectByGuestId).length
+        ? result.orderObjectByGuestId
+        : undefined
+    );
+  }, [result]);
   return result;
 };

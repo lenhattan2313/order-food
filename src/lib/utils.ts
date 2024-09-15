@@ -26,7 +26,7 @@ export function handleApiError<T extends FieldValues>(
   error: unknown,
   setError?: UseFormSetError<T>
 ) {
-  if (error instanceof HttpError && setError) {
+  if (error instanceof HttpError && setError && error.errors.length) {
     error.errors.forEach(({ field, message }: FieldValues) => {
       setError(field, {
         message,

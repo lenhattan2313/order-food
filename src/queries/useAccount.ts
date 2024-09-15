@@ -1,6 +1,9 @@
 import { accountActions } from "@/actions/account/accountActions";
 import { QUERY_KEYS } from "@/constants/queryKeys";
-import { AccountResType } from "@/schemaValidations/account.schema";
+import {
+  AccountResType,
+  GetGuestListQueryParamsType,
+} from "@/schemaValidations/account.schema";
 import {
   UseQueryOptions,
   useMutation,
@@ -78,3 +81,21 @@ export const useDeleteEmployee = () => {
     },
   });
 };
+
+//GUEST
+export const useCreateGuest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: accountActions.createGuest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.ACCOUNTS, QUERY_KEYS.GUEST],
+      });
+    },
+  });
+};
+export const useGetGuestList = (params: GetGuestListQueryParamsType) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.ACCOUNTS, QUERY_KEYS.GUEST, params],
+    queryFn: () => accountActions.getGuestList(params),
+  });

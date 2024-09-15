@@ -25,12 +25,19 @@ import { Switch } from "@/components/ui/switch";
 import GuestsDialog from "@/app/manage/orders/components/GuestsDialog";
 import { CreateOrdersBodyType } from "@/schemaValidations/order.schema";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, handleApiError } from "@/lib/utils";
 import { DishStatus } from "@/constants/type";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import { formatCurrency } from "@/lib/currency";
 import Quantity from "@/app/guest/menu/components/Quantity";
-
+import { useGetDishList } from "@/queries/useDish";
+import { useCreateOrder } from "@/queries/useOrder";
+import { toast } from "@/hooks/use-toast";
+import { useCreateGuest } from "@/queries/useAccount";
+const initialData = {
+  name: "",
+  tableNumber: 0,
+};
 export default function AddOrder() {
   const [open, setOpen] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState<
@@ -38,7 +45,8 @@ export default function AddOrder() {
   >(null);
   const [isNewGuest, setIsNewGuest] = useState(true);
   const [orders, setOrders] = useState<CreateOrdersBodyType["orders"]>([]);
-  const dishes: DishListResType["data"] = [];
+  const { data, isPending } = useGetDishList();
+  const dishes = useMemo(() => data?.data ?? [], [data]);
 
   const totalPrice = useMemo(() => {
     return dishes.reduce((result, dish) => {
@@ -50,15 +58,11 @@ export default function AddOrder() {
 
   const form = useForm<GuestLoginBodyType>({
     resolver: zodResolver(GuestLoginBody),
-    defaultValues: {
-      name: "",
-      tableNumber: 0,
-    },
+    defaultValues: initialData,
   });
-  const name = form.watch("name");
-  const tableNumber = form.watch("tableNumber");
 
   const handleQuantityChange = (dishId: number, quantity: number) => {
+    //TODO create utils guest and others
     setOrders((prevOrders) => {
       if (quantity === 0) {
         return prevOrders.filter((order) => order.dishId !== dishId);
@@ -72,11 +76,56 @@ export default function AddOrder() {
       return newOrders;
     });
   };
-
-  const handleOrder = async () => {};
-
+  const { mutateAsync: createOrder, isPending: isCreateOrderPending } =
+    useCreateOrder();
+  const { mutateAsync: createGuest, isPending: isCreateGuestPending } =
+    useCreateGuest();
+  const handleOrder = async () => {
+    try {
+      let guestId = selectedGuest?.id;
+      if (!guestId) {
+        const {
+          data: { id },
+        } = await createGuest({
+          name: form.getValues("name"),
+          tableNumber: form.getValues("tableNumber"),
+        });
+        guestId = id;
+      }
+      if (!guestId) {
+        toast({
+          description: "Hãy chọn một khách hàng",
+        });
+        return;
+      }
+      const payload: CreateOrdersBodyType = {
+        orders,
+        guestId,
+      };
+      const { message } = await createOrder(payload);
+      reset();
+      toast({ description: message });
+    } catch (error) {
+      handleApiError<GuestLoginBodyType>(error, form.setError);
+    }
+  };
+  function reset() {
+    form.reset();
+    setSelectedGuest(null);
+    setIsNewGuest(true);
+    setOrders([]);
+    setOpen(false);
+  }
   return (
-    <Dialog onOpenChange={setOpen} open={open}>
+    <Dialog
+      onOpenChange={(value) => {
+        if (!value) {
+          reset();
+        }
+        setOpen(value);
+      }}
+      open={open}
+    >
       <DialogTrigger asChild>
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
@@ -212,6 +261,7 @@ export default function AddOrder() {
             className="w-full justify-between"
             onClick={handleOrder}
             disabled={orders.length === 0}
+            isLoading={isCreateOrderPending || isCreateGuestPending}
           >
             <span>Đặt hàng · {orders.length} món</span>
             <span>{formatCurrency(totalPrice)}</span>

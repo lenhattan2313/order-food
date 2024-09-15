@@ -1,3 +1,4 @@
+import AutoPagination from "@/components/auto-pagination";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -14,8 +16,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AutoPagination from "@/components/auto-pagination";
-import { useEffect, useState } from "react";
+import { dateRangeDefault, defaultPagination } from "@/constants/common";
+import { formatDateTimeToLocaleString } from "@/lib/dateUtils";
+import { simpleMatchText } from "@/lib/utils";
+import { useGetGuestList } from "@/queries/useAccount";
+import { GetListGuestsResType } from "@/schemaValidations/account.schema";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -28,11 +33,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { simpleMatchText } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { GetListGuestsResType } from "@/schemaValidations/account.schema";
-import { endOfDay, format, startOfDay } from "date-fns";
-import { formatDateTimeToLocaleString } from "@/lib/dateUtils";
+import { format } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
 
 type GuestItem = GetListGuestsResType["data"][0];
 
@@ -78,30 +80,27 @@ export const columns: ColumnDef<GuestItem>[] = [
   },
 ];
 
-const PAGE_SIZE = 10;
-const initFromDate = startOfDay(new Date());
-const initToDate = endOfDay(new Date());
-
 export default function GuestsDialog({
   onChoose,
 }: {
   onChoose: (guest: GuestItem) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [fromDate, setFromDate] = useState(initFromDate);
-  const [toDate, setToDate] = useState(initToDate);
-  const data: GetListGuestsResType["data"] = [];
+  const [fromDate, setFromDate] = useState(dateRangeDefault.fromDate);
+  const [toDate, setToDate] = useState(dateRangeDefault.toDate);
+  const { data, isPending } = useGetGuestList({ fromDate, toDate });
+  const guests = useMemo(() => data?.data ?? [], [data]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({
     pageIndex: 0, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
-    pageSize: PAGE_SIZE, //default page size
+    pageSize: defaultPagination.pageSize, //default page size
   });
 
   const table = useReactTable({
-    data,
+    data: guests,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -125,7 +124,7 @@ export default function GuestsDialog({
   useEffect(() => {
     table.setPagination({
       pageIndex: 0,
-      pageSize: PAGE_SIZE,
+      pageSize: defaultPagination.pageSize,
     });
   }, [table]);
 
@@ -135,8 +134,8 @@ export default function GuestsDialog({
   };
 
   const resetDateFilter = () => {
-    setFromDate(initFromDate);
-    setToDate(initToDate);
+    setFromDate(dateRangeDefault.fromDate);
+    setToDate(dateRangeDefault.toDate);
   };
 
   return (
@@ -264,7 +263,7 @@ export default function GuestsDialog({
               <div className="text-xs text-muted-foreground py-4 flex-1 ">
                 Hiển thị{" "}
                 <strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
-                trong <strong>{data.length}</strong> kết quả
+                trong <strong>{guests.length}</strong> kết quả
               </div>
               <div>
                 <AutoPagination

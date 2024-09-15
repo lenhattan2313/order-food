@@ -1,31 +1,31 @@
-import { OrderStatusValues } from "@/constants/type";
+"use client";
+import { UpdateOrderType } from "@/actions/order/orderActions";
+import { toast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/utils";
+import { useUpdateOrder } from "@/queries/useOrder";
 import { GetOrdersResType } from "@/schemaValidations/order.schema";
 import {
   FC,
   PropsWithChildren,
   createContext,
+  useCallback,
   useContext,
   useState,
 } from "react";
 
 export type OrderObjectByGuestID = Record<number, GetOrdersResType["data"]>;
 export type ServingGuestByTableNumber = Record<number, OrderObjectByGuestID>;
-export type IChangeStatusType = {
-  orderId: number;
-  dishId: number;
-  status: (typeof OrderStatusValues)[number];
-  quantity: number;
-};
+
 const OrderContext = createContext<{
   setOrderIdEdit: (value?: number) => void;
   orderIdEdit?: number;
-  changeStatus: (value: IChangeStatusType) => void;
+  changeStatus: (value: UpdateOrderType) => void;
   setOrderObjectByGuestId: (value?: OrderObjectByGuestID) => void;
   orderObjectByGuestId?: OrderObjectByGuestID;
 }>({
   setOrderIdEdit: (value?: number) => {},
   orderIdEdit: undefined,
-  changeStatus: (body: IChangeStatusType) => {},
+  changeStatus: (body: UpdateOrderType) => {},
   setOrderObjectByGuestId: (value?: OrderObjectByGuestID) => {},
   orderObjectByGuestId: undefined,
 });
@@ -34,12 +34,15 @@ export const OrderProvider: FC<PropsWithChildren> = ({ children }) => {
   const [orderObjectByGuestId, setOrderObjectByGuestId] = useState<
     OrderObjectByGuestID | undefined
   >();
-  const changeStatus = async (body: {
-    orderId: number;
-    dishId: number;
-    status: (typeof OrderStatusValues)[number];
-    quantity: number;
-  }) => {};
+  const { mutateAsync } = useUpdateOrder();
+  const changeStatus = useCallback(async (body: UpdateOrderType) => {
+    try {
+      const { message } = await mutateAsync(body);
+      toast({ description: message });
+    } catch (error) {
+      handleApiError(error);
+    }
+  }, []);
   return (
     <OrderContext.Provider
       value={{
