@@ -32,6 +32,10 @@ export default function Order() {
       refetch();
       toast({ description: "Trạng thái được cập nhật" });
     }
+    function handlePayment() {
+      refetch();
+      toast({ description: "Bạn đã thanh toán thành công" });
+    }
     socket.on(SOCKET_EVENT.CONNECT, onConnect);
     socket.on(SOCKET_EVENT.DISCONNECT, onDisconnect);
     socket.on(SOCKET_EVENT.UPDATE_ORDER, (data: UpdateOrderResType["data"]) => {
@@ -46,10 +50,13 @@ export default function Order() {
       // );
       handleRefetchStatus();
     });
+    socket.on(SOCKET_EVENT.PAYMENT, handlePayment);
+
     return () => {
       socket.off(SOCKET_EVENT.CONNECT, onConnect);
       socket.off(SOCKET_EVENT.DISCONNECT, onDisconnect);
       socket.off(SOCKET_EVENT.UPDATE_ORDER, handleRefetchStatus);
+      socket.off(SOCKET_EVENT.PAYMENT, handlePayment);
     };
   }, []);
   const { data, isPending, refetch } = useGuestGetOrder();

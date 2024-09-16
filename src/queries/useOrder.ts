@@ -3,6 +3,7 @@ import { QUERY_KEYS } from "@/constants/queryKeys";
 import {
   CreateOrdersBodyType,
   GetOrdersQueryParamsType,
+  PayGuestOrdersBodyType,
 } from "@/schemaValidations/order.schema";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -26,4 +27,9 @@ export const useCreateOrder = () =>
 export const useUpdateOrder = () =>
   useMutation({
     mutationFn: (payload: UpdateOrderType) => orderActions.update(payload),
+  });
+export const usePaymentOrder = () =>
+  useMutation({
+    mutationFn: (payload: PayGuestOrdersBodyType) =>
+      orderActions.payment(payload),
   });

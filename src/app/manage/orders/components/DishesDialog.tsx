@@ -214,7 +214,8 @@ export function DishesDialog({
                 <AutoPagination
                   page={table.getState().pagination.pageIndex + 1}
                   pageSize={table.getPageCount()}
-                  pathname="/manage/dishes"
+                  isButton
+                  onClick={(page) => table.setPageIndex(page - 1)}
                 />
               </div>
             </div>

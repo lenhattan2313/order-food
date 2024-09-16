@@ -3,4 +3,5 @@ export const SOCKET_EVENT = {
   DISCONNECT: "disconnect",
   UPDATE_ORDER: "update-order",
   NEW_ORDER: "new-order",
+  PAYMENT: "payment",
 } as const;

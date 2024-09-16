@@ -7,6 +7,8 @@ import {
   GetOrdersQueryParamsType,
   GetOrdersResType,
   OrderParamType,
+  PayGuestOrdersBodyType,
+  PayGuestOrdersResType,
   UpdateOrderBodyType,
   UpdateOrderResType,
 } from "@/schemaValidations/order.schema";
@@ -36,6 +38,12 @@ export const orderActions = {
   create: (body: CreateOrdersBodyType) =>
     http.post<CreateOrdersResType, CreateOrdersBodyType>(
       PREFIX_URL.ORDER,
+      body
+    ),
+
+  payment: (body: PayGuestOrdersBodyType) =>
+    http.post<PayGuestOrdersResType, PayGuestOrdersBodyType>(
+      `${PREFIX_URL.ORDER}/pay`,
       body
     ),
 };

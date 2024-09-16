@@ -5,11 +5,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { OrderStatus } from "@/constants/type";
+import { toast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/currency";
 import {
   formatDateTimeToLocaleString,
   formatDateTimeToTimeString,
 } from "@/lib/dateUtils";
+import { handleApiError } from "@/lib/utils";
+import { usePaymentOrder } from "@/queries/useOrder";
 
 import { GetOrdersResType } from "@/schemaValidations/order.schema";
 import Image from "next/image";
@@ -20,9 +23,11 @@ type Orders = GetOrdersResType["data"];
 export default function OrderGuestDetail({
   guest,
   orders,
+  onSuccess,
 }: {
   guest: Guest;
   orders: Orders;
+  onSuccess?: () => void;
 }) {
   const ordersFilterToPurchase = guest
     ? orders.filter(
@@ -34,6 +39,20 @@ export default function OrderGuestDetail({
   const purchasedOrderFilter = guest
     ? orders.filter((order) => order.status === OrderStatus.Paid)
     : [];
+
+  const { mutateAsync, isPending } = usePaymentOrder();
+  async function handlePayment() {
+    if (!guest?.id) {
+      return;
+    }
+    try {
+      const { message } = await mutateAsync({ guestId: guest.id });
+      toast({ description: message });
+      onSuccess && onSuccess();
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
   return (
     <div className="space-y-2 text-sm">
       {guest && (
@@ -150,6 +169,8 @@ export default function OrderGuestDetail({
           size={"sm"}
           variant={"secondary"}
           disabled={ordersFilterToPurchase.length === 0}
+          isLoading={isPending}
+          onClick={handlePayment}
         >
           Thanh toán tất cả ({ordersFilterToPurchase.length} đơn)
         </Button>

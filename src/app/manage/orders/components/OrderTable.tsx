@@ -17,6 +17,7 @@ import {
 import { OrderStatusValues } from "@/constants/type";
 import {
   CreateOrdersResType,
+  PayGuestOrdersResType,
   UpdateOrderResType,
 } from "@/schemaValidations/order.schema";
 import {
@@ -148,7 +149,6 @@ export default function OrderTable() {
     function handleUpdateOrder(data: UpdateOrderResType["data"]) {
       refetchGetOrderList();
       toast({
-        variant: "destructive",
         description: `Bàn số ${data.tableNumber} vừa được cập nhật bởi ${data.orderHandler?.name}`,
       });
     }
@@ -178,8 +178,16 @@ export default function OrderTable() {
 
       toast({ description });
     }
+    function handlePayment(response: PayGuestOrdersResType["data"]) {
+      const data = response[0];
+      refetchGetOrderList();
+      toast({
+        description: `Bàn số ${data.tableNumber} vừa thanh toán thành công`,
+      });
+    }
     socket.on(SOCKET_EVENT.UPDATE_ORDER, handleUpdateOrder);
     socket.on(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
+    socket.on(SOCKET_EVENT.PAYMENT, handlePayment);
     socket.on(SOCKET_EVENT.CONNECT, onConnect);
     socket.on(SOCKET_EVENT.DISCONNECT, onConnect);
 
@@ -188,6 +196,7 @@ export default function OrderTable() {
       socket.off(SOCKET_EVENT.DISCONNECT, onDisconnect);
       socket.off(SOCKET_EVENT.UPDATE_ORDER, handleUpdateOrder);
       socket.off(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
+      socket.off(SOCKET_EVENT.PAYMENT, handlePayment);
     };
   }, []);
   return (
