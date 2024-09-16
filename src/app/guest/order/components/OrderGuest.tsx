@@ -1,9 +1,10 @@
 "use client";
 
 import OrderItem from "@/app/guest/order/components/OrderGuestItem";
+import { calculateTotals } from "@/app/guest/order/utils/guestOrderUtils";
 import { Spinner } from "@/components/_client/Spinner";
-import { Button } from "@/components/ui/button";
 import { SOCKET_EVENT } from "@/constants/socket";
+import { OrderStatus } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/currency";
 import { socket } from "@/lib/socket";
@@ -57,21 +58,21 @@ export default function Order() {
       setOrders(data.data);
     }
   }, [data]);
-  const totalPrice = useMemo(
-    () =>
-      orders.reduce((acc, cur) => {
-        return acc + cur.dishSnapshot.price * cur.quantity;
-      }, 0),
-    [orders]
-  );
-  const totalCount = useMemo(
-    () =>
-      orders.reduce((acc, cur) => {
-        return acc + cur.quantity;
-      }, 0),
+
+  const paid = useMemo(
+    () => calculateTotals(orders, (cur) => cur.status === OrderStatus.Paid),
     [orders]
   );
 
+  const unPaid = useMemo(
+    () =>
+      calculateTotals(
+        orders,
+        (cur) =>
+          cur.status !== OrderStatus.Paid && cur.status !== OrderStatus.Rejected
+      ),
+    [orders]
+  );
   return (
     <>
       {isPending && <Spinner />}
@@ -79,10 +80,20 @@ export default function Order() {
         return <OrderItem order={order} key={order.id} />;
       })}
       <div className="sticky bottom-0">
-        <Button className="w-full justify-between">
-          <span>{totalCount} món</span>
-          <span>{formatCurrency(totalPrice)}</span>
-        </Button>
+        <div className="sticky bottom-0 ">
+          <div className="w-full flex space-x-4 text-xl font-semibold">
+            <span>Đơn chưa thanh toán · {unPaid.count} món</span>
+            <span>{formatCurrency(unPaid.price)}</span>
+          </div>
+        </div>
+        {paid.count > 0 && (
+          <div className="sticky bottom-0 ">
+            <div className="w-full flex space-x-4 text-xl font-semibold">
+              <span>Đơn đã thanh toán · {paid.count} món</span>
+              <span>{formatCurrency(paid.price)}</span>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
