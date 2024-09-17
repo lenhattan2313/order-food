@@ -39,7 +39,7 @@ import { DeleteTable } from "@/app/manage/tables/components/DeleteTable";
 import EditTable from "@/app/manage/tables/components/EditTable";
 import { getVietnameseTableStatus } from "@/app/manage/tables/utils/tablesUtils";
 import { QRCodeCanvas } from "@/components/_client/QRCode";
-import AutoPagination from "@/components/auto-pagination";
+import AutoPagination from "@/components/_client/AutoPagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { defaultPagination } from "@/constants/common";
 import {

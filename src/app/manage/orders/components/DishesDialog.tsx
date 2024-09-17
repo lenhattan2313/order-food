@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AutoPagination from "@/components/auto-pagination";
+import AutoPagination from "@/components/_client/AutoPagination";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import { useEffect, useMemo, useState } from "react";
 import {

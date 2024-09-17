@@ -1,5 +1,5 @@
 import { getVietnameseTableStatus } from "@/app/manage/tables/utils/tablesUtils";
-import AutoPagination from "@/components/auto-pagination";
+import AutoPagination from "@/components/_client/AutoPagination";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

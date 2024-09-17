@@ -18,7 +18,7 @@ import {
 import AddDish from "@/app/manage/dishes/components/AddDish";
 import EditDish from "@/app/manage/dishes/components/EditDish";
 import { getVietnameseDishStatus } from "@/app/manage/dishes/utils/dishesUtils";
-import AutoPagination from "@/components/auto-pagination";
+import AutoPagination from "@/components/_client/AutoPagination";
 
 import { DeleteDish } from "@/app/manage/dishes/components/DeleteDish";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

@@ -20,7 +20,7 @@ import { AccountProvider, useAccountContext } from "@/context/accountContext";
 import AddEmployee from "@/app/manage/accounts/components/AddEmployee";
 import { DeleteAccountModal } from "@/app/manage/accounts/components/DeleteAccountModal";
 import EditEmployee from "@/app/manage/accounts/components/EditEmployee";
-import AutoPagination from "@/components/auto-pagination";
+import AutoPagination from "@/components/_client/AutoPagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,

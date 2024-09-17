@@ -4,7 +4,7 @@ import EditOrder from "@/app/manage/orders/components/EditOrder";
 import orderTableColumns from "@/app/manage/orders/components/OrderColumns";
 import OrderStatics from "@/app/manage/orders/components/OrderStatics";
 import { useOrderService } from "@/app/manage/orders/hooks/useOrderService";
-import AutoPagination from "@/components/auto-pagination";
+import AutoPagination from "@/components/_client/AutoPagination";
 import { Input } from "@/components/ui/input";
 import {
   Table,
