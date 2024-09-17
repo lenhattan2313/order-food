@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import DarkModeToggle from "@/components/ui/dark-mode-toggle";
-import NavItems from "@/app/(public)/nav-items";
+import NavItems from "@/app/(public)/NavItem";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 
 export default function Layout({

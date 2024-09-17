@@ -243,9 +243,8 @@ export default function AddDish() {
                             ))}
                           </SelectContent>
                         </Select>
+                        <FormMessage />
                       </div>
-
-                      <FormMessage />
                     </div>
                   </FormItem>
                 )}

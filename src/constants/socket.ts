@@ -4,4 +4,5 @@ export const SOCKET_EVENT = {
   UPDATE_ORDER: "update-order",
   NEW_ORDER: "new-order",
   PAYMENT: "payment",
+  REFRESH_TOKEN: "refresh-token",
 } as const;

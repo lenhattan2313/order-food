@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 
 const guestPaths = ["/guest"];
 const managePaths = ["/manage"];
+const ownerPaths = ["/manage/accounts"];
 const unAuthRoutes = ["/login", "/register", "/tables"];
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
@@ -42,10 +43,12 @@ export function middleware(request: NextRequest) {
     const role = decodeJWT(accessToken)?.role;
     const isGuestPaths = guestPaths.some((route) => pathname.includes(route));
     const isManagePaths = managePaths.some((route) => pathname.includes(route));
+    const isOwnerPaths = ownerPaths.some((route) => pathname.includes(route));
     if (
       role &&
       ((role === Role.Guest && !isGuestPaths) ||
-        (role === Role.Owner && !isManagePaths))
+        (role === Role.Owner && !isManagePaths) ||
+        (role === Role.Employee && isOwnerPaths))
     ) {
       return NextResponse.redirect(new URL("/", request.url));
     }

@@ -84,7 +84,7 @@ export default function NavItems({ className }: { className?: string }) {
   });
   if (role) {
     menu.push(
-      <AlertDialog>
+      <AlertDialog key="logout">
         <AlertDialogTrigger asChild>
           <div
             key="logout"

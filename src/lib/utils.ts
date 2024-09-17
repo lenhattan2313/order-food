@@ -44,6 +44,7 @@ export const checkAccessTokenExpire = async (
   params?: Partial<{
     onError: () => void;
     onSuccess: () => void;
+    force: boolean;
   }>
 ) => {
   const accessToken =
@@ -59,7 +60,7 @@ export const checkAccessTokenExpire = async (
     //example: expired 10s, 2/3 of 10s = 6s, => 6s will call api refreshToken
     //exp - now: thời gian còn lại
     //exp - iat: thời gian hết hạn
-    if (exp - now < (exp - iat) / 3) {
+    if (exp - now < (exp - iat) / 3 || params?.force) {
       try {
         const {
           data: { accessToken, refreshToken },

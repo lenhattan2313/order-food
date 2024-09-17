@@ -14,9 +14,12 @@ import { Package2, PanelLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { useAuth } from "@/components/provider/auth-provider";
+import { Role } from "@/constants/type";
 
 export default function MobileNavLinks() {
   const pathname = usePathname();
+  const { role } = useAuth();
   return (
     <Sheet>
       <SheetHeader>
@@ -44,6 +47,8 @@ export default function MobileNavLinks() {
           </Link>
           {menuItems.map((Item, index) => {
             const isActive = pathname === Item.href;
+            if (role && role !== Role.Guest && !Item.roles.includes(role))
+              return null;
             return (
               <Link
                 key={index}

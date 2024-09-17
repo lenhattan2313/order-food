@@ -22,11 +22,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { OrderStatus, OrderStatusValues } from "@/constants/type";
+import { ServingGuestByTableNumber } from "@/context/orderContext";
 import { cn } from "@/lib/utils";
 import { TableListResType } from "@/schemaValidations/table.schema";
 import { Users } from "lucide-react";
-import { Fragment, useState } from "react";
-import { ServingGuestByTableNumber } from "@/context/orderContext";
+import { useState } from "react";
 
 // Ví dụ:
 // const statics: Statics = {
@@ -68,7 +68,7 @@ export default function OrderStatics({
   const [selectedTableNumber, setSelectedTableNumber] = useState<number>(0);
   const selectedServingGuest = servingGuestByTableNumber[selectedTableNumber];
   return (
-    <Fragment>
+    <>
       <Dialog
         open={Boolean(selectedTableNumber)}
         onOpenChange={(open) => {
@@ -243,6 +243,6 @@ export default function OrderStatics({
           </Badge>
         ))}
       </div>
-    </Fragment>
+    </>
   );
 }
