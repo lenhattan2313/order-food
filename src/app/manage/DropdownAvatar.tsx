@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { socket } from "@/lib/socket";
 import { handleApiError } from "@/lib/utils";
 import { useGetAccountMe } from "@/queries/useAccount";
 import { useLogoutMutation } from "@/queries/useAuth";
@@ -28,6 +29,7 @@ export default function DropdownAvatar() {
     try {
       await mutateAsync();
       setRole(undefined);
+      socket.disconnect();
       router.push("/");
     } catch (error) {
       handleApiError(error);

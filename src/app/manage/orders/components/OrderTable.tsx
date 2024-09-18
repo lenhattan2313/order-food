@@ -137,15 +137,6 @@ export default function OrderTable() {
   };
 
   useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
-    function onConnect() {
-      console.log(socket.id);
-    }
-    function onDisconnect() {
-      console.log("Socket disconnected");
-    }
     function handleUpdateOrder(data: UpdateOrderResType["data"]) {
       refetchGetOrderList();
       toast({
@@ -188,12 +179,8 @@ export default function OrderTable() {
     socket.on(SOCKET_EVENT.UPDATE_ORDER, handleUpdateOrder);
     socket.on(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
     socket.on(SOCKET_EVENT.PAYMENT, handlePayment);
-    socket.on(SOCKET_EVENT.CONNECT, onConnect);
-    socket.on(SOCKET_EVENT.DISCONNECT, onConnect);
 
     return () => {
-      socket.off(SOCKET_EVENT.CONNECT, onConnect);
-      socket.off(SOCKET_EVENT.DISCONNECT, onDisconnect);
       socket.off(SOCKET_EVENT.UPDATE_ORDER, handleUpdateOrder);
       socket.off(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
       socket.off(SOCKET_EVENT.PAYMENT, handlePayment);

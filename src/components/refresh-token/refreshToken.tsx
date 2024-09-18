@@ -30,15 +30,7 @@ export default function RefreshToken() {
     intervalId = setInterval(onRefreshToken, REFRESH_TOKEN_TIMEOUT);
 
     //socket
-    if (socket.connected) {
-      onConnect();
-    }
-    function onConnect() {
-      console.log(socket.id);
-    }
-    function onDisconnect() {
-      console.log("disconnect socket");
-    }
+
     async function onRefreshTokenSocket() {
       await onRefreshToken(true);
       const accessToken =
@@ -47,14 +39,11 @@ export default function RefreshToken() {
       role && setRole(role);
     }
     //Lắng nghe sự kiến
-    socket.on(SOCKET_EVENT.CONNECT, onConnect);
-    socket.on(SOCKET_EVENT.DISCONNECT, onDisconnect);
     socket.on(SOCKET_EVENT.REFRESH_TOKEN, onRefreshTokenSocket);
     return () => {
       clearInterval(intervalId);
       //huỷ lắng nghe sự kiện
-      socket.off(SOCKET_EVENT.CONNECT, onConnect);
-      socket.off(SOCKET_EVENT.DISCONNECT, onConnect);
+
       socket.off(SOCKET_EVENT.REFRESH_TOKEN, onRefreshTokenSocket);
     };
   }, [pathname, router]);

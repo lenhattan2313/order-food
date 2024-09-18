@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { TokenPayload } from "@/interface/IAuth";
+import { socket } from "@/lib/socket";
 import { decodeJWT, handleApiError } from "@/lib/utils";
 import { useLoginMutation } from "@/queries/useAuth";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
@@ -51,7 +52,7 @@ function LoginForm() {
       toast({
         description: message,
       });
-
+      socket.connect();
       router.push("/manage/dashboard");
     } catch (error) {
       handleApiError(error, setError);

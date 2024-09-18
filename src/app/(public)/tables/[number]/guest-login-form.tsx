@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { TokenPayload } from "@/interface/IAuth";
+import { socket } from "@/lib/socket";
 import { decodeJWT, handleApiError } from "@/lib/utils";
 import { useGuestLogin } from "@/queries/useGuest";
 import {
@@ -41,6 +42,7 @@ export default function GuestLoginForm() {
       } = await mutateAsync({ ...data, tableNumber, token });
       const decodeRole = decodeJWT<TokenPayload>(accessToken);
       decodeRole && setRole(decodeRole.role);
+      socket.connect();
       toast({ description: message });
       router.push("/guest/menu");
     } catch (error) {

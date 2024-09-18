@@ -2,6 +2,7 @@
 
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { RoleType, TokenPayload } from "@/interface/IAuth";
+import { socket } from "@/lib/socket";
 import {
   clearTokenFromLocalStorage,
   localStorageUtil,
@@ -15,6 +16,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 export type IAuthContext = {
@@ -30,12 +32,22 @@ const initialAuth: IAuthContext = {
 const AuthContext = createContext<IAuthContext>(initialAuth);
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [role, setRole] = useState<RoleType>();
+  const socketRef = useRef(false);
   useEffect(() => {
     const accessToken =
       localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? "";
     const decodeRole = decodeJWT<TokenPayload>(accessToken);
 
-    decodeRole && setRole(decodeRole.role);
+    if (decodeRole) {
+      if (!socketRef.current) {
+        socket.connect();
+        socketRef.current = true;
+      }
+      setRole(decodeRole.role);
+    }
+    return () => {
+      !socketRef.current && socket.disconnect();
+    };
   }, []);
   const setRoleType = useCallback((value?: RoleType) => {
     if (value) {

@@ -16,18 +16,6 @@ import { useEffect, useMemo, useState } from "react";
 export default function Order() {
   const [orders, setOrders] = useState<GuestGetOrdersResType["data"]>([]);
   useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
-
-    function onConnect() {
-      console.log(socket.id);
-    }
-
-    function onDisconnect() {
-      console.log(SOCKET_EVENT.DISCONNECT);
-    }
-
     function handleRefetchStatus() {
       refetch();
       toast({ description: "Trạng thái được cập nhật" });
@@ -36,8 +24,7 @@ export default function Order() {
       refetch();
       toast({ description: "Bạn đã thanh toán thành công" });
     }
-    socket.on(SOCKET_EVENT.CONNECT, onConnect);
-    socket.on(SOCKET_EVENT.DISCONNECT, onDisconnect);
+
     socket.on(SOCKET_EVENT.UPDATE_ORDER, (data: UpdateOrderResType["data"]) => {
       // const foundIndex = orders.findIndex((order) => data.id === order.id);
       // if (foundIndex === -1) {
@@ -53,8 +40,6 @@ export default function Order() {
     socket.on(SOCKET_EVENT.PAYMENT, handlePayment);
 
     return () => {
-      socket.off(SOCKET_EVENT.CONNECT, onConnect);
-      socket.off(SOCKET_EVENT.DISCONNECT, onDisconnect);
       socket.off(SOCKET_EVENT.UPDATE_ORDER, handleRefetchStatus);
       socket.off(SOCKET_EVENT.PAYMENT, handlePayment);
     };

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Role } from "@/constants/type";
 import { RoleType } from "@/interface/IAuth";
+import { socket } from "@/lib/socket";
 import { handleApiError } from "@/lib/utils";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useGuestLogout } from "@/queries/useGuest";
@@ -64,6 +65,7 @@ export default function NavItems({ className }: { className?: string }) {
     try {
       role === Role.Guest ? await guestLogout() : await logout();
       setRole(undefined);
+      socket.disconnect();
       router.push("/");
     } catch (error) {
       handleApiError(error);
