@@ -16,7 +16,7 @@ import { useGetAccountMe } from "@/queries/useAccount";
 import { useLogoutMutation } from "@/queries/useAuth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 export default function DropdownAvatar() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function DropdownAvatar() {
   const { setRole } = useAuth();
   const { mutateAsync, isPending } = useLogoutMutation();
 
-  async function handleLogout() {
+  const handleLogout = useCallback(async () => {
     try {
       await mutateAsync();
       setRole(undefined);
@@ -34,7 +34,13 @@ export default function DropdownAvatar() {
     } catch (error) {
       handleApiError(error);
     }
-  }
+  }, []);
+  useEffect(() => {
+    socket.on("logout", handleLogout);
+    return () => {
+      socket.off("logout", handleLogout);
+    };
+  }, [handleLogout]);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -45,6 +45,8 @@ import { useGetAccountList } from "@/queries/useAccount";
 import { AccountType } from "@/schemaValidations/account.schema";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/components/provider/auth-provider";
+import { Role } from "@/constants/type";
 
 export const columns: ColumnDef<AccountType>[] = [
   {
@@ -90,6 +92,7 @@ export const columns: ColumnDef<AccountType>[] = [
     enableHiding: false,
     cell: function Actions({ row }) {
       const { setEmployeeIdEdit, setEmployeeDelete } = useAccountContext();
+      const { role } = useAuth();
       const openEditEmployee = () => {
         setEmployeeIdEdit(row.original.id);
       };
@@ -109,9 +112,11 @@ export const columns: ColumnDef<AccountType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditEmployee}>Sửa</DropdownMenuItem>
-            <DropdownMenuItem onClick={openDeleteEmployee}>
-              Xóa
-            </DropdownMenuItem>
+            {role === Role.Owner && (
+              <DropdownMenuItem onClick={openDeleteEmployee}>
+                Xóa
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );
