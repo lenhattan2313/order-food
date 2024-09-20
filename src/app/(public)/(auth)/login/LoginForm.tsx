@@ -11,17 +11,19 @@ import {
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/hooks/use-toast";
 import { TokenPayload } from "@/interface/IAuth";
+import { getOauthGoogleUrl } from "@/lib/authUtils";
 import { socket } from "@/lib/socket";
 import { decodeJWT, handleApiError } from "@/lib/utils";
 import { useLoginMutation } from "@/queries/useAuth";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
+const linkGoogleAuth = getOauthGoogleUrl();
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,14 +46,10 @@ function LoginForm() {
   async function onSubmit(dataForm: LoginBodyType) {
     try {
       const {
-        message,
         data: { accessToken },
       } = await mutateAsync(dataForm);
       const decodeRole = decodeJWT<TokenPayload>(accessToken);
       decodeRole && setRole(decodeRole.role);
-      toast({
-        description: message,
-      });
       socket.connect();
       router.push("/manage/dashboard");
     } catch (error) {
@@ -63,6 +61,14 @@ function LoginForm() {
       setRole(undefined);
     }
   }, [clearToken, setRole]);
+
+  // useGoogleOneTapLogin({
+  //   onError: (error) => console.log(error),
+  //   onSuccess: (response) => console.log(response),
+  //   googleAccountConfigs: {
+  //     client_id: envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+  //   },
+  // });
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -129,9 +135,11 @@ function LoginForm() {
               >
                 Đăng nhập
               </Button>
-              <Button variant="outline" className="w-full" type="button">
-                Đăng nhập bằng Google
-              </Button>
+              <Link href={linkGoogleAuth}>
+                <Button variant="outline" className="w-full" type="button">
+                  Đăng nhập bằng Google
+                </Button>
+              </Link>
             </div>
           </form>
         </Form>

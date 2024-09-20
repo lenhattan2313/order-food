@@ -1,3 +1,4 @@
+import { AccessToken } from "@/interface/IAuth";
 import http from "@/lib/httpUtils";
 import {
   LoginBodyType,
@@ -43,4 +44,9 @@ export const authActions = {
   },
   refreshToken: (body: RefreshTokenBodyType) =>
     http.post<LoginResType, RefreshTokenBodyType>("/auth/refresh-token", body),
+
+  setTokenFromOAuth: (body: AccessToken) =>
+    http.post<{ data: AccessToken }, AccessToken>("/api/auth/oauth", body, {
+      baseUrl: "",
+    }),
 };

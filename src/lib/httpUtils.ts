@@ -7,6 +7,7 @@ import { LoginResType } from "@/schemaValidations/auth.schema";
 import { StatusCodes } from "http-status-codes";
 import { redirect } from "next/navigation";
 
+const loginPaths = ["api/auth/login", "api/guest/auth/login", "api/auth/oauth"];
 //this file is using in server and client
 let logoutRequest: (() => Promise<Response>) | null = null;
 const request = async <T = Response>(
@@ -93,9 +94,7 @@ const request = async <T = Response>(
   const data: T = await response.json();
 
   if (isClient) {
-    if (
-      ["api/auth/login", "api/guest/auth/login"].includes(normalizeUrl(url))
-    ) {
+    if (loginPaths.includes(normalizeUrl(url))) {
       const {
         data: { accessToken, refreshToken },
       } = data as LoginResType;

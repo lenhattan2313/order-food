@@ -10,3 +10,6 @@ export const useLogoutMutation = () =>
 
 export const useLogoutBackendMutation = () =>
   useMutation({ mutationFn: authActions.logout });
+
+export const useLoginOauth = () =>
+  useMutation({ mutationFn: authActions.setTokenFromOAuth });
