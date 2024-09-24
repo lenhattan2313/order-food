@@ -51,7 +51,6 @@ import {
 } from "@/components/ui/popover";
 import { dateRangeDefault, defaultPagination } from "@/constants/common";
 import { SOCKET_EVENT } from "@/constants/socket";
-import { OrderProvider } from "@/context/orderContext";
 import { toast } from "@/hooks/use-toast";
 import { socket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
@@ -77,15 +76,11 @@ export default function OrderTable() {
     ? Number(searchParam.get("page"))
     : defaultPagination.page;
   const pageIndex = page - 1;
-  const {
-    data: orders,
-    isPending: isGetOrderListPending,
-    refetch: refetchGetOrderList,
-  } = useGetOrderList({
+  const { data: orders, refetch: refetchGetOrderList } = useGetOrderList({
     fromDate,
     toDate,
   });
-  const { data: tables, isPending: isGetTableListPending } = useGetTableList();
+  const { data: tables } = useGetTableList();
   const orderList = useMemo(() => orders?.data ?? [], [orders]);
   const tableList = useMemo(
     () => (tables?.data ?? []).sort((a, b) => a.number - b.number),

@@ -88,7 +88,7 @@ export default function GuestsDialog({
   const [open, setOpen] = useState(false);
   const [fromDate, setFromDate] = useState(dateRangeDefault.fromDate);
   const [toDate, setToDate] = useState(dateRangeDefault.toDate);
-  const { data, isPending } = useGetGuestList({ fromDate, toDate });
+  const { data } = useGetGuestList({ fromDate, toDate });
   const guests = useMemo(() => data?.data ?? [], [data]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

@@ -9,7 +9,7 @@ type Props = {
   dish: DishItem;
 };
 
-const DishItem = ({ dish }: Props) => {
+const DishItemComp = ({ dish }: Props) => {
   const router = useRouter();
   function handleOpenDetail() {
     router.push(`/dish/${dish.id}`);
@@ -35,4 +35,4 @@ const DishItem = ({ dish }: Props) => {
   );
 };
 
-export default DishItem;
+export default DishItemComp;

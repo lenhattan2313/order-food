@@ -1,9 +1,10 @@
-import { dishActions } from "@/actions/dish/dishActions";
 import DishMain from "@/app/(public)/dish/DishMain";
-import { formatCurrency } from "@/lib/currency";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
 export default async function DishPage() {
+  const t = await getTranslations("home");
+
   return (
     <div className="w-full space-y-4">
       <div className="relative">
@@ -19,7 +20,7 @@ export default async function DishPage() {
         />
         <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
           <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold">
-            Nhà hàng Big Boy
+            {t("title")}
           </h1>
           <p className="text-center text-sm sm:text-base mt-4">
             Vị ngon, trọn khoảnh khắc

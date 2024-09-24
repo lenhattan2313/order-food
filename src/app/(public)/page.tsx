@@ -1,3 +1,3 @@
-import DishMain from "@/app/(public)/dish/DishMain";
+import DishPage from "@/app/(public)/dish/page";
 
-export default DishMain;
+export default DishPage;

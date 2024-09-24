@@ -1,3 +1,5 @@
+import { getVietnameseDishStatus } from "@/app/manage/dishes/utils/dishesUtils";
+import AutoPagination from "@/components/_client/AutoPagination";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -14,9 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AutoPagination from "@/components/_client/AutoPagination";
-import { DishListResType } from "@/schemaValidations/dish.schema";
-import { useEffect, useMemo, useState } from "react";
+import { defaultPagination } from "@/constants/common";
+import { DishItem } from "@/context/dishContext";
+import { formatCurrency } from "@/lib/currency";
+import { simpleMatchText } from "@/lib/utils";
+import { useGetDishList } from "@/queries/useDish";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -29,14 +34,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { simpleMatchText } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { formatCurrency } from "@/lib/currency";
-import { getVietnameseDishStatus } from "@/app/manage/dishes/utils/dishesUtils";
-import { DishItem } from "@/context/dishContext";
-import { useGetDishList } from "@/queries/useDish";
-import { defaultPagination } from "@/constants/common";
+import { useEffect, useMemo, useState } from "react";
 
 export const columns: ColumnDef<DishItem>[] = [
   {
@@ -81,7 +80,7 @@ export function DishesDialog({
   onChoose: (dish: DishItem) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const { data, isPending } = useGetDishList();
+  const { data } = useGetDishList();
   const dishes = useMemo(() => data?.data ?? [], [data]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

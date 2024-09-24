@@ -7,9 +7,9 @@ import { toast } from "@/hooks/use-toast";
 import { decodeJWT } from "@/lib/utils";
 import { useLoginOauth } from "@/queries/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 
-export default function OAuth() {
+function OAuth() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { mutateAsync } = useLoginOauth();
@@ -41,4 +41,12 @@ export default function OAuth() {
     isFirstRender.current = true;
   }, [searchParams]);
   return <Spinner />;
+}
+
+export default function OAuthPage() {
+  return (
+    <Suspense>
+      <OAuth />
+    </Suspense>
+  );
 }

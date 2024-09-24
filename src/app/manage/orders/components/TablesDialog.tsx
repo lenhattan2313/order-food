@@ -72,7 +72,7 @@ export function TablesDialog({
   onChoose: (table: TableItem) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const { data, isPending } = useGetTableList();
+  const { data } = useGetTableList();
   const tables = useMemo(
     () =>
       data?.data.filter((table) => table.status === TableStatus.Available) ??

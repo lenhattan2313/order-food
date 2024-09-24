@@ -1,4 +1,8 @@
 "use client";
+import Quantity from "@/app/guest/menu/components/Quantity";
+import GuestsDialog from "@/app/manage/orders/components/GuestsDialog";
+import { TablesDialog } from "@/app/manage/orders/components/TablesDialog";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,33 +11,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PlusCircle } from "lucide-react";
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { DishStatus } from "@/constants/type";
+import { toast } from "@/hooks/use-toast";
+import { formatCurrency } from "@/lib/currency";
+import { cn, handleApiError } from "@/lib/utils";
+import { useCreateGuest } from "@/queries/useAccount";
+import { useGetDishList } from "@/queries/useDish";
+import { useCreateOrder } from "@/queries/useOrder";
+import { GetListGuestsResType } from "@/schemaValidations/account.schema";
 import {
   GuestLoginBody,
   GuestLoginBodyType,
 } from "@/schemaValidations/guest.schema";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { TablesDialog } from "@/app/manage/orders/components/TablesDialog";
-import { GetListGuestsResType } from "@/schemaValidations/account.schema";
-import { Switch } from "@/components/ui/switch";
-import GuestsDialog from "@/app/manage/orders/components/GuestsDialog";
 import { CreateOrdersBodyType } from "@/schemaValidations/order.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusCircle } from "lucide-react";
 import Image from "next/image";
-import { cn, handleApiError } from "@/lib/utils";
-import { DishStatus } from "@/constants/type";
-import { DishListResType } from "@/schemaValidations/dish.schema";
-import { formatCurrency } from "@/lib/currency";
-import Quantity from "@/app/guest/menu/components/Quantity";
-import { useGetDishList } from "@/queries/useDish";
-import { useCreateOrder } from "@/queries/useOrder";
-import { toast } from "@/hooks/use-toast";
-import { useCreateGuest } from "@/queries/useAccount";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 const initialData = {
   name: "",
   tableNumber: 0,
@@ -45,7 +44,7 @@ export default function AddOrder() {
   >(null);
   const [isNewGuest, setIsNewGuest] = useState(true);
   const [orders, setOrders] = useState<CreateOrdersBodyType["orders"]>([]);
-  const { data, isPending } = useGetDishList();
+  const { data } = useGetDishList();
   const dishes = useMemo(() => data?.data ?? [], [data]);
 
   const totalPrice = useMemo(() => {

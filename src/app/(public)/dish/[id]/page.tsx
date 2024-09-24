@@ -1,5 +1,4 @@
 import { dishActions } from "@/actions/dish/dishActions";
-import { Spinner } from "@/components/_client/Spinner";
 import { wrapServerApi } from "@/lib/serverUtils";
 import Image from "next/image";
 

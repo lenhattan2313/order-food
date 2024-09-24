@@ -1,5 +1,4 @@
 "use client";
-import DishDetail from "@/app/(public)/dish/[id]/page";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { PropsWithChildren, Suspense, useState } from "react";
+import { PropsWithChildren, useState } from "react";
 
 const Modal = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(true);
