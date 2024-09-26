@@ -1,6 +1,7 @@
 "use client";
 import { DishItem } from "@/context/dishContext";
 import { formatCurrency } from "@/lib/currency";
+import { generateSlugUrl } from "@/lib/utils";
 import { useRouter } from "@/navigation";
 import Image from "next/image";
 import React from "react";
@@ -12,7 +13,8 @@ type Props = {
 const DishItemComp = ({ dish }: Props) => {
   const router = useRouter();
   function handleOpenDetail() {
-    router.push(`/dish/${dish.id}`);
+    const slug = generateSlugUrl({ name: dish.name, id: dish.id });
+    router.push(`/dish/${slug}`);
   }
   return (
     <div className="flex gap-4 w">

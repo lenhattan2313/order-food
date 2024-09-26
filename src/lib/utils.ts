@@ -13,6 +13,7 @@ import { clsx, type ClassValue } from "clsx";
 import jwt from "jsonwebtoken";
 import { FieldValues, UseFormSetError } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
+import slugify from "slugify";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -105,4 +106,12 @@ export const simpleMatchText = (fullText: string, matchText: string) => {
   return removeAccents(fullText.toLowerCase()).includes(
     removeAccents(matchText.trim().toLowerCase())
   );
+};
+
+export const generateSlugUrl = ({ name, id }: { name: string; id: number }) => {
+  return `${slugify(name)}-i.${id}`;
+};
+
+export const getIdFromSlugUrl = (slug: string) => {
+  return Number(slug.split("-i.")[1]);
 };

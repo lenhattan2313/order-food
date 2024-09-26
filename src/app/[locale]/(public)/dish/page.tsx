@@ -1,8 +1,14 @@
 import DishMain from "@/app/[locale]/(public)/dish/DishMain";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 
-export default async function DishPage() {
+export default async function DishPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
+
   const t = await getTranslations("home");
 
   return (
