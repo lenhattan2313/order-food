@@ -8,7 +8,7 @@ import { UNAUTHORIZED_URL } from "@/constants/url";
 import { socket } from "@/lib/socket";
 import { localStorageUtil } from "@/lib/storageUtils";
 import { checkAccessTokenExpire, decodeJWT } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "@/navigation";
 import { useEffect } from "react";
 //Do not allow accessToken expired, using interval to check
 export default function RefreshToken() {

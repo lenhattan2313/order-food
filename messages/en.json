@@ -1,4 +1,7 @@
 {
   "home": { "title": "Restaurant" },
+  "login": {
+    "title": "Login"
+  },
   "common": { "vi": "Việt Nam", "en": "English" }
 }

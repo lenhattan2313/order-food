@@ -1,4 +1,7 @@
 {
   "home": { "title": "Nhà hàng" },
+  "login": {
+    "title": "Đăng nhập"
+  },
   "common": { "vi": "Việt Nam", "en": "English" }
 }

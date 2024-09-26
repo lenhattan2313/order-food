@@ -8,15 +8,21 @@ import {
 } from "@/components/ui/select";
 import { locales } from "@/constants/locale";
 import { Locale } from "@/interface/locale";
-import { setUserLocale } from "@/lib/locale";
+import { usePathname, useRouter } from "@/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 export const SwitchLocales = () => {
   const t = useTranslations("common");
   const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
   return (
     <Select
-      onValueChange={(value) => setUserLocale(value as Locale)}
+      onValueChange={(value) => {
+        router.replace(pathname, {
+          locale: value as Locale,
+        });
+      }}
       value={locale}
     >
       <SelectTrigger className="w-[120px]">
