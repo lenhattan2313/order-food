@@ -2,20 +2,31 @@ import { AuthProvider } from "@/components/provider/auth-provider";
 import ReactQueryProvider from "@/components/provider/react-query-provider";
 import { ThemeProvider } from "@/components/provider/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, unstable_setRequestLocale } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  unstable_setRequestLocale,
+} from "next-intl/server";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { routing } from "@/i18n/routing";
+import { baseOpenGraph } from "@/shareMetadata";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Order food",
-  description: "Taan FOOD",
-};
-
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("home");
+  return {
+    title: { template: `%s | ${t("title")}`, default: t("title") },
+    description: t("description"),
+    authors: [{ name: "TanLe", url: "https://lenhattan.vn" }],
+    creator: "TanLe",
+    publisher: "TanLe",
+    openGraph: { ...baseOpenGraph },
+  };
+}
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }

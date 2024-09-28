@@ -1,7 +1,7 @@
 {
-  "home": { "title": "Nhà hàng" },
+  "home": { "title": "Nhà hàng", "description": "Phục vụ đồ ăn và thức uống" },
   "login": {
     "title": "Đăng nhập"
   },
-  "common": { "vi": "Việt Nam", "en": "English" }
+  "common": { "vi": "Việt Nam", "en": "English", "notFound": "Không tìm thấy" }
 }

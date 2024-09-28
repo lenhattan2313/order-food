@@ -1,9 +1,58 @@
 import { dishActions } from "@/actions/dish/dishActions";
+import envConfig from "@/config";
+import { Locale } from "@/interface/locale";
 import { wrapServerApi } from "@/lib/serverUtils";
 import { generateSlugUrl, getIdFromSlugUrl } from "@/lib/utils";
-import { unstable_setRequestLocale } from "next-intl/server";
+import { Metadata } from "next";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import Image from "next/image";
+import { baseOpenGraph } from "@/shareMetadata";
+import { cache } from "react";
+const getDetail = cache((id: number) =>
+  wrapServerApi(() => dishActions.getDishDetail({ id }))
+);
 export type DishParams = { params: { slug: string; locale: string } };
+
+export async function generateMetadata({
+  params: { slug, locale },
+}: {
+  params: { slug: string; locale: Locale };
+}): Promise<Metadata> {
+  const t = await getTranslations("common");
+  const id = getIdFromSlugUrl(slug);
+  const dish = await getDetail(id);
+  if (!dish) {
+    return {
+      title: t("notFound"),
+      description: t("notFound"),
+    };
+  }
+  const { data } = dish;
+  const url =
+    envConfig.NEXT_PUBLIC_BASE_URL +
+    `/${locale}/dishes/${generateSlugUrl({
+      name: data.name,
+      id: data.id,
+    })}`;
+  return {
+    title: data.name,
+    description: data.description,
+    openGraph: {
+      ...baseOpenGraph,
+      title: data.name,
+      description: data.description,
+      url,
+      images: [
+        {
+          url: data.image,
+        },
+      ],
+    },
+    alternates: {
+      canonical: url,
+    },
+  };
+}
 export async function generateStaticParams() {
   const dish = await wrapServerApi(() => dishActions.getList());
   return (
@@ -16,7 +65,7 @@ export async function generateStaticParams() {
 const DishDetail = async ({ params: { slug, locale } }: DishParams) => {
   unstable_setRequestLocale(locale);
   const id = getIdFromSlugUrl(slug);
-  const response = await wrapServerApi(() => dishActions.getDishDetail({ id }));
+  const response = await getDetail(id);
   if (!response) {
     return <h1>No data</h1>;
   }
