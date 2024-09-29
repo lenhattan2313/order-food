@@ -1,7 +1,7 @@
 import { dishActions } from "@/actions/dish/dishActions";
 import envConfig from "@/config";
 import { Locale } from "@/interface/locale";
-import { wrapServerApi } from "@/lib/serverUtils";
+import { htmlToTextForDesc, wrapServerApi } from "@/lib/serverUtils";
 import { generateSlugUrl, getIdFromSlugUrl } from "@/lib/utils";
 import { Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
@@ -36,7 +36,7 @@ export async function generateMetadata({
     })}`;
   return {
     title: data.name,
-    description: data.description,
+    description: htmlToTextForDesc(data.description),
     openGraph: {
       ...baseOpenGraph,
       title: data.name,

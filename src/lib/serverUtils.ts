@@ -1,4 +1,5 @@
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
+import { htmlToText } from "html-to-text";
 import { cookies } from "next/headers";
 import "server-only";
 export const getTokenCookies = () => {
@@ -26,4 +27,8 @@ export const wrapServerApi = async <T>(fn: () => Promise<T>) => {
     }
   }
   return data;
+};
+
+export const htmlToTextForDesc = (html: string) => {
+  return htmlToText(html, { limits: { maxInputLength: 140 } });
 };

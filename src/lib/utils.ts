@@ -10,10 +10,10 @@ import {
   localStorageUtil,
 } from "@/lib/storageUtils";
 import { clsx, type ClassValue } from "clsx";
-import jwt from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
 import { FieldValues, UseFormSetError } from "react-hook-form";
-import { twMerge } from "tailwind-merge";
 import slugify from "slugify";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -86,7 +86,7 @@ export const checkAccessTokenExpire = async (
 
 export function decodeJWT<T extends TokenPayload>(token: string): T | null {
   try {
-    const decoded = jwt.decode(token) as T;
+    const decoded = jwtDecode<T>(token);
     return decoded;
   } catch (error) {
     console.error("Invalid JWT token:", error);

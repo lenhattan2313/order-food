@@ -13,6 +13,8 @@ import {
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { baseOpenGraph } from "@/shareMetadata";
+import NextTopLoader from "nextjs-toploader";
+import Footer from "@/components/_client/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,6 +47,11 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
+        <NextTopLoader
+          showSpinner={false}
+          color="hsl(var(--muted-foreground))"
+        />
+
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
             <ThemeProvider
@@ -55,6 +62,8 @@ export default async function RootLayout({
             >
               <ReactQueryProvider>
                 {children}
+                <Footer />
+
                 <Toaster />
               </ReactQueryProvider>
             </ThemeProvider>
