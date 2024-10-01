@@ -3,7 +3,7 @@ import envConfig from "@/config";
 import { locales } from "@/constants/locale";
 import { generateSlugUrl } from "@/lib/utils";
 import { Languages } from "next/dist/lib/metadata/types/alternative-urls-types";
-type Sitemap = Array<{
+export type Sitemap = Array<{
   url: string;
   lastModified?: string | Date;
   changeFrequency?:
