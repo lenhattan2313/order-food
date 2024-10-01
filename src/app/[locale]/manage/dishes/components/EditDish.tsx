@@ -26,13 +26,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { DishStatus, DishStatusValues } from "@/constants/type";
 import { DishItem, useDishContext } from "@/context/dishContext";
 import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
+import { createImagePathS3, handleApiError } from "@/lib/utils";
 import { useGetDishDetail, useUpdateDish } from "@/queries/useDish";
-import { useUploadAvatar } from "@/queries/useMedia";
+import { useUploadAvatar, useUploadImageToS3 } from "@/queries/useMedia";
 import {
   UpdateDishBody,
   UpdateDishBodyType,
@@ -88,6 +89,8 @@ export default function EditDish() {
   }
   const { mutateAsync: uploadAvatar, isPending: isUploadPending } =
     useUploadAvatar();
+  const { mutateAsync: uploadToS3, isPending: isUploadS3Pending } =
+    useUploadImageToS3();
   const { mutateAsync: updateDish, isPending: isUpdatePending } =
     useUpdateDish();
   async function onSubmit(dataForm: UpdateDishBodyType) {
@@ -95,11 +98,16 @@ export default function EditDish() {
     try {
       let body = { ...dataForm };
       if (file) {
+        const uploadImage = dataForm.isUploadS3 ? uploadToS3 : uploadAvatar;
         const formData = new FormData();
         formData.append("file", file);
-        const { data } = await uploadAvatar(formData);
-        body.image = data;
+        const { data } = await uploadImage(formData);
+        ``;
+        body.image = dataForm.isUploadS3
+          ? createImagePathS3(data, "dish")
+          : data;
       }
+
       const { message } = await updateDish({
         id: dishIdEdit,
         ...body,
@@ -136,6 +144,24 @@ export default function EditDish() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid gap-4 py-4">
+              <FormField
+                control={form.control}
+                name="isUploadS3"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                      <Label htmlFor="email">Upload to S3</Label>
+                      <div className="col-span-3 w-full space-y-2">
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="image"
@@ -262,7 +288,7 @@ export default function EditDish() {
           <Button
             type="submit"
             form="edit-dish-form"
-            isLoading={isUpdatePending || isUploadPending}
+            isLoading={isUpdatePending || isUploadPending || isUploadS3Pending}
           >
             Lưu
           </Button>

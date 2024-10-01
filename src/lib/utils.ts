@@ -1,5 +1,6 @@
 import { authActions } from "@/actions/auth/authActions";
 import { guestActions } from "@/actions/guest/guestActions";
+import envConfig from "@/config";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { Role } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
@@ -114,4 +115,12 @@ export const generateSlugUrl = ({ name, id }: { name: string; id: number }) => {
 
 export const getIdFromSlugUrl = (slug: string) => {
   return Number(slug.split("-i.")[1]);
+};
+export const createImagePathS3 = (name: string, prefix = "") => {
+  return [envConfig.NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE, prefix, name]
+    .filter(Boolean)
+    .join("/");
+};
+export const getImagePathS3 = (name: string) => {
+  return `${envConfig.NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE}/${name}`;
 };

@@ -7,6 +7,7 @@ export const CreateDishBody = z.object({
   description: z.string().max(10000),
   image: z.string().url(),
   status: z.enum(DishStatusValues).optional(),
+  isUploadS3: z.boolean().optional(),
 });
 
 export type CreateDishBodyType = z.TypeOf<typeof CreateDishBody>;
@@ -20,6 +21,7 @@ export const DishSchema = z.object({
   status: z.enum(DishStatusValues),
   createdAt: z.date(),
   updatedAt: z.date(),
+  isUploadS3: z.boolean().optional(),
 });
 
 export const DishRes = z.object({

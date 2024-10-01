@@ -1,4 +1,6 @@
 "use client";
+import { getVietnameseDishStatus } from "@/app/[locale]/manage/dishes/utils/dishesUtils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,12 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle, Upload } from "lucide-react";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -21,12 +17,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  CreateDishBody,
-  CreateDishBodyType,
-} from "@/schemaValidations/dish.schema";
-import { DishStatus, DishStatusValues } from "@/constants/type";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -34,14 +26,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { getVietnameseDishStatus } from "@/app/[locale]/manage/dishes/utils/dishesUtils";
-import { useUploadAvatar } from "@/queries/useMedia";
-import { useCreateDish } from "@/queries/useDish";
+import envConfig from "@/config";
+import { DishStatus, DishStatusValues } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
+import { createImagePathS3, handleApiError } from "@/lib/utils";
+import { useCreateDish } from "@/queries/useDish";
+import { useUploadAvatar, useUploadImageToS3 } from "@/queries/useMedia";
+import {
+  CreateDishBody,
+  CreateDishBodyType,
+} from "@/schemaValidations/dish.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { PlusCircle, Upload } from "lucide-react";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const defaultDish = {
   name: "",
@@ -49,6 +51,7 @@ const defaultDish = {
   price: 0,
   image: undefined,
   status: DishStatus.Unavailable,
+  isUploadS3: false,
 };
 export default function AddDish() {
   const [file, setFile] = useState<File | null>(null);
@@ -68,6 +71,8 @@ export default function AddDish() {
     }
     return image;
   }, [file, image]);
+  const { mutateAsync: uploadToS3, isPending: isUploadToS3Pending } =
+    useUploadImageToS3();
   const { mutateAsync: uploadAvatar, isPending: isUploadPending } =
     useUploadAvatar();
   const { mutateAsync: createDish, isPending: isCreatePending } =
@@ -76,11 +81,14 @@ export default function AddDish() {
     try {
       let body = { ...dataForm };
       if (file) {
+        const uploadImage = dataForm.isUploadS3 ? uploadToS3 : uploadAvatar;
         const formData = new FormData();
         formData.append("file", file);
-        const { data } = await uploadAvatar(formData);
+        const { data } = await uploadImage(formData);
         ``;
-        body.image = data;
+        body.image = dataForm.isUploadS3
+          ? createImagePathS3(data, "dish")
+          : data;
       }
       const { message } = await createDish(body);
 
@@ -131,6 +139,24 @@ export default function AddDish() {
             onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}
           >
             <div className="grid gap-4 py-4">
+              <FormField
+                control={form.control}
+                name="isUploadS3"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                      <Label htmlFor="email">Upload to S3</Label>
+                      <div className="col-span-3 w-full space-y-2">
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="image"
@@ -256,7 +282,9 @@ export default function AddDish() {
           <Button
             type="submit"
             form="add-dish-form"
-            isLoading={isCreatePending || isUploadPending}
+            isLoading={
+              isCreatePending || isUploadPending || isUploadToS3Pending
+            }
           >
             Thêm
           </Button>
