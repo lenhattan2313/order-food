@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import envConfig from "@/config";
 import { DishStatus, DishStatusValues } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
 import { createImagePathS3, handleApiError } from "@/lib/utils";
