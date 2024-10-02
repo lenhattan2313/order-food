@@ -1,5 +1,5 @@
-import { authActions } from "@/actions/auth/authActions";
-import { guestActions } from "@/actions/guest/guestActions";
+import { authActions } from "@/apiRequest/auth/authActions";
+import { guestActions } from "@/apiRequest/guest/guestActions";
 import envConfig from "@/config";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { Role } from "@/constants/type";

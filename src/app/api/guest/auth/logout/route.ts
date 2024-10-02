@@ -1,4 +1,4 @@
-import { guestActions } from "@/actions/guest/guestActions";
+import { guestActions } from "@/apiRequest/guest/guestActions";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { removeCookies } from "@/lib/cookieUtils";
 import { getTokenCookies } from "@/lib/serverUtils";

@@ -1,4 +1,4 @@
-import { accountActions } from "@/actions/account/accountActions";
+import { accountActions } from "@/apiRequest/account/accountActions";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import {
   AccountResType,

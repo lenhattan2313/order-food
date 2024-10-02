@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { dishActions } from "../../../actions/dish/dishActions";
+import { dishActions } from "../../../apiRequest/dish/dishActions";
 
 // Calculate and output sitemap URLs ex sitemap/1.xml
 async function generateSitemaps() {

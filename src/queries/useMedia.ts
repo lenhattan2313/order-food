@@ -1,4 +1,4 @@
-import { mediaActions } from "@/actions/media/mediaActions";
+import { mediaActions } from "@/apiRequest/media/mediaActions";
 import { useMutation } from "@tanstack/react-query";
 
 export const useUploadAvatar = () =>

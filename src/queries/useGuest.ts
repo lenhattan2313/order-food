@@ -1,4 +1,4 @@
-import { guestActions } from "@/actions/guest/guestActions";
+import { guestActions } from "@/apiRequest/guest/guestActions";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

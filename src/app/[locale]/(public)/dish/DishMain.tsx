@@ -1,4 +1,4 @@
-import { dishActions } from "@/actions/dish/dishActions";
+import { dishActions } from "@/apiRequest/dish/dishActions";
 import DishItemComp from "@/app/[locale]/(public)/dish/DishItem";
 type Props = {};
 

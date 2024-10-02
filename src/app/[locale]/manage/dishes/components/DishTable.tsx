@@ -46,7 +46,6 @@ import { formatCurrency } from "@/lib/currency";
 import { useGetDishList } from "@/queries/useDish";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { getImagePathS3 } from "@/lib/utils";
 
 export const columns: ColumnDef<DishItem>[] = [
   {

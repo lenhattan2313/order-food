@@ -1,6 +1,6 @@
 // export const revalidate = 3600; // one hour
 
-import { dishActions } from "@/actions/dish/dishActions";
+import { dishActions } from "@/apiRequest/dish/dishActions";
 import { generateSlugUrl } from "@/lib/utils";
 
 export async function generateSitemaps() {

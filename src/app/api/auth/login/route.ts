@@ -1,5 +1,5 @@
 "use server";
-import { authActions } from "@/actions/auth/authActions";
+import { authActions } from "@/apiRequest/auth/authActions";
 import { setCookies } from "@/lib/cookieUtils";
 import { HttpError } from "@/lib/error";
 import { LoginBodyType } from "@/schemaValidations/auth.schema";

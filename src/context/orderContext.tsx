@@ -1,5 +1,5 @@
 "use client";
-import { UpdateOrderType } from "@/actions/order/orderActions";
+import { UpdateOrderType } from "@/apiRequest/order/orderActions";
 import { toast } from "@/hooks/use-toast";
 import { handleApiError } from "@/lib/utils";
 import { useUpdateOrder } from "@/queries/useOrder";

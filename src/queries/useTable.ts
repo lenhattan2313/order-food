@@ -1,4 +1,4 @@
-import { tableActions } from "@/actions/table/tableActions";
+import { tableActions } from "@/apiRequest/table/tableActions";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

@@ -1,5 +1,5 @@
 "use server";
-import { authActions } from "@/actions/auth/authActions";
+import { authActions } from "@/apiRequest/auth/authActions";
 import { StatusCodes } from "http-status-codes";
 import { cookies } from "next/headers";
 //logout: remove cookies at Next server, and localStorage Next client

@@ -1,4 +1,4 @@
-import { UpdateOrderType, orderActions } from "@/actions/order/orderActions";
+import { UpdateOrderType, orderActions } from "@/apiRequest/order/orderActions";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import {
   CreateOrdersBodyType,

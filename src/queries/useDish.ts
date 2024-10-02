@@ -1,4 +1,4 @@
-import { dishActions } from "@/actions/dish/dishActions";
+import { dishActions } from "@/apiRequest/dish/dishActions";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

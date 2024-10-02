@@ -1,4 +1,4 @@
-import { dishActions } from "@/actions/dish/dishActions";
+import { dishActions } from "@/apiRequest/dish/dishActions";
 import envConfig from "@/config";
 import { locales } from "@/constants/locale";
 import { generateSlugUrl } from "@/lib/utils";
