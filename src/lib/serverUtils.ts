@@ -1,7 +1,9 @@
+import "server-only";
 import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
 import { htmlToText } from "html-to-text";
 import { cookies } from "next/headers";
-import "server-only";
+import crypto from "crypto";
+
 export const getTokenCookies = () => {
   const cookieStore = cookies();
 
@@ -32,3 +34,6 @@ export const wrapServerApi = async <T>(fn: () => Promise<T>) => {
 export const htmlToTextForDesc = (html: string) => {
   return htmlToText(html, { limits: { maxInputLength: 140 } });
 };
+
+export const generateFileName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString("hex");

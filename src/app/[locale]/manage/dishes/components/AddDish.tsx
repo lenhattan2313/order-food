@@ -1,4 +1,5 @@
 "use client";
+import { getSignedURL } from "@/actions/s3";
 import { getVietnameseDishStatus } from "@/app/[locale]/manage/dishes/utils/dishesUtils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { DishStatus, DishStatusValues } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
+import { computeSHA256 } from "@/lib/fileUtils";
 import { createImagePathS3, handleApiError } from "@/lib/utils";
 import { useCreateDish } from "@/queries/useDish";
 import { useUploadAvatar, useUploadImageToS3 } from "@/queries/useMedia";
@@ -80,14 +82,31 @@ export default function AddDish() {
     try {
       let body = { ...dataForm };
       if (file) {
-        const uploadImage = dataForm.isUploadS3 ? uploadToS3 : uploadAvatar;
-        const formData = new FormData();
-        formData.append("file", file);
-        const { data } = await uploadImage(formData);
-        ``;
-        body.image = dataForm.isUploadS3
-          ? createImagePathS3(data, "dish")
-          : data;
+        if (dataForm.isUploadS3) {
+          const signedURLResult = await getSignedURL({
+            fileSize: file.size,
+            fileType: file.type,
+            checksum: await computeSHA256(file),
+          });
+          if (signedURLResult.failure !== undefined) {
+            throw new Error(signedURLResult.failure);
+          }
+          const { url, fileName } = signedURLResult.success;
+          await fetch(url, {
+            method: "PUT",
+            headers: {
+              "Content-Type": file.type,
+            },
+            body: file,
+          });
+          body.image = createImagePathS3(fileName, "");
+        } else {
+          const formData = new FormData();
+          formData.append("file", file);
+          const { data } = await uploadAvatar(formData);
+          ``;
+          body.image = data;
+        }
       }
       const { message } = await createDish(body);
 

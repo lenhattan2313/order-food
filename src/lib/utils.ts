@@ -86,6 +86,9 @@ export const checkAccessTokenExpire = async (
 };
 
 export function decodeJWT<T extends TokenPayload>(token: string): T | null {
+  if (!token) {
+    return null;
+  }
   try {
     const decoded = jwtDecode<T>(token);
     return decoded;

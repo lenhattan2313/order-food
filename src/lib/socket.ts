@@ -19,6 +19,11 @@ class WebSocket {
         auth: {
           Authorization: `Bearer ${token}`,
         },
+        reconnection: true, // Enable reconnection
+        reconnectionAttempts: 5, // Max number of reconnection attempts before giving up
+        reconnectionDelay: 1000, // Delay between reconnection attempts (in milliseconds)
+        reconnectionDelayMax: 5000, // Maximum delay between attempts (in milliseconds)
+        timeout: 20000, // Connection timeout before failing
       });
 
       this.socket.on("connect", () => {
