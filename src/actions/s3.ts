@@ -4,7 +4,7 @@ import { s3Client } from "@/lib/s3Utils";
 import { generateFileName } from "@/lib/serverUtils";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-
+import { getSignedUrl as getSignedUrlCloudFront } from "@aws-sdk/cloudfront-signer";
 const allowedFileTypes = [
   "image/jpeg",
   "image/png",
@@ -45,6 +45,19 @@ export async function getSignedURL({
     putObjectCommand,
     { expiresIn: 60 } // 60 seconds
   );
+
+  return { success: { url, fileName }, message: "Create new pre signer URL" };
+}
+// create key pair
+// openssl genrsa -out private_key.pem 2048
+// openssl rsa -pubout -in private_key.pem -out public_key.pem
+export async function getSignedURLCloudFront({ url }: { url: string }) {
+  const fileName = getSignedUrlCloudFront({
+    keyPairId: envConfig.NEXT_AWS_ACCESS_KEY_ID,
+    privateKey: envConfig.NEXT_CLOUDFRONT_PRIVATE_KEY,
+    url: url,
+    dateLessThan: new Date(Date.now() + 1000 /*sec*/ * 60).toISOString(),
+  });
 
   return { success: { url, fileName }, message: "Create new pre signer URL" };
 }
