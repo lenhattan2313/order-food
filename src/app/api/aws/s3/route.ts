@@ -1,24 +1,6 @@
-import envConfig from "@/config";
-import { NextResponse } from "next/server";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "@/lib/s3Utils";
+import { uploadFileToS3 } from "@/lib/s3Utils";
 import { StatusCodes } from "http-status-codes";
-//TODO create util func
-async function uploadFileToS3(
-  file: Buffer,
-  fileName: string,
-  category = "dish"
-) {
-  const params = {
-    Bucket: envConfig.NEXT_AWS_S3_BUCKET_NAME,
-    Key: `${category}/${fileName}`,
-    Body: file,
-    ContentType: "image/jpg",
-  };
-  const command = new PutObjectCommand(params);
-  await s3Client.send(command);
-  return fileName;
-}
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
