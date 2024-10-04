@@ -7,19 +7,20 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
 import { cookies } from "next/headers";
 import { NEXT_LOCALE, defaultLocale } from "@/constants/locale";
+import { generatePaths } from "@/lib/authUtils";
+const basePaths = {
+  guest: "/guest",
+  manage: "/manage",
+  owner: "/manage/accounts",
+  unAuth: ["/login", "/register", "/tables"],
+  root: "",
+};
+const guestPaths = generatePaths(basePaths.guest);
+const managePaths = generatePaths(basePaths.manage);
+const ownerPaths = generatePaths(basePaths.owner);
+const unAuthPaths = generatePaths(basePaths.unAuth);
+const rootPaths = generatePaths(basePaths.root);
 
-const guestPaths = ["/vi/guest", "/en/guest"];
-const managePaths = ["/vi/manage", "/en/manage"];
-const ownerPaths = ["/vi/manage/accounts", "/en/manage/accounts"];
-const unAuthPaths = [
-  "/vi/login",
-  "/en/login",
-  "/vi/register",
-  "/en/register",
-  "/vi/tables",
-  "/en/tables",
-];
-const rootPaths = ["/vi", "/en"];
 export function middleware(request: NextRequest) {
   const handleI18nRouting = createMiddleware(routing);
   const response = handleI18nRouting(request);
@@ -30,9 +31,10 @@ export function middleware(request: NextRequest) {
   const { accessToken, refreshToken } = getTokenCookies();
   const isUnAuthPaths = unAuthPaths.some((route) => pathname.includes(route));
   const isRootRoutes = rootPaths.some((route) => pathname.includes(route));
+  console.log("pathname", pathname);
   //when not log in or accessToken expired
   if (!accessToken) {
-    if (isUnAuthPaths && refreshToken) {
+    if ((isUnAuthPaths && refreshToken) || pathname === "/") {
       return NextResponse.redirect(new URL(`/${locale}`, request.url));
     }
     if (!isUnAuthPaths && !isRootRoutes) {
