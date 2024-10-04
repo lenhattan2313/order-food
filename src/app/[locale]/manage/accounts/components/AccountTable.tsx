@@ -1,26 +1,15 @@
 "use client";
 
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { ColumnDef, flexRender } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 
-import { AccountProvider, useAccountContext } from "@/context/accountContext";
 import AddEmployee from "@/app/[locale]/manage/accounts/components/AddEmployee";
 import { DeleteAccountModal } from "@/app/[locale]/manage/accounts/components/DeleteAccountModal";
 import EditEmployee from "@/app/[locale]/manage/accounts/components/EditEmployee";
 import AutoPagination from "@/components/_client/AutoPagination";
+import { useAuth } from "@/components/provider/auth-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -31,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -41,14 +29,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { defaultPagination } from "@/constants/common";
+import { Role } from "@/constants/type";
+import { AccountProvider, useAccountContext } from "@/context/accountContext";
+import { useTable } from "@/hooks/useTable";
 import { useGetAccountList } from "@/queries/useAccount";
 import { AccountType } from "@/schemaValidations/account.schema";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/components/provider/auth-provider";
-import { Role } from "@/constants/type";
-const columnWidths = [30, 100, 30, 30, 30];
-const columnHeights = [30, 100, 30, 30, 30];
+import { useMemo } from "react";
+import { DataTable } from "@/components/_client/Table";
+
 export const columns: ColumnDef<AccountType>[] = [
   {
     accessorKey: "id",
@@ -126,68 +114,20 @@ export const columns: ColumnDef<AccountType>[] = [
 ];
 
 export default function AccountTable() {
-  const searchParam = useSearchParams();
-  const page = searchParam.get("page")
-    ? Number(searchParam.get("page"))
-    : defaultPagination.page;
-  const pageIndex = page - 1;
-
   const { data: accountList, isPending } = useGetAccountList();
   const data = useMemo(
     () => accountList?.data ?? Array(defaultPagination.pageSize).fill({}),
     [accountList]
   );
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-  const [pagination, setPagination] = useState({
-    pageIndex, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
-    pageSize: defaultPagination.pageSize, //default page size
-  });
-  //TODO make a common component for table
-  const columnsMemo = useMemo(
-    () =>
-      isPending
-        ? columns.map((column, index) => ({
-            ...column,
-            cell: () => (
-              <Skeleton
-                className={`h-[${columnHeights[index]}px] w-[${columnWidths[index]}px]`}
-              />
-            ),
-          }))
-        : columns,
-    [isPending]
-  );
-  const table = useReactTable({
+  const table = useTable({
+    isPending,
     data,
-    columns: columnsMemo,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    onPaginationChange: setPagination,
-    autoResetPageIndex: false,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-      pagination,
+    columns,
+    skeleton: {
+      width: [30, 100, 30, 30, 30],
+      height: [30, 100, 30, 30, 30],
     },
   });
-
-  useEffect(() => {
-    table.setPagination({
-      pageIndex,
-      pageSize: defaultPagination.pageSize,
-    });
-  }, [table, pageIndex]);
   return (
     <AccountProvider>
       <div className="w-full">
@@ -206,70 +146,7 @@ export default function AccountTable() {
             <AddEmployee />
           </div>
         </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="text-xs text-muted-foreground py-4 flex-1 ">
-            Hiển thị{" "}
-            <strong>{table.getPaginationRowModel().rows.length}</strong> trong{" "}
-            <strong>{data.length}</strong> kết quả
-          </div>
-          <div>
-            <AutoPagination
-              page={table.getState().pagination.pageIndex + 1}
-              pageSize={table.getPageCount()}
-              pathname="/manage/accounts"
-            />
-          </div>
-        </div>
+        <DataTable table={table} />
       </div>
     </AccountProvider>
   );

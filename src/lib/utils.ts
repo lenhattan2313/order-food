@@ -127,3 +127,16 @@ export const createImagePathS3 = (name: string, prefix = "") => {
 export const getImagePathS3 = (name: string) => {
   return `${envConfig.NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE}/${name}`;
 };
+export const getSkeletonDimension = (
+  dimension: number | number[] | undefined, // The dimension can be a number, an array of numbers, or undefined
+  index: number,
+  defaultValue: number
+): number => {
+  if (Array.isArray(dimension)) {
+    return dimension.length > index ? dimension[index] : defaultValue;
+  }
+  if (typeof dimension === "number") {
+    return dimension;
+  }
+  return defaultValue;
+};

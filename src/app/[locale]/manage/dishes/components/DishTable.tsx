@@ -1,13 +1,10 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-
 import AddDish from "@/app/[locale]/manage/dishes/components/AddDish";
 import EditDish from "@/app/[locale]/manage/dishes/components/EditDish";
 import { getVietnameseDishStatus } from "@/app/[locale]/manage/dishes/utils/dishesUtils";
-
 import { DeleteDish } from "@/app/[locale]/manage/dishes/components/DeleteDish";
 import { DataTable } from "@/components/_client/Table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,8 +23,47 @@ import { useTable } from "@/hooks/useTable";
 import { formatCurrency } from "@/lib/currency";
 import { useGetDishList } from "@/queries/useDish";
 import { useMemo } from "react";
-const columnWidths = [30, 100, 30, 30, 30, 30, 30];
-const columnHeights = [30, 100, 30, 30, 30, 30, 30];
+
+export default function DishTable() {
+  const { data: dishList, isPending } = useGetDishList();
+  const data: DishItem[] = useMemo(
+    () => dishList?.data ?? Array(defaultPagination.pageSize).fill({}),
+    [dishList]
+  );
+
+  const table = useTable({
+    isPending,
+    data,
+    columns,
+    skeleton: {
+      width: [30, 100, 30, 30, 30, 30, 30],
+      height: [30, 100, 30, 30, 30, 30, 30],
+    },
+  });
+  return (
+    <DishProvider>
+      <div className="w-full">
+        <EditDish />
+        <DeleteDish />
+        <div className="flex items-center py-4">
+          <Input
+            placeholder="Lọc tên"
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <div className="ml-auto flex items-center gap-2">
+            <AddDish />
+          </div>
+        </div>
+        <DataTable table={table} />
+      </div>
+    </DishProvider>
+  );
+}
+
 export const columns: ColumnDef<DishItem>[] = [
   {
     accessorKey: "id",
@@ -107,41 +143,3 @@ export const columns: ColumnDef<DishItem>[] = [
     },
   },
 ];
-
-export default function DishTable() {
-  const { data: dishList, isPending } = useGetDishList();
-  const data: DishItem[] = useMemo(
-    () => dishList?.data ?? Array(defaultPagination.pageSize).fill({}),
-    [dishList]
-  );
-
-  const table = useTable({
-    isPending,
-    data,
-    columns,
-    columnHeights,
-    columnWidths,
-  });
-  return (
-    <DishProvider>
-      <div className="w-full">
-        <EditDish />
-        <DeleteDish />
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Lọc tên"
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <div className="ml-auto flex items-center gap-2">
-            <AddDish />
-          </div>
-        </div>
-        <DataTable table={table} />
-      </div>
-    </DishProvider>
-  );
-}

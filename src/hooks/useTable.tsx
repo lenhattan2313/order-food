@@ -1,5 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { defaultPagination } from "@/constants/common";
+import { getSkeletonDimension } from "@/lib/utils";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,15 +19,16 @@ interface ITableProps<T> {
   isPending: boolean;
   data: T[];
   columns: ColumnDef<T>[];
-  columnWidths?: number[];
-  columnHeights?: number[];
+  skeleton?: {
+    width: number | number[];
+    height: number | number[];
+  };
 }
 export function useTable<T>({
   isPending,
   data,
   columns,
-  columnHeights = [],
-  columnWidths = [],
+  skeleton,
 }: ITableProps<T>) {
   const searchParam = useSearchParams();
   const page = searchParam.get("page")
@@ -47,9 +49,15 @@ export function useTable<T>({
         ? columns.map((column, index) => ({
             ...column,
             cell: () => {
-              const height = columnHeights.length ? columnHeights[index] : 30;
-              const width = columnWidths.length ? columnWidths[index] : 30;
-              return <Skeleton className={`h-[${height}px] w-[${width}px]`} />;
+              const { width, height } = skeleton ?? {};
+              // Get width and height for the skeleton
+              const heightSkeleton = getSkeletonDimension(height, index, 30);
+              const widthSkeleton = getSkeletonDimension(width, index, 30);
+              return (
+                <Skeleton
+                  className={`h-[${heightSkeleton}px] w-[${widthSkeleton}px]`}
+                />
+              );
             },
           }))
         : columns,

@@ -4,38 +4,18 @@ import EditOrder from "@/app/[locale]/manage/orders/components/EditOrder";
 import orderTableColumns from "@/app/[locale]/manage/orders/components/OrderColumns";
 import OrderStatics from "@/app/[locale]/manage/orders/components/OrderStatics";
 import { useOrderService } from "@/app/[locale]/manage/orders/hooks/useOrderService";
-import AutoPagination from "@/components/_client/AutoPagination";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { OrderStatusValues } from "@/constants/type";
 import {
   CreateOrdersResType,
   PayGuestOrdersResType,
   UpdateOrderResType,
 } from "@/schemaValidations/order.schema";
-import {
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { getVietnameseOrderStatus } from "@/app/[locale]/manage/orders/utils/orderUtils";
+import { DataTable } from "@/components/_client/Table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,9 +29,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { dateRangeDefault, defaultPagination } from "@/constants/common";
+import { dateRangeDefault } from "@/constants/common";
 import { SOCKET_EVENT } from "@/constants/socket";
 import { toast } from "@/hooks/use-toast";
+import { useTable } from "@/hooks/useTable";
 import { socket } from "@/lib/socket";
 import { cn } from "@/lib/utils";
 import { useGetOrderList } from "@/queries/useOrder";
@@ -68,15 +49,15 @@ export type Statics = {
 };
 
 export default function OrderTable() {
-  const searchParam = useSearchParams();
   const [openStatusFilter, setOpenStatusFilter] = useState(false);
   const [fromDate, setFromDate] = useState(dateRangeDefault.fromDate);
   const [toDate, setToDate] = useState(dateRangeDefault.toDate);
-  const page = searchParam.get("page")
-    ? Number(searchParam.get("page"))
-    : defaultPagination.page;
-  const pageIndex = page - 1;
-  const { data: orders, refetch: refetchGetOrderList } = useGetOrderList({
+
+  const {
+    data: orders,
+    refetch: refetchGetOrderList,
+    isPending,
+  } = useGetOrderList({
     fromDate,
     toDate,
   });
@@ -86,45 +67,18 @@ export default function OrderTable() {
     () => (tables?.data ?? []).sort((a, b) => a.number - b.number),
     [tables]
   );
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-  const [pagination, setPagination] = useState({
-    pageIndex, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
-    pageSize: defaultPagination.pageSize, //default page size
-  });
 
   const { statics, servingGuestByTableNumber } = useOrderService(orderList);
 
-  const table = useReactTable({
+  const table = useTable({
+    isPending,
     data: orderList,
     columns: orderTableColumns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    onPaginationChange: setPagination,
-    autoResetPageIndex: false,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-      pagination,
+    skeleton: {
+      width: 40,
+      height: 30,
     },
   });
-
-  useEffect(() => {
-    table.setPagination({
-      pageIndex,
-      pageSize: defaultPagination.pageSize,
-    });
-  }, [table, pageIndex]);
 
   const resetDateFilter = () => {
     setFromDate(dateRangeDefault.fromDate);
@@ -294,69 +248,7 @@ export default function OrderTable() {
         tableList={tableList}
         servingGuestByTableNumber={servingGuestByTableNumber}
       />
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={orderTableColumns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-xs text-muted-foreground py-4 flex-1 ">
-          Hiển thị <strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
-          trong <strong>{orderList.length}</strong> kết quả
-        </div>
-        <div>
-          <AutoPagination
-            page={table.getState().pagination.pageIndex + 1}
-            pageSize={table.getPageCount()}
-            pathname="/manage/orders"
-          />
-        </div>
-      </div>
+      <DataTable table={table} />
     </div>
   );
 }
