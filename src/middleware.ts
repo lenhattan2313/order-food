@@ -36,8 +36,6 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}`, request.url));
     }
     if (!isUnAuthPaths && !isRootRoutes) {
-      console.log("bbb");
-
       let url = new URL(`/${locale}/login`, request.url);
       if (refreshToken) {
         url = new URL(`/${locale}/refresh-token`, request.url);

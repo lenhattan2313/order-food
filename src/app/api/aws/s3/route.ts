@@ -15,7 +15,6 @@ async function uploadFileToS3(
     Body: file,
     ContentType: "image/jpg",
   };
-  console.log("file", fileName);
   const command = new PutObjectCommand(params);
   await s3Client.send(command);
   return fileName;

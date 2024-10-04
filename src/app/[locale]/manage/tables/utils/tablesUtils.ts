@@ -1,4 +1,5 @@
 import envConfig from "@/config";
+import { defaultLocale } from "@/constants/locale";
 import { TableStatus } from "@/constants/type";
 
 export const getVietnameseTableStatus = (
@@ -23,7 +24,7 @@ export const getTableLink = ({
 }) => {
   return (
     envConfig.NEXT_PUBLIC_BASE_URL +
-    "/tables/" +
+    `${defaultLocale}/tables/` +
     tableNumber +
     "?token=" +
     token

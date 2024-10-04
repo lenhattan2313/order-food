@@ -18,7 +18,6 @@ export async function POST(request: Request) {
     const response = await guestActions.logout({ accessToken, refreshToken });
     return Response.json(response);
   } catch (error) {
-    console.log(error);
     return Response.json(
       {
         message: "Somethings happened",

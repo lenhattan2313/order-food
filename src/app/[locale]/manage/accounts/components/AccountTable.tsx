@@ -47,7 +47,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/components/provider/auth-provider";
 import { Role } from "@/constants/type";
-
+const columnWidths = [30, 100, 30, 30, 30];
+const columnHeights = [30, 100, 30, 30, 30];
 export const columns: ColumnDef<AccountType>[] = [
   {
     accessorKey: "id",
@@ -148,9 +149,13 @@ export default function AccountTable() {
   const columnsMemo = useMemo(
     () =>
       isPending
-        ? columns.map((column) => ({
+        ? columns.map((column, index) => ({
             ...column,
-            cell: () => <Skeleton className="h-4 w-12" />,
+            cell: () => (
+              <Skeleton
+                className={`h-[${columnHeights[index]}px] w-[${columnWidths[index]}px]`}
+              />
+            ),
           }))
         : columns,
     [isPending]

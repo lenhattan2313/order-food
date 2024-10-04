@@ -49,7 +49,8 @@ import {
 } from "@/context/tableContext";
 import { useGetTableList } from "@/queries/useTable";
 import { useSearchParams } from "next/navigation";
-
+const columnWidths = [30, 30, 30, 300, 30];
+const columnHeights = [30, 30, 30, 300, 30];
 export const columns: ColumnDef<TableItem>[] = [
   {
     accessorKey: "number",
@@ -137,9 +138,13 @@ export default function TableTable() {
   const columnsMemo = useMemo(
     () =>
       isPending
-        ? columns.map((column) => ({
+        ? columns.map((column, index) => ({
             ...column,
-            cell: () => <Skeleton className="h-4 w-12" />,
+            cell: () => (
+              <Skeleton
+                className={`h-[${columnHeights[index]}px] w-[${columnWidths[index]}px]`}
+              />
+            ),
           }))
         : columns,
     [isPending]

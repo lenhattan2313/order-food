@@ -15,12 +15,17 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "4000",
         pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "via.placeholder.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "test-order-food.s3.ap-southeast-1.amazonaws.com",
         port: "",
         pathname: "/**",
       },
