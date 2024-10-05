@@ -1,7 +1,22 @@
 {
-  "home": { "title": "Nhà hàng", "description": "Phục vụ đồ ăn và thức uống" },
+  "home": { "title": "Tannrest", "description": "Phục vụ đồ ăn và thức uống" },
   "login": {
     "title": "Đăng nhập"
   },
-  "common": { "vi": "Việt Nam", "en": "English", "notFound": "Không tìm thấy" }
+  "common": {
+    "vi": "Việt Nam",
+    "en": "English",
+    "notFound": "Không tìm thấy",
+    "noResult": "Không có dữ liệu"
+  },
+  "button": {
+    "detail": "Chi tiết"
+  },
+  "dish": {
+    "description": "Đa dạng các món ăn",
+    "bestSeller": "Ưu thích",
+    "detail": {
+      "title": "Món ăn"
+    }
+  }
 }

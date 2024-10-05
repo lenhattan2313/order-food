@@ -1,7 +1,22 @@
 {
-  "home": { "title": "Restaurant", "description": "Serving food and beverage" },
+  "home": { "title": "Tannrest", "description": "Serving food and beverage" },
   "login": {
     "title": "Login"
   },
-  "common": { "vi": "Việt Nam", "en": "English", "notFound": "Not Found" }
+  "common": {
+    "vi": "Việt Nam",
+    "en": "English",
+    "notFound": "Not Found",
+    "noResult": "No result"
+  },
+  "button": {
+    "detail": "Detail"
+  },
+  "dish": {
+    "description": "Our Delicious Menu",
+    "bestSeller": "Best seller",
+    "detail": {
+      "title": "Dish detail"
+    }
+  }
 }

@@ -8,7 +8,11 @@ import {
 import { useRouter } from "@/navigation";
 import { PropsWithChildren, useState } from "react";
 
-const Modal = ({ children }: PropsWithChildren) => {
+const Modal = ({
+  children,
+  title,
+  dataTestId,
+}: PropsWithChildren<{ title: string; dataTestId: string }>) => {
   const [open, setOpen] = useState(true);
   const router = useRouter();
   return (
@@ -18,10 +22,11 @@ const Modal = ({ children }: PropsWithChildren) => {
         setOpen(!value);
         router.back();
       }}
+      data-testid={dataTestId}
     >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Dish detail</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <div>{children} </div>
       </DialogContent>
