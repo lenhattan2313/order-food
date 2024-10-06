@@ -87,6 +87,7 @@ function LoginForm() {
                 required
                 placeholder="m@example.com"
                 label={t("email")}
+                autoFocus
               />
               <InputForm
                 id="password"
