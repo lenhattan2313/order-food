@@ -8,6 +8,7 @@ import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { baseOpenGraph } from "@/shareMetadata";
 import { cache } from "react";
+import NoResult from "@/components/_client/NoResult";
 const getDetail = cache((id: number) =>
   wrapServerApi(() => dishActions.getDishDetail({ id }))
 );
@@ -67,7 +68,7 @@ const DishDetail = async ({ params: { slug, locale } }: DishParams) => {
   const id = getIdFromSlugUrl(slug);
   const response = await getDetail(id);
   if (!response) {
-    return <h1>No data</h1>;
+    return <NoResult />;
   }
   const data = response.data;
   return (
@@ -81,7 +82,8 @@ const DishDetail = async ({ params: { slug, locale } }: DishParams) => {
           className="object-cover w-[300px] h-[300px] rounded-md"
         />
       </div>
-      <p>{data.name}</p>
+      <p className="font-bold">{data.name}</p>
+      <p className="text-sm leading-relaxed">{data.description}</p>
     </div>
   );
 };

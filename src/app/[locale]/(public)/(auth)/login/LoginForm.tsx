@@ -1,4 +1,5 @@
 "use client";
+import { InputForm } from "@/components/_client/Form";
 import { useAuth } from "@/components/provider/auth-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,16 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Form } from "@/components/ui/form";
 import { TokenPayload } from "@/interface/IAuth";
 import { getOauthGoogleUrl } from "@/lib/authUtils";
 import { socket } from "@/lib/socket";
 import { decodeJWT, handleApiError } from "@/lib/utils";
 import { Link, useRouter } from "@/navigation";
 import { useLoginMutation } from "@/queries/useAuth";
-import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
+import { LoginBodyType, useLoginSchema } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
@@ -30,19 +29,16 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const clearToken = searchParams.get("clearToken");
   const { setRole } = useAuth();
+  const schema = useLoginSchema();
   const form = useForm<LoginBodyType>({
-    resolver: zodResolver(LoginBody),
+    resolver: zodResolver(schema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const {
-    formState: { isValid },
-    handleSubmit,
-    setError,
-  } = form;
+  const { handleSubmit, setError } = form;
   const { mutateAsync, isPending } = useLoginMutation();
   async function onSubmit(dataForm: LoginBodyType) {
     try {
@@ -74,71 +70,38 @@ function LoginForm() {
     <Card className="mx-auto max-w-sm">
       <CardHeader>
         <CardTitle className="text-2xl">{t("title")}</CardTitle>
-        <CardDescription>
-          Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form
             className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
             noValidate
-            onSubmit={(e) => {
-              e.preventDefault();
-              void handleSubmit(onSubmit)();
-            }}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid gap-4">
-              <FormField
-                control={form.control}
+              <InputForm
+                id="email"
                 name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="m@example.com"
-                        required
-                        {...field}
-                      />
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
+                type="email"
+                required
+                placeholder="m@example.com"
+                label={t("email")}
               />
-              <FormField
-                control={form.control}
+              <InputForm
+                id="password"
                 name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid gap-2">
-                      <div className="flex items-center">
-                        <Label htmlFor="password">Password</Label>
-                      </div>
-                      <Input
-                        id="password"
-                        type="password"
-                        required
-                        {...field}
-                      />
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
+                required
+                label={t("password")}
+                type="password"
               />
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={!isValid}
-                isLoading={isPending}
-              >
-                Đăng nhập
+
+              <Button type="submit" className="w-full" isLoading={isPending}>
+                {t("title")}
               </Button>
               <Link href={getOauthGoogleUrl()}>
                 <Button variant="outline" className="w-full" type="button">
-                  Đăng nhập bằng Google
+                  {t("google-access")}
                 </Button>
               </Link>
             </div>

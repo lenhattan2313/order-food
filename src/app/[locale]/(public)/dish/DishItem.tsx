@@ -27,9 +27,11 @@ const DishItemComp = ({ dish }: Props) => {
           height={150}
           src={dish.image}
           alt={dish.name}
+          quality={80}
           onClick={handleOpenDetail}
           className="w-full h-56 object-cover"
         />
+
         {/* {dish.bestSeller && (
           <div className="absolute top-4 left-4 bg-yellow-400 dark:text-gray-800 text-xs font-bold px-3 py-1 rounded-full flex items-center">
             <Star className="w-4 h-4 mr-1" />

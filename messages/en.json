@@ -1,7 +1,13 @@
 {
   "home": { "title": "Tannrest", "description": "Serving food and beverage" },
   "login": {
-    "title": "Login"
+    "title": "Login",
+    "guest-logout": "You may lose your order.",
+    "account-logout": "Bạn muốn đăng xuất?",
+    "description": "Enter your email and password to log in to the system",
+    "google-access": "Sign in with Google",
+    "email": "Email",
+    "password": "Password"
   },
   "common": {
     "vi": "Việt Nam",
@@ -9,8 +15,24 @@
     "notFound": "Not Found",
     "noResult": "No result"
   },
+  "menu": {
+    "login": "Login",
+    "logout": "Logout",
+    "dish": "Dish",
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "account": "Account",
+    "table": "Table",
+    "order": "Order"
+  },
   "button": {
-    "detail": "Detail"
+    "detail": "Detail",
+    "continue": "Continue",
+    "cancel": "Cancel"
+  },
+  "form": {
+    "emailInvalid": "Invalid Email",
+    "passwordInvalid": "String must contain at least 6 character(s)"
   },
   "dish": {
     "description": "Our Delicious Menu",

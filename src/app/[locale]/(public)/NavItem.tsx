@@ -1,58 +1,22 @@
 "use client";
 
+import { ConfirmDialog } from "@/components/_client/ConfirmDialog";
 import { useAuth } from "@/components/provider/auth-provider";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import { Role } from "@/constants/type";
 import { RoleType } from "@/interface/IAuth";
+import { MenuTranslationKeys } from "@/interface/common";
 import { socket } from "@/lib/socket";
 import { handleApiError } from "@/lib/utils";
 import { Link, useRouter } from "@/navigation";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useGuestLogout } from "@/queries/useGuest";
+import { useTranslations } from "next-intl";
 import { useCallback } from "react";
-const menuItems: {
-  title: string;
-  href: string;
-  roles?: RoleType[];
-  hideWhenLogin?: boolean;
-}[] = [
-  {
-    title: "Món ăn",
-    href: "/",
-  },
-  {
-    title: "Menu",
-    href: "/guest/menu",
-    roles: [Role.Guest],
-  },
-  {
-    title: "Đơn hàng",
-    href: "/guest/order",
-    roles: [Role.Guest],
-  },
-  {
-    title: "Đăng nhập",
-    href: "/login",
-    hideWhenLogin: true,
-  },
-  {
-    title: "Quản lý",
-    href: "/manage/dashboard",
-    roles: [Role.Owner, Role.Employee],
-  },
-];
 
 export default function NavItems({ className }: { className?: string }) {
+  const t = useTranslations("menu");
+  const tl = useTranslations("login");
   const { role, setRole } = useAuth();
   const router = useRouter();
   const { mutateAsync: logout, isPending: isLogoutPending } =
@@ -76,7 +40,7 @@ export default function NavItems({ className }: { className?: string }) {
     if ((role && item.roles?.includes(role)) || canShow) {
       return (
         <Link href={item.href} key={item.href} className={className}>
-          {item.title}
+          {t(item.name)}
         </Link>
       );
     }
@@ -85,37 +49,49 @@ export default function NavItems({ className }: { className?: string }) {
   });
   if (role) {
     menu.push(
-      <AlertDialog key="logout">
-        <AlertDialogTrigger asChild>
-          <div
-            key="logout"
-            className="cursor-pointer text-muted-foreground hover:text-foreground"
-          >
-            Đăng xuất
-          </div>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Đăng xuất</AlertDialogTitle>
-            <AlertDialogDescription>
-              {role === Role.Guest
-                ? "Bạn có thể sẽ mất đơn hàng của mình"
-                : "Bạn muốn đăng xuất?"}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleLogout}
-              disabled={isGuestLogoutPending || isLogoutPending}
-            >
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDialog
+        key="logout"
+        title={t("logout")}
+        description={
+          role === Role.Guest ? tl("guest-logout") : tl("account-logout")
+        }
+        onClick={handleLogout}
+        isPending={isGuestLogoutPending || isLogoutPending}
+      />
     );
     return menu;
   }
   return menu;
 }
+
+const menuItems: {
+  name: MenuTranslationKeys;
+  href: string;
+  roles?: RoleType[];
+  hideWhenLogin?: boolean;
+}[] = [
+  {
+    name: "menu",
+    href: "/",
+  },
+  {
+    name: "menu",
+    href: "/guest/menu",
+    roles: [Role.Guest],
+  },
+  {
+    name: "order",
+    href: "/guest/order",
+    roles: [Role.Guest],
+  },
+  {
+    name: "login",
+    href: "/login",
+    hideWhenLogin: true,
+  },
+  {
+    name: "dashboard",
+    href: "/manage/dashboard",
+    roles: [Role.Owner, Role.Employee],
+  },
+];
