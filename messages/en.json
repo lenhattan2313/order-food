@@ -27,6 +27,12 @@
     "table": "Table",
     "order": "Order"
   },
+  "footer": {
+    "term": "Terms of Service",
+    "policy": "Privacy Policy",
+    "about": "About Us",
+    "title": "Tannrest"
+  },
   "button": {
     "detail": "Detail",
     "continue": "Continue",

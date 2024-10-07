@@ -27,6 +27,12 @@
     "table": "Bàn",
     "order": "Đơn hàng"
   },
+  "footer": {
+    "term": "Điều khoản dịch vụ",
+    "policy": "Chính sách bảo mật",
+    "about": "Về chúng tôi",
+    "title": "Tannrest"
+  },
   "button": {
     "detail": "Chi tiết",
     "continue": "Tiếp tục",
