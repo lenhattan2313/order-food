@@ -1,11 +1,14 @@
-import { test as setup, expect } from "@playwright/test";
+import envConfig from "@/config";
+import { chromium, expect } from "@playwright/test";
 import path from "path";
 
 const authFile = path.join(__dirname, "../../playwright/.auth/user.json");
-
-setup("authenticate", async ({ page }) => {
+async function globalSetup() {
+  const browsers = await chromium.launch({ headless: false });
+  const context = await browsers.newContext();
+  const page = await context.newPage();
   // Perform authentication steps. Replace these actions with your own.
-  await page.goto("./login");
+  await page.goto("http://localhost:3000/en/login");
   const emailInput = await page.locator("#email");
   const passwordInput = await page.locator("#password");
   const loginBtn = await page.getByRole("button", { name: /login/i });
@@ -16,8 +19,12 @@ setup("authenticate", async ({ page }) => {
   //
   // Sometimes login flow sets cookies in the process of several redirects.
   // Wait for the final URL to ensure that the cookies are actually set.
-  await expect(page).toHaveURL("/en/manage/dashboard");
+  await expect(page).toHaveURL(
+    `${envConfig.NEXT_PUBLIC_BASE_URL}/en/manage/dashboard`
+  );
   // End of authentication steps.
-
+  console.log(authFile);
   await page.context().storageState({ path: authFile });
-});
+  await browsers.close();
+}
+export default globalSetup;
