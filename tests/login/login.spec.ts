@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-
+test.use({ storageState: { cookies: [], origins: [] } });
 test.describe("Login page", () => {
   test.beforeEach(async ({ page }) => {
     // Go to the starting url before each test.
@@ -40,6 +40,6 @@ test.describe("Login page", () => {
 
     //dashboard page
 
-    await expect(page).toHaveURL("/en/manage/dashboard");
+    await expect(page).toHaveURL("./manage/dashboard");
   });
 });
