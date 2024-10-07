@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test';
+import { mockApiResponse } from '../../utils/mockUtils';
+import { responseDashboard } from './data.mock';
 
 test.describe('Dashboard page', () => {
   test('display content', async ({ page }) => {
@@ -16,5 +18,13 @@ test.describe('Dashboard page', () => {
     const barChart = await page.getByTestId('bar-chart');
     await expect(revenueChart).toBeVisible();
     await expect(barChart).toBeVisible();
+
+    // update from to date
+
+    await page.getByPlaceholder('From').fill('2024-09-07T00:00');
+    await mockApiResponse(page, '/indicators/dashboard', responseDashboard);
+
+    const firstCard = await cardItem.first();
+    await expect(firstCard).toContainText('290.000');
   });
 });
