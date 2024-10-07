@@ -1,14 +1,14 @@
 "use client";
 
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { ColumnDef, flexRender } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 
 import AddEmployee from "@/app/[locale]/manage/accounts/components/AddEmployee";
 import { DeleteAccountModal } from "@/app/[locale]/manage/accounts/components/DeleteAccountModal";
 import EditEmployee from "@/app/[locale]/manage/accounts/components/EditEmployee";
-import AutoPagination from "@/components/_client/AutoPagination";
+import { DataTable } from "@/components/_client/Table";
 import { useAuth } from "@/components/provider/auth-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -20,14 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { defaultPagination } from "@/constants/common";
 import { Role } from "@/constants/type";
 import { AccountProvider, useAccountContext } from "@/context/accountContext";
@@ -35,7 +27,6 @@ import { useTable } from "@/hooks/useTable";
 import { useGetAccountList } from "@/queries/useAccount";
 import { AccountType } from "@/schemaValidations/account.schema";
 import { useMemo } from "react";
-import { DataTable } from "@/components/_client/Table";
 
 export const columns: ColumnDef<AccountType>[] = [
   {

@@ -13,7 +13,6 @@ type Props = {
 
 const DishItemComp = ({ dish }: Props) => {
   const tb = useTranslations("button");
-  const t = useTranslations("dish");
   const router = useRouter();
   function handleOpenDetail() {
     const slug = generateSlugUrl({ name: dish.name, id: dish.id });

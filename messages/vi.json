@@ -13,7 +13,9 @@
     "vi": "Việt Nam",
     "en": "English",
     "notFound": "Không tìm thấy",
-    "noResult": "Không có dữ liệu"
+    "noResult": "Không có dữ liệu",
+    "from": "Từ",
+    "to": "Đến"
   },
   "menu": {
     "login": "Đăng nhập",
@@ -28,7 +30,8 @@
   "button": {
     "detail": "Chi tiết",
     "continue": "Tiếp tục",
-    "cancel": "Huỷ"
+    "cancel": "Huỷ",
+    "reset": "Đặt lại"
   },
   "form": {
     "emailInvalid": "Email không hợp lệ",
@@ -40,5 +43,17 @@
     "detail": {
       "title": "Món ăn"
     }
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển",
+    "description": "Phân tích các chỉ số",
+    "totalRevenue": "Tổng doanh thu",
+    "revenue": "Doanh thu",
+    "client": "Khách",
+    "order": "Đơn hàng",
+    "request": "Gọi món",
+    "table": "Bàn phục vụ",
+    "dishesRating": "Xếp hạng món ăn",
+    "mostRequestedDishes": "Được gọi nhiều nhất"
   }
 }

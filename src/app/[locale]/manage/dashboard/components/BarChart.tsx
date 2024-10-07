@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/chart";
 import { DashboardIndicatorResType } from "@/schemaValidations/indicator.schema";
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 const colors = [
   "var(--color-chrome)",
@@ -59,6 +60,7 @@ export function DishBarChart({
     "name" | "successOrders"
   >[];
 }) {
+  const t = useTranslations("dashboard");
   const chartData = useMemo(
     () =>
       dishIndicator.map((dish, index) => ({
@@ -71,8 +73,8 @@ export function DishBarChart({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Xếp hạng món ăn</CardTitle>
-        <CardDescription>Được gọi nhiều nhất</CardDescription>
+        <CardTitle>{t("dishesRating")}</CardTitle>
+        <CardDescription>{t("mostRequestedDishes")}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

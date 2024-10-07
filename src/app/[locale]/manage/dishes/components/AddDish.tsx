@@ -34,7 +34,7 @@ import { toast } from "@/hooks/use-toast";
 import { computeSHA256 } from "@/lib/fileUtils";
 import { createImagePathS3, handleApiError } from "@/lib/utils";
 import { useCreateDish } from "@/queries/useDish";
-import { useUploadAvatar, useUploadImageToS3 } from "@/queries/useMedia";
+import { useUploadAvatar } from "@/queries/useMedia";
 import {
   CreateDishBody,
   CreateDishBodyType,
@@ -72,8 +72,8 @@ export default function AddDish() {
     }
     return image;
   }, [file, image]);
-  const { mutateAsync: uploadToS3, isPending: isUploadToS3Pending } =
-    useUploadImageToS3();
+  // const { mutateAsync: uploadToS3, isPending: isUploadToS3Pending } =
+  //   useUploadImageToS3();
   const { mutateAsync: uploadAvatar, isPending: isUploadPending } =
     useUploadAvatar();
   const { mutateAsync: createDish, isPending: isCreatePending } =
@@ -300,9 +300,7 @@ export default function AddDish() {
           <Button
             type="submit"
             form="add-dish-form"
-            isLoading={
-              isCreatePending || isUploadPending || isUploadToS3Pending
-            }
+            isLoading={isCreatePending || isUploadPending}
           >
             Thêm
           </Button>

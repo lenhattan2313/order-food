@@ -13,7 +13,9 @@
     "vi": "Việt Nam",
     "en": "English",
     "notFound": "Not Found",
-    "noResult": "No result"
+    "noResult": "No result",
+    "from": "From",
+    "to": "To"
   },
   "menu": {
     "login": "Login",
@@ -28,7 +30,8 @@
   "button": {
     "detail": "Detail",
     "continue": "Continue",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "reset": "Reset"
   },
   "form": {
     "emailInvalid": "Invalid Email",
@@ -40,5 +43,17 @@
     "detail": {
       "title": "Dish detail"
     }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Analyze the numbers",
+    "totalRevenue": "Total Revenue",
+    "revenue": "Revenue",
+    "client": "Client",
+    "request": "Request",
+    "order": "Order",
+    "table": "Served Table",
+    "dishesRating": "Dishes rating",
+    "mostRequestedDishes": "Most requested dishes"
   }
 }
