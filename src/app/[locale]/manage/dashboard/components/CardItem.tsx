@@ -7,9 +7,9 @@ type Props = {
   icon: LucideIcon;
 };
 
-export const CardItem = ({ title, value, icon: Icon }: Props) => {
+export function CardItem({ title, value, icon: Icon }: Props) {
   return (
-    <Card>
+    <Card className="card-item">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon />
@@ -19,4 +19,4 @@ export const CardItem = ({ title, value, icon: Icon }: Props) => {
       </CardContent>
     </Card>
   );
-};
+}

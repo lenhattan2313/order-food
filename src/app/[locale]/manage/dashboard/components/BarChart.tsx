@@ -67,11 +67,11 @@ export function DishBarChart({
         ...dish,
         fill: colors[index] ?? colors[colors.length - 1],
       })),
-    [dishIndicator, colors],
+    [dishIndicator],
   );
 
   return (
-    <Card>
+    <Card data-testid="bar-chart">
       <CardHeader>
         <CardTitle>{t('dishesRating')}</CardTitle>
         <CardDescription>{t('mostRequestedDishes')}</CardDescription>
@@ -92,15 +92,13 @@ export function DishBarChart({
               tickLine={false}
               tickMargin={2}
               axisLine={false}
-              tickFormatter={(value) => {
-                return value;
-              }}
+              tickFormatter={(value) => value}
             />
             <XAxis dataKey="successOrders" type="number" hide />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar
               dataKey="successOrders"
-              name={'Đơn thanh toán'}
+              name="Đơn thanh toán"
               layout="vertical"
               radius={5}
             />

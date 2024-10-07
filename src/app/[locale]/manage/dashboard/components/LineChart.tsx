@@ -17,6 +17,7 @@ import { DashboardIndicatorResType } from '@/schemaValidations/indicator.schema'
 import { format, parse } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
+
 const chartConfig = {
   desktop: {
     label: 'Desktop',
@@ -31,7 +32,7 @@ export function RevenueLineChart({
 }) {
   const t = useTranslations('dashboard');
   return (
-    <Card>
+    <Card data-testid="revenue-chart">
       <CardHeader>
         <CardTitle>{t('revenue')}</CardTitle>
       </CardHeader>
