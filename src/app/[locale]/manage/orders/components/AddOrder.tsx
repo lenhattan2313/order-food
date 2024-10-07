@@ -1,8 +1,8 @@
-"use client";
-import Quantity from "@/app/[locale]/guest/menu/components/Quantity";
-import GuestsDialog from "@/app/[locale]/manage/orders/components/GuestsDialog";
-import { TablesDialog } from "@/app/[locale]/manage/orders/components/TablesDialog";
-import { Button } from "@/components/ui/button";
+'use client';
+import Quantity from '@/app/[locale]/guest/menu/components/Quantity';
+import GuestsDialog from '@/app/[locale]/manage/orders/components/GuestsDialog';
+import { TablesDialog } from '@/app/[locale]/manage/orders/components/TablesDialog';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,40 +10,40 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { DishStatus } from "@/constants/type";
-import { toast } from "@/hooks/use-toast";
-import { formatCurrency } from "@/lib/currency";
-import { cn, handleApiError } from "@/lib/utils";
-import { useCreateGuest } from "@/queries/useAccount";
-import { useGetDishList } from "@/queries/useDish";
-import { useCreateOrder } from "@/queries/useOrder";
-import { GetListGuestsResType } from "@/schemaValidations/account.schema";
+} from '@/components/ui/dialog';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { DishStatus } from '@/constants/type';
+import { toast } from '@/hooks/use-toast';
+import { formatCurrency } from '@/lib/currency';
+import { cn, handleApiError } from '@/lib/utils';
+import { useCreateGuest } from '@/queries/useAccount';
+import { useGetDishList } from '@/queries/useDish';
+import { useCreateOrder } from '@/queries/useOrder';
+import { GetListGuestsResType } from '@/schemaValidations/account.schema';
 import {
   GuestLoginBody,
   GuestLoginBodyType,
-} from "@/schemaValidations/guest.schema";
-import { CreateOrdersBodyType } from "@/schemaValidations/order.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
-import Image from "next/image";
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/guest.schema';
+import { CreateOrdersBodyType } from '@/schemaValidations/order.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusCircle } from 'lucide-react';
+import Image from 'next/image';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 const initialData = {
-  name: "",
+  name: '',
   tableNumber: 0,
 };
 export default function AddOrder() {
   const [open, setOpen] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState<
-    GetListGuestsResType["data"][0] | null
+    GetListGuestsResType['data'][0] | null
   >(null);
   const [isNewGuest, setIsNewGuest] = useState(true);
-  const [orders, setOrders] = useState<CreateOrdersBodyType["orders"]>([]);
+  const [orders, setOrders] = useState<CreateOrdersBodyType['orders']>([]);
   const { data } = useGetDishList();
   const dishes = useMemo(() => data?.data ?? [], [data]);
 
@@ -86,14 +86,14 @@ export default function AddOrder() {
         const {
           data: { id },
         } = await createGuest({
-          name: form.getValues("name"),
-          tableNumber: form.getValues("tableNumber"),
+          name: form.getValues('name'),
+          tableNumber: form.getValues('tableNumber'),
         });
         guestId = id;
       }
       if (!guestId) {
         toast({
-          description: "Hãy chọn một khách hàng",
+          description: 'Hãy chọn một khách hàng',
         });
         return;
       }
@@ -218,8 +218,8 @@ export default function AddOrder() {
           .map((dish) => (
             <div
               key={dish.id}
-              className={cn("flex gap-4", {
-                "pointer-events-none": dish.status === DishStatus.Unavailable,
+              className={cn('flex gap-4', {
+                'pointer-events-none': dish.status === DishStatus.Unavailable,
               })}
             >
               <div className="flex-shrink-0 relative">

@@ -1,14 +1,14 @@
-import OrderTable from "@/app/[locale]/manage/orders/components/OrderTable";
+import OrderTable from '@/app/[locale]/manage/orders/components/OrderTable';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { OrderProvider } from "@/context/orderContext";
+} from '@/components/ui/card';
+import { OrderProvider } from '@/context/orderContext';
 
-import { Suspense } from "react";
+import { Suspense } from 'react';
 
 export default function AccountsPage() {
   return (

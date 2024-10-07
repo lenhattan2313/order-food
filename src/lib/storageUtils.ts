@@ -1,5 +1,5 @@
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { isClient } from "@/lib/utils";
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { isClient } from '@/lib/utils';
 
 export const localStorageUtil = {
   get(key: string): string | null {

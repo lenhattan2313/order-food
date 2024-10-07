@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,11 +8,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useTableContext } from "@/context/tableContext";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { useDeleteTable } from "@/queries/useTable";
+} from '@/components/ui/alert-dialog';
+import { useTableContext } from '@/context/tableContext';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { useDeleteTable } from '@/queries/useTable';
 export function DeleteTable() {
   const { tableDelete, setTableDelete } = useTableContext();
   const { mutateAsync, isPending } = useDeleteTable();
@@ -39,10 +39,10 @@ export function DeleteTable() {
         <AlertDialogHeader>
           <AlertDialogTitle>Xóa bàn ăn?</AlertDialogTitle>
           <AlertDialogDescription>
-            Bàn{" "}
+            Bàn{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">
               {tableDelete?.number}
-            </span>{" "}
+            </span>{' '}
             sẽ bị xóa vĩnh viễn
           </AlertDialogDescription>
         </AlertDialogHeader>

@@ -1,18 +1,18 @@
-"use client";
+'use client';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { locales } from "@/constants/locale";
-import { Locale } from "@/interface/locale";
-import { usePathname, useRouter } from "@/navigation";
-import { useLocale, useTranslations } from "next-intl";
+} from '@/components/ui/select';
+import { locales } from '@/constants/locale';
+import { Locale } from '@/interface/locale';
+import { usePathname, useRouter } from '@/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 
 export const SwitchLocales = () => {
-  const t = useTranslations("common");
+  const t = useTranslations('common');
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();

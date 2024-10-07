@@ -1,15 +1,15 @@
-"use client";
-import { Statics } from "@/app/[locale]/manage/orders/components/OrderTable";
-import { OrderStatus } from "@/constants/type";
+'use client';
+import { Statics } from '@/app/[locale]/manage/orders/components/OrderTable';
+import { OrderStatus } from '@/constants/type';
 import {
   OrderObjectByGuestID,
   ServingGuestByTableNumber,
   useOrderContext,
-} from "@/context/orderContext";
-import { GetOrdersResType } from "@/schemaValidations/order.schema";
-import { useEffect, useMemo } from "react";
+} from '@/context/orderContext';
+import { GetOrdersResType } from '@/schemaValidations/order.schema';
+import { useEffect, useMemo } from 'react';
 
-export const useOrderService = (orderList: GetOrdersResType["data"]) => {
+export const useOrderService = (orderList: GetOrdersResType['data']) => {
   const { setOrderObjectByGuestId } = useOrderContext();
   const result = useMemo(() => {
     const statics: Statics = {
@@ -71,7 +71,7 @@ export const useOrderService = (orderList: GetOrdersResType["data"]) => {
             OrderStatus.Pending,
             OrderStatus.Processing,
             OrderStatus.Delivered,
-          ].includes(order.status as any)
+          ].includes(order.status as any),
         );
         if (isServingGuest) {
           servingGuestObject[Number(guestId)] = guestOrders;
@@ -93,7 +93,7 @@ export const useOrderService = (orderList: GetOrdersResType["data"]) => {
     setOrderObjectByGuestId(
       Object.keys(result.orderObjectByGuestId).length
         ? result.orderObjectByGuestId
-        : undefined
+        : undefined,
     );
   }, [result]);
   return result;

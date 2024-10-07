@@ -1,8 +1,8 @@
-import { GuestGetOrdersResType } from "@/schemaValidations/guest.schema";
+import { GuestGetOrdersResType } from '@/schemaValidations/guest.schema';
 
 export const calculateTotals = (
-  orders: GuestGetOrdersResType["data"],
-  filterFn: (order: GuestGetOrdersResType["data"][0]) => boolean
+  orders: GuestGetOrdersResType['data'],
+  filterFn: (order: GuestGetOrdersResType['data'][0]) => boolean,
 ) => {
   return orders.reduce(
     (acc, cur) => {
@@ -18,6 +18,6 @@ export const calculateTotals = (
     {
       count: 0,
       price: 0,
-    }
+    },
   );
 };

@@ -1,9 +1,9 @@
-"use server";
-import { authActions } from "@/apiRequest/auth/authActions";
-import { setCookies } from "@/lib/cookieUtils";
-import { HttpError } from "@/lib/error";
-import { LoginBodyType } from "@/schemaValidations/auth.schema";
-import { StatusCodes } from "http-status-codes";
+'use server';
+import { authActions } from '@/apiRequest/auth/authActions';
+import { setCookies } from '@/lib/cookieUtils';
+import { HttpError } from '@/lib/error';
+import { LoginBodyType } from '@/schemaValidations/auth.schema';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: Request) {
   try {
@@ -13,8 +13,8 @@ export async function POST(request: Request) {
       data: { accessToken, refreshToken },
     } = response;
 
-    setCookies("accessToken", accessToken);
-    setCookies("refreshToken", refreshToken);
+    setCookies('accessToken', accessToken);
+    setCookies('refreshToken', refreshToken);
     return Response.json(response);
   } catch (error) {
     if (error instanceof HttpError) {
@@ -24,9 +24,9 @@ export async function POST(request: Request) {
     }
     return Response.json(
       {
-        message: "Somethings happened",
+        message: 'Somethings happened',
       },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR }
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
     );
   }
 }

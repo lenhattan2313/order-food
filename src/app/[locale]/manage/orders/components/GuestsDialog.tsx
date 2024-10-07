@@ -1,13 +1,13 @@
-import AutoPagination from "@/components/_client/AutoPagination";
-import { Button } from "@/components/ui/button";
+import AutoPagination from '@/components/_client/AutoPagination';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -15,12 +15,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { dateRangeDefault, defaultPagination } from "@/constants/common";
-import { formatDateTimeToLocaleString } from "@/lib/dateUtils";
-import { simpleMatchText } from "@/lib/utils";
-import { useGetGuestList } from "@/queries/useAccount";
-import { GetListGuestsResType } from "@/schemaValidations/account.schema";
+} from '@/components/ui/table';
+import { dateRangeDefault, defaultPagination } from '@/constants/common';
+import { formatDateTimeToLocaleString } from '@/lib/dateUtils';
+import { simpleMatchText } from '@/lib/utils';
+import { useGetGuestList } from '@/queries/useAccount';
+import { GetListGuestsResType } from '@/schemaValidations/account.schema';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -32,49 +32,49 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { format } from "date-fns";
-import { useEffect, useMemo, useState } from "react";
+} from '@tanstack/react-table';
+import { format } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
 
-type GuestItem = GetListGuestsResType["data"][0];
+type GuestItem = GetListGuestsResType['data'][0];
 
 export const columns: ColumnDef<GuestItem>[] = [
   {
-    accessorKey: "name",
-    header: "Tên",
+    accessorKey: 'name',
+    header: 'Tên',
     cell: ({ row }) => (
       <div className="capitalize">
-        {row.getValue("name")} | (#{row.original.id})
+        {row.getValue('name')} | (#{row.original.id})
       </div>
     ),
     filterFn: (row, columnId, filterValue: string) => {
       if (filterValue === undefined) return true;
       return simpleMatchText(
         row.original.name + String(row.original.id),
-        String(filterValue)
+        String(filterValue),
       );
     },
   },
   {
-    accessorKey: "tableNumber",
-    header: "Số bàn",
+    accessorKey: 'tableNumber',
+    header: 'Số bàn',
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("tableNumber")}</div>
+      <div className="capitalize">{row.getValue('tableNumber')}</div>
     ),
     filterFn: (row, columnId, filterValue: string) => {
       if (filterValue === undefined) return true;
       return simpleMatchText(
         String(row.original.tableNumber),
-        String(filterValue)
+        String(filterValue),
       );
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: 'createdAt',
     header: () => <div>Tạo</div>,
     cell: ({ row }) => (
       <div className="flex items-center space-x-4 text-sm">
-        {formatDateTimeToLocaleString(row.getValue("createdAt"))}
+        {formatDateTimeToLocaleString(row.getValue('createdAt'))}
       </div>
     ),
   },
@@ -156,7 +156,7 @@ export default function GuestsDialog({
                   type="datetime-local"
                   placeholder="Từ ngày"
                   className="text-sm"
-                  value={format(fromDate, "yyyy-MM-dd HH:mm").replace(" ", "T")}
+                  value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                   onChange={(event) =>
                     setFromDate(new Date(event.target.value))
                   }
@@ -167,13 +167,13 @@ export default function GuestsDialog({
                 <Input
                   type="datetime-local"
                   placeholder="Đến ngày"
-                  value={format(toDate, "yyyy-MM-dd HH:mm").replace(" ", "T")}
+                  value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                   onChange={(event) => setToDate(new Date(event.target.value))}
                 />
               </div>
               <Button
                 className=""
-                variant={"outline"}
+                variant={'outline'}
                 onClick={resetDateFilter}
               >
                 Reset
@@ -183,10 +183,10 @@ export default function GuestsDialog({
               <Input
                 placeholder="Tên hoặc Id"
                 value={
-                  (table.getColumn("name")?.getFilterValue() as string) ?? ""
+                  (table.getColumn('name')?.getFilterValue() as string) ?? ''
                 }
                 onChange={(event) =>
-                  table.getColumn("name")?.setFilterValue(event.target.value)
+                  table.getColumn('name')?.setFilterValue(event.target.value)
                 }
                 className="w-[170px]"
               />
@@ -194,12 +194,12 @@ export default function GuestsDialog({
                 placeholder="Số bàn"
                 value={
                   (table
-                    .getColumn("tableNumber")
-                    ?.getFilterValue() as string) ?? ""
+                    .getColumn('tableNumber')
+                    ?.getFilterValue() as string) ?? ''
                 }
                 onChange={(event) =>
                   table
-                    .getColumn("tableNumber")
+                    .getColumn('tableNumber')
                     ?.setFilterValue(event.target.value)
                 }
                 className="w-[80px]"
@@ -217,7 +217,7 @@ export default function GuestsDialog({
                               ? null
                               : flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext()
+                                  header.getContext(),
                                 )}
                           </TableHead>
                         );
@@ -230,7 +230,7 @@ export default function GuestsDialog({
                     table.getRowModel().rows.map((row) => (
                       <TableRow
                         key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
+                        data-state={row.getIsSelected() && 'selected'}
                         onClick={() => {
                           choose(row.original);
                         }}
@@ -240,7 +240,7 @@ export default function GuestsDialog({
                           <TableCell key={cell.id}>
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext()
+                              cell.getContext(),
                             )}
                           </TableCell>
                         ))}
@@ -261,8 +261,8 @@ export default function GuestsDialog({
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
               <div className="text-xs text-muted-foreground py-4 flex-1 ">
-                Hiển thị{" "}
-                <strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
+                Hiển thị{' '}
+                <strong>{table.getPaginationRowModel().rows.length}</strong>{' '}
                 trong <strong>{guests.length}</strong> kết quả
               </div>
               <div>

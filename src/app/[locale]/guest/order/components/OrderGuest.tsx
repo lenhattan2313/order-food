@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import OrderItem from "@/app/[locale]/guest/order/components/OrderGuestItem";
-import { calculateTotals } from "@/app/[locale]/guest/order/utils/guestOrderUtils";
-import { Spinner } from "@/components/_client/Spinner";
-import { SOCKET_EVENT } from "@/constants/socket";
-import { OrderStatus } from "@/constants/type";
-import { toast } from "@/hooks/use-toast";
-import { formatCurrency } from "@/lib/currency";
-import { socket } from "@/lib/socket";
-import { useGuestGetOrder } from "@/queries/useGuest";
-import { GuestGetOrdersResType } from "@/schemaValidations/guest.schema";
-import { UpdateOrderResType } from "@/schemaValidations/order.schema";
-import { useEffect, useMemo, useState } from "react";
+import OrderItem from '@/app/[locale]/guest/order/components/OrderGuestItem';
+import { calculateTotals } from '@/app/[locale]/guest/order/utils/guestOrderUtils';
+import { Spinner } from '@/components/_client/Spinner';
+import { SOCKET_EVENT } from '@/constants/socket';
+import { OrderStatus } from '@/constants/type';
+import { toast } from '@/hooks/use-toast';
+import { formatCurrency } from '@/lib/currency';
+import { socket } from '@/lib/socket';
+import { useGuestGetOrder } from '@/queries/useGuest';
+import { GuestGetOrdersResType } from '@/schemaValidations/guest.schema';
+import { UpdateOrderResType } from '@/schemaValidations/order.schema';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function Order() {
-  const [orders, setOrders] = useState<GuestGetOrdersResType["data"]>([]);
+  const [orders, setOrders] = useState<GuestGetOrdersResType['data']>([]);
   useEffect(() => {
     function handleRefetchStatus() {
       refetch();
-      toast({ description: "Trạng thái được cập nhật" });
+      toast({ description: 'Trạng thái được cập nhật' });
     }
     function handlePayment() {
       refetch();
-      toast({ description: "Bạn đã thanh toán thành công" });
+      toast({ description: 'Bạn đã thanh toán thành công' });
     }
 
-    socket.on(SOCKET_EVENT.UPDATE_ORDER, (data: UpdateOrderResType["data"]) => {
+    socket.on(SOCKET_EVENT.UPDATE_ORDER, (data: UpdateOrderResType['data']) => {
       // const foundIndex = orders.findIndex((order) => data.id === order.id);
       // if (foundIndex === -1) {
       //   return;
@@ -53,7 +53,7 @@ export default function Order() {
 
   const paid = useMemo(
     () => calculateTotals(orders, (cur) => cur.status === OrderStatus.Paid),
-    [orders]
+    [orders],
   );
 
   const unPaid = useMemo(
@@ -61,9 +61,10 @@ export default function Order() {
       calculateTotals(
         orders,
         (cur) =>
-          cur.status !== OrderStatus.Paid && cur.status !== OrderStatus.Rejected
+          cur.status !== OrderStatus.Paid &&
+          cur.status !== OrderStatus.Rejected,
       ),
-    [orders]
+    [orders],
   );
   return (
     <>

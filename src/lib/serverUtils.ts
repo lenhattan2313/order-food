@@ -1,17 +1,17 @@
-import "server-only";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { htmlToText } from "html-to-text";
-import { cookies } from "next/headers";
-import crypto from "crypto";
+import 'server-only';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { htmlToText } from 'html-to-text';
+import { cookies } from 'next/headers';
+import crypto from 'crypto';
 
 export const getTokenCookies = () => {
   const cookieStore = cookies();
 
   // Get access token and refresh token from cookies
   const accessToken =
-    cookieStore.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN)?.value ?? "";
+    cookieStore.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN)?.value ?? '';
   const refreshToken =
-    cookieStore.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN)?.value ?? "";
+    cookieStore.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN)?.value ?? '';
 
   return {
     accessToken,
@@ -24,7 +24,7 @@ export const wrapServerApi = async <T>(fn: () => Promise<T>) => {
     data = await fn();
     return data;
   } catch (error: any) {
-    if (error.digest?.includes("NEXT_REDIRECT")) {
+    if (error.digest?.includes('NEXT_REDIRECT')) {
       throw error;
     }
   }
@@ -36,4 +36,4 @@ export const htmlToTextForDesc = (html: string) => {
 };
 
 export const generateFileName = (bytes = 32) =>
-  crypto.randomBytes(bytes).toString("hex");
+  crypto.randomBytes(bytes).toString('hex');

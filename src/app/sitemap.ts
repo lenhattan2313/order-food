@@ -1,19 +1,19 @@
-import { dishActions } from "@/apiRequest/dish/dishActions";
-import envConfig from "@/config";
-import { locales } from "@/constants/locale";
-import { generateSlugUrl } from "@/lib/utils";
-import { Languages } from "next/dist/lib/metadata/types/alternative-urls-types";
+import { dishActions } from '@/apiRequest/dish/dishActions';
+import envConfig from '@/config';
+import { locales } from '@/constants/locale';
+import { generateSlugUrl } from '@/lib/utils';
+import { Languages } from 'next/dist/lib/metadata/types/alternative-urls-types';
 export type Sitemap = Array<{
   url: string;
   lastModified?: string | Date;
   changeFrequency?:
-    | "always"
-    | "hourly"
-    | "daily"
-    | "weekly"
-    | "monthly"
-    | "yearly"
-    | "never";
+    | 'always'
+    | 'hourly'
+    | 'daily'
+    | 'weekly'
+    | 'monthly'
+    | 'yearly'
+    | 'never';
   priority?: number;
   alternates?: {
     languages?: Languages<string>;
@@ -22,13 +22,13 @@ export type Sitemap = Array<{
 //only for public page
 const staticRoutes: Sitemap = [
   {
-    url: "/login",
-    changeFrequency: "yearly",
+    url: '/login',
+    changeFrequency: 'yearly',
     priority: 0.5,
   },
   {
-    url: "",
-    changeFrequency: "daily",
+    url: '',
+    changeFrequency: 'daily',
     priority: 1,
   },
 ];
@@ -64,7 +64,7 @@ export default async function sitemap(): Promise<Sitemap> {
         id: item.id,
       })}`,
       lastModified: item.updatedAt,
-      changeFrequency: "daily",
+      changeFrequency: 'daily',
       priority: 0.9,
     }));
 

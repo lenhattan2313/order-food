@@ -1,5 +1,5 @@
-import { IPaginationParams } from "@/interface/common";
-import { endOfDay, startOfDay } from "date-fns";
+import { IPaginationParams } from '@/interface/common';
+import { endOfDay, startOfDay } from 'date-fns';
 
 export const REFRESH_TOKEN_TIMEOUT = 1000;
 export const defaultPagination: IPaginationParams = {

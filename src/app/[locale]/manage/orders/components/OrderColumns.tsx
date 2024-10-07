@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import OrderGuestDetail from "@/app/[locale]/manage/orders/components/OrderGuestDetail";
-import { getVietnameseOrderStatus } from "@/app/[locale]/manage/orders/utils/orderUtils";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import OrderGuestDetail from '@/app/[locale]/manage/orders/components/OrderGuestDetail';
+import { getVietnameseOrderStatus } from '@/app/[locale]/manage/orders/utils/orderUtils';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,46 +11,46 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { OrderStatus, OrderStatusValues } from "@/constants/type";
-import { useOrderContext } from "@/context/orderContext";
-import { formatCurrency } from "@/lib/currency";
-import { formatDateTimeToLocaleString } from "@/lib/dateUtils";
-import { simpleMatchText } from "@/lib/utils";
-import { GetOrdersResType } from "@/schemaValidations/order.schema";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
+} from '@/components/ui/select';
+import { OrderStatus, OrderStatusValues } from '@/constants/type';
+import { useOrderContext } from '@/context/orderContext';
+import { formatCurrency } from '@/lib/currency';
+import { formatDateTimeToLocaleString } from '@/lib/dateUtils';
+import { simpleMatchText } from '@/lib/utils';
+import { GetOrdersResType } from '@/schemaValidations/order.schema';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { ColumnDef } from '@tanstack/react-table';
+import Image from 'next/image';
 
-type OrderItem = GetOrdersResType["data"][0];
+type OrderItem = GetOrdersResType['data'][0];
 const orderTableColumns: ColumnDef<OrderItem>[] = [
   {
-    accessorKey: "tableNumber",
-    header: "Bàn",
-    cell: ({ row }) => <div>{row.getValue("tableNumber")}</div>,
+    accessorKey: 'tableNumber',
+    header: 'Bàn',
+    cell: ({ row }) => <div>{row.getValue('tableNumber')}</div>,
     filterFn: (row, columnId, filterValue: string) => {
       if (filterValue === undefined) return true;
       return simpleMatchText(
         String(row.getValue(columnId)),
-        String(filterValue)
+        String(filterValue),
       );
     },
   },
   {
-    id: "guestName",
-    header: "Khách hàng",
+    id: 'guestName',
+    header: 'Khách hàng',
     cell: function Cell({ row }) {
       const { orderObjectByGuestId } = useOrderContext();
       const guest = row.original.guest;
@@ -83,14 +83,14 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
     filterFn: (row, columnId, filterValue: string) => {
       if (filterValue === undefined) return true;
       return simpleMatchText(
-        row.original.guest?.name ?? "Đã bị xóa",
-        String(filterValue)
+        row.original.guest?.name ?? 'Đã bị xóa',
+        String(filterValue),
       );
     },
   },
   {
-    id: "dishName",
-    header: "Món ăn",
+    id: 'dishName',
+    header: 'Món ăn',
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <Popover>
@@ -128,13 +128,13 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <span>{row.original.dishSnapshot.name}</span>
-            <Badge className="px-1" variant={"secondary"}>
+            <Badge className="px-1" variant={'secondary'}>
               x{row.original.quantity}
             </Badge>
           </div>
           <span className="italic">
             {formatCurrency(
-              row.original.dishSnapshot.price * row.original.quantity
+              row.original.dishSnapshot.price * row.original.quantity,
             )}
           </span>
         </div>
@@ -142,12 +142,12 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
     ),
   },
   {
-    accessorKey: "status",
-    header: "Trạng thái",
+    accessorKey: 'status',
+    header: 'Trạng thái',
     cell: function Cell({ row }) {
       const { changeStatus } = useOrderContext();
       const changeOrderStatus = async (
-        status: (typeof OrderStatusValues)[number]
+        status: (typeof OrderStatusValues)[number],
       ) => {
         changeStatus({
           orderId: row.original.id,
@@ -162,7 +162,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
             changeOrderStatus(value);
           }}
           defaultValue={OrderStatus.Pending}
-          value={row.getValue("status")}
+          value={row.getValue('status')}
         >
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Theme" />
@@ -179,28 +179,28 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
     },
   },
   {
-    id: "orderHandlerName",
-    header: "Người xử lý",
-    cell: ({ row }) => <div>{row.original.orderHandler?.name ?? ""}</div>,
+    id: 'orderHandlerName',
+    header: 'Người xử lý',
+    cell: ({ row }) => <div>{row.original.orderHandler?.name ?? ''}</div>,
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: 'createdAt',
     header: () => <div>Tạo/Cập nhật</div>,
     cell: ({ row }) => (
       <div className="space-y-2 text-sm">
         <div className="flex items-center space-x-4">
-          {formatDateTimeToLocaleString(row.getValue("createdAt"))}
+          {formatDateTimeToLocaleString(row.getValue('createdAt'))}
         </div>
         <div className="flex items-center space-x-4">
           {formatDateTimeToLocaleString(
-            row.original.updatedAt as unknown as string
+            row.original.updatedAt as unknown as string,
           )}
         </div>
       </div>
     ),
   },
   {
-    id: "actions",
+    id: 'actions',
     enableHiding: false,
     cell: function Actions({ row }) {
       const { setOrderIdEdit } = useOrderContext();

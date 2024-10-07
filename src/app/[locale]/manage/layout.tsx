@@ -1,8 +1,8 @@
-import DarkModeToggle from "@/components/ui/dark-mode-toggle";
-import DropdownAvatar from "@/app/[locale]/manage/DropdownAvatar";
-import NavLinks from "@/app/[locale]/manage/NavLinks";
-import MobileNavLinks from "@/app/[locale]/manage/MobileNavLinks";
-import { SwitchLocales } from "@/components/_client/SwitchLocales";
+import DarkModeToggle from '@/components/ui/dark-mode-toggle';
+import DropdownAvatar from '@/app/[locale]/manage/DropdownAvatar';
+import NavLinks from '@/app/[locale]/manage/NavLinks';
+import MobileNavLinks from '@/app/[locale]/manage/MobileNavLinks';
+import { SwitchLocales } from '@/components/_client/SwitchLocales';
 
 export default function Layout({
   children,

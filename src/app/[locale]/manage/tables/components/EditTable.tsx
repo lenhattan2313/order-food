@@ -1,47 +1,47 @@
-"use client";
+'use client';
 import {
   getTableLink,
   getVietnameseTableStatus,
-} from "@/app/[locale]/manage/tables/utils/tablesUtils";
-import { QRCodeCanvas } from "@/components/_client/QRCode";
-import { Button } from "@/components/ui/button";
+} from '@/app/[locale]/manage/tables/utils/tablesUtils';
+import { QRCodeCanvas } from '@/components/_client/QRCode';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { TableStatus, TableStatusValues } from "@/constants/type";
-import { TableItem, useTableContext } from "@/context/tableContext";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { Link } from "@/navigation";
-import { useGetTableDetail, useUpdateTable } from "@/queries/useTable";
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { TableStatus, TableStatusValues } from '@/constants/type';
+import { TableItem, useTableContext } from '@/context/tableContext';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { Link } from '@/navigation';
+import { useGetTableDetail, useUpdateTable } from '@/queries/useTable';
 import {
   UpdateTableBody,
   UpdateTableBodyType,
-} from "@/schemaValidations/table.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useMemo } from "react";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/table.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function EditTable() {
   const { setTableIdEdit, tableIdEdit } = useTableContext();
@@ -59,7 +59,7 @@ export default function EditTable() {
     (data: TableItem) => {
       reset({ ...data, changeToken: false });
     },
-    [reset]
+    [reset],
   );
   useMemo(() => {
     if (data) {

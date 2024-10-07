@@ -1,11 +1,11 @@
-import { UpdateOrderType, orderActions } from "@/apiRequest/order/orderActions";
-import { QUERY_KEYS } from "@/constants/queryKeys";
+import { UpdateOrderType, orderActions } from '@/apiRequest/order/orderActions';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 import {
   CreateOrdersBodyType,
   GetOrdersQueryParamsType,
   PayGuestOrdersBodyType,
-} from "@/schemaValidations/order.schema";
-import { useMutation, useQuery } from "@tanstack/react-query";
+} from '@/schemaValidations/order.schema';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useGetOrderList = (queryParams?: GetOrdersQueryParamsType) =>
   useQuery({

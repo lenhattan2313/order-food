@@ -1,43 +1,43 @@
-"use client";
-import AddOrder from "@/app/[locale]/manage/orders/components/AddOrder";
-import EditOrder from "@/app/[locale]/manage/orders/components/EditOrder";
-import orderTableColumns from "@/app/[locale]/manage/orders/components/OrderColumns";
-import OrderStatics from "@/app/[locale]/manage/orders/components/OrderStatics";
-import { useOrderService } from "@/app/[locale]/manage/orders/hooks/useOrderService";
-import { Input } from "@/components/ui/input";
-import { OrderStatusValues } from "@/constants/type";
+'use client';
+import AddOrder from '@/app/[locale]/manage/orders/components/AddOrder';
+import EditOrder from '@/app/[locale]/manage/orders/components/EditOrder';
+import orderTableColumns from '@/app/[locale]/manage/orders/components/OrderColumns';
+import OrderStatics from '@/app/[locale]/manage/orders/components/OrderStatics';
+import { useOrderService } from '@/app/[locale]/manage/orders/hooks/useOrderService';
+import { Input } from '@/components/ui/input';
+import { OrderStatusValues } from '@/constants/type';
 import {
   CreateOrdersResType,
   PayGuestOrdersResType,
   UpdateOrderResType,
-} from "@/schemaValidations/order.schema";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+} from '@/schemaValidations/order.schema';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { getVietnameseOrderStatus } from "@/app/[locale]/manage/orders/utils/orderUtils";
-import { DataTable } from "@/components/_client/Table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { getVietnameseOrderStatus } from '@/app/[locale]/manage/orders/utils/orderUtils';
+import { DataTable } from '@/components/_client/Table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { dateRangeDefault } from "@/constants/common";
-import { SOCKET_EVENT } from "@/constants/socket";
-import { toast } from "@/hooks/use-toast";
-import { useTable } from "@/hooks/useTable";
-import { socket } from "@/lib/socket";
-import { cn } from "@/lib/utils";
-import { useGetOrderList } from "@/queries/useOrder";
-import { useGetTableList } from "@/queries/useTable";
-import { format } from "date-fns";
+} from '@/components/ui/popover';
+import { dateRangeDefault } from '@/constants/common';
+import { SOCKET_EVENT } from '@/constants/socket';
+import { toast } from '@/hooks/use-toast';
+import { useTable } from '@/hooks/useTable';
+import { socket } from '@/lib/socket';
+import { cn } from '@/lib/utils';
+import { useGetOrderList } from '@/queries/useOrder';
+import { useGetTableList } from '@/queries/useTable';
+import { format } from 'date-fns';
 
 export type StatusCountObject = Record<
   (typeof OrderStatusValues)[number],
@@ -65,7 +65,7 @@ export default function OrderTable() {
   const orderList = useMemo(() => orders?.data ?? [], [orders]);
   const tableList = useMemo(
     () => (tables?.data ?? []).sort((a, b) => a.number - b.number),
-    [tables]
+    [tables],
   );
 
   const { statics, servingGuestByTableNumber } = useOrderService(orderList);
@@ -86,13 +86,13 @@ export default function OrderTable() {
   };
 
   useEffect(() => {
-    function handleUpdateOrder(data: UpdateOrderResType["data"]) {
+    function handleUpdateOrder(data: UpdateOrderResType['data']) {
       refetchGetOrderList();
       toast({
         description: `Bàn số ${data.tableNumber} vừa được cập nhật bởi ${data.orderHandler?.name}`,
       });
     }
-    function getInfoTableOrder(data: CreateOrdersResType["data"]) {
+    function getInfoTableOrder(data: CreateOrdersResType['data']) {
       const tables = data.reduce((acc: Record<string, number>, cur) => {
         if (!cur.tableNumber) {
           return acc;
@@ -104,7 +104,7 @@ export default function OrderTable() {
 
       return tables;
     }
-    function handleNewOrder(data: CreateOrdersResType["data"]) {
+    function handleNewOrder(data: CreateOrdersResType['data']) {
       refetchGetOrderList();
       const tables = getInfoTableOrder(data);
       const description = Object.entries(tables).map(
@@ -113,12 +113,12 @@ export default function OrderTable() {
             Bàn số <Badge>{tableNumber}</Badge> vừa đặt
             <Badge>{dishCount}</Badge> món
           </p>
-        )
+        ),
       );
 
       toast({ description });
     }
-    function handlePayment(response: PayGuestOrdersResType["data"]) {
+    function handlePayment(response: PayGuestOrdersResType['data']) {
       const data = response[0];
       refetchGetOrderList();
       toast({
@@ -146,7 +146,7 @@ export default function OrderTable() {
               type="datetime-local"
               placeholder="Từ ngày"
               className="text-sm"
-              value={format(fromDate, "yyyy-MM-dd HH:mm").replace(" ", "T")}
+              value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
               onChange={(event) => setFromDate(new Date(event.target.value))}
             />
           </div>
@@ -155,11 +155,11 @@ export default function OrderTable() {
             <Input
               type="datetime-local"
               placeholder="Đến ngày"
-              value={format(toDate, "yyyy-MM-dd HH:mm").replace(" ", "T")}
+              value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
               onChange={(event) => setToDate(new Date(event.target.value))}
             />
           </div>
-          <Button className="" variant={"outline"} onClick={resetDateFilter}>
+          <Button className="" variant={'outline'} onClick={resetDateFilter}>
             Reset
           </Button>
         </div>
@@ -171,20 +171,20 @@ export default function OrderTable() {
         <Input
           placeholder="Tên khách"
           value={
-            (table.getColumn("guestName")?.getFilterValue() as string) ?? ""
+            (table.getColumn('guestName')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn("guestName")?.setFilterValue(event.target.value)
+            table.getColumn('guestName')?.setFilterValue(event.target.value)
           }
           className="max-w-[100px]"
         />
         <Input
           placeholder="Số bàn"
           value={
-            (table.getColumn("tableNumber")?.getFilterValue() as string) ?? ""
+            (table.getColumn('tableNumber')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn("tableNumber")?.setFilterValue(event.target.value)
+            table.getColumn('tableNumber')?.setFilterValue(event.target.value)
           }
           className="max-w-[80px]"
         />
@@ -196,13 +196,13 @@ export default function OrderTable() {
               aria-expanded={openStatusFilter}
               className="w-[150px] text-sm justify-between"
             >
-              {table.getColumn("status")?.getFilterValue()
+              {table.getColumn('status')?.getFilterValue()
                 ? getVietnameseOrderStatus(
                     table
-                      .getColumn("status")
-                      ?.getFilterValue() as (typeof OrderStatusValues)[number]
+                      .getColumn('status')
+                      ?.getFilterValue() as (typeof OrderStatusValues)[number],
                   )
-                : "Trạng thái"}
+                : 'Trạng thái'}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -216,22 +216,22 @@ export default function OrderTable() {
                       value={status}
                       onSelect={(currentValue) => {
                         table
-                          .getColumn("status")
+                          .getColumn('status')
                           ?.setFilterValue(
                             currentValue ===
-                              table.getColumn("status")?.getFilterValue()
-                              ? ""
-                              : currentValue
+                              table.getColumn('status')?.getFilterValue()
+                              ? ''
+                              : currentValue,
                           );
                         setOpenStatusFilter(false);
                       }}
                     >
                       <Check
                         className={cn(
-                          "mr-2 h-4 w-4",
-                          table.getColumn("status")?.getFilterValue() === status
-                            ? "opacity-100"
-                            : "opacity-0"
+                          'mr-2 h-4 w-4',
+                          table.getColumn('status')?.getFilterValue() === status
+                            ? 'opacity-100'
+                            : 'opacity-0',
                         )}
                       />
                       {getVietnameseOrderStatus(status)}

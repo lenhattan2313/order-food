@@ -1,27 +1,27 @@
-"use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+'use client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import {
   ChangePasswordBody,
   ChangePasswordBodyType,
-} from "@/schemaValidations/account.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { handleApiError } from "@/lib/utils";
-import { useChangePassword } from "@/queries/useAccount";
-import { toast } from "@/hooks/use-toast";
+} from '@/schemaValidations/account.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { handleApiError } from '@/lib/utils';
+import { useChangePassword } from '@/queries/useAccount';
+import { toast } from '@/hooks/use-toast';
 
 export default function ChangePasswordForm() {
   const form = useForm<ChangePasswordBodyType>({
     resolver: zodResolver(ChangePasswordBody),
     defaultValues: {
-      oldPassword: "",
-      password: "",
-      confirmPassword: "",
+      oldPassword: '',
+      password: '',
+      confirmPassword: '',
     },
   });
   const { handleSubmit, setError, reset } = form;

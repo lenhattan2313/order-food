@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,9 +9,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { useTranslations } from "next-intl";
-import { ReactNode } from "react";
+} from '@/components/ui/alert-dialog';
+import { useTranslations } from 'next-intl';
+import { ReactNode } from 'react';
 type Props = {
   title: ReactNode;
   description: ReactNode;
@@ -25,7 +25,7 @@ export const ConfirmDialog = ({
   onClick,
   isPending,
 }: Props) => {
-  const t = useTranslations("button");
+  const t = useTranslations('button');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -39,9 +39,9 @@ export const ConfirmDialog = ({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction onClick={onClick} disabled={isPending}>
-            {t("continue")}
+            {t('continue')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

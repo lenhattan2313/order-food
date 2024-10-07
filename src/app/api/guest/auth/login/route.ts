@@ -1,9 +1,9 @@
-import { guestActions } from "@/apiRequest/guest/guestActions";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { setCookies } from "@/lib/cookieUtils";
-import { HttpError } from "@/lib/error";
-import { GuestLoginBodyType } from "@/schemaValidations/guest.schema";
-import { StatusCodes } from "http-status-codes";
+import { guestActions } from '@/apiRequest/guest/guestActions';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { setCookies } from '@/lib/cookieUtils';
+import { HttpError } from '@/lib/error';
+import { GuestLoginBodyType } from '@/schemaValidations/guest.schema';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: Request) {
   const data: GuestLoginBodyType = await request.json();
@@ -23,9 +23,9 @@ export async function POST(request: Request) {
     }
     return Response.json(
       {
-        message: "Somethings happened",
+        message: 'Somethings happened',
       },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR }
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
     );
   }
 }

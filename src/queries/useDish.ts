@@ -1,6 +1,6 @@
-import { dishActions } from "@/apiRequest/dish/dishActions";
-import { QUERY_KEYS } from "@/constants/queryKeys";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { dishActions } from '@/apiRequest/dish/dishActions';
+import { QUERY_KEYS } from '@/constants/queryKeys';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useGetDishList = () =>
   useQuery({
@@ -22,7 +22,7 @@ export const useCreateDish = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.DISHES],
       });
-      dishActions.revalidate("dishes");
+      dishActions.revalidate('dishes');
     },
   });
 };
@@ -35,7 +35,7 @@ export const useUpdateDish = () => {
         queryKey: [QUERY_KEYS.DISHES],
         exact: true,
       });
-      dishActions.revalidate("dishes");
+      dishActions.revalidate('dishes');
     },
   });
 };
@@ -49,7 +49,7 @@ export const useDeleteDish = () => {
         queryKey: [QUERY_KEYS.DISHES],
         exact: true,
       });
-      dishActions.revalidate("dishes");
+      dishActions.revalidate('dishes');
     },
   });
 };

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Pagination,
   PaginationContent,
@@ -7,9 +7,9 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+} from '@/components/ui/pagination';
+import { cn } from '@/lib/utils';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 interface Props {
   page: number;
   pageSize: number;
@@ -43,7 +43,7 @@ const RANGE = 2;
 export default function AutoPagination({
   page,
   pageSize,
-  pathname = "/",
+  pathname = '/',
   isButton = false,
   onClick = () => {},
 }: Props) {
@@ -105,7 +105,7 @@ export default function AutoPagination({
             {isButton && (
               <Button
                 className="w-9 h-p p-0"
-                variant={pageNumber === page ? "outline" : "ghost"}
+                variant={pageNumber === page ? 'outline' : 'ghost'}
                 onClick={() => onClick(pageNumber)}
               >
                 {pageNumber}
@@ -141,7 +141,7 @@ export default function AutoPagination({
                 },
               }}
               className={cn({
-                "cursor-not-allowed": page === 1,
+                'cursor-not-allowed': page === 1,
               })}
               onClick={(e) => {
                 if (page === 1) {
@@ -154,7 +154,7 @@ export default function AutoPagination({
             <Button
               disabled={page === 1}
               className="h-9 p-0 px-2"
-              variant={"ghost"}
+              variant={'ghost'}
               onClick={() => {
                 onClick(page - 1);
               }}
@@ -175,7 +175,7 @@ export default function AutoPagination({
                 },
               }}
               className={cn({
-                "cursor-not-allowed": page === pageSize,
+                'cursor-not-allowed': page === pageSize,
               })}
               onClick={(e) => {
                 if (page === pageSize) {
@@ -188,7 +188,7 @@ export default function AutoPagination({
             <Button
               disabled={page === pageSize}
               className="h-9 p-0 px-2"
-              variant={"ghost"}
+              variant={'ghost'}
               onClick={() => {
                 onClick(page + 1);
               }}

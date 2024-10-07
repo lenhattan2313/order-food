@@ -1,6 +1,6 @@
-"use client";
-import menuItems from "@/app/[locale]/manage/menuItems";
-import { Button } from "@/components/ui/button";
+'use client';
+import menuItems from '@/app/[locale]/manage/menuItems';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -8,14 +8,14 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
-import { Package2, PanelLeft } from "lucide-react";
-import { usePathname } from "next/navigation";
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { useAuth } from "@/components/provider/auth-provider";
-import { Role } from "@/constants/type";
-import { Link } from "@/navigation";
+} from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+import { Package2, PanelLeft } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { useAuth } from '@/components/provider/auth-provider';
+import { Role } from '@/constants/type';
+import { Link } from '@/navigation';
 
 export default function MobileNavLinks() {
   const pathname = usePathname();
@@ -54,11 +54,11 @@ export default function MobileNavLinks() {
                 key={index}
                 href={Item.href}
                 className={cn(
-                  "flex items-center gap-4 px-2.5  hover:text-foreground",
+                  'flex items-center gap-4 px-2.5  hover:text-foreground',
                   {
-                    "text-foreground": isActive,
-                    "text-muted-foreground": !isActive,
-                  }
+                    'text-foreground': isActive,
+                    'text-muted-foreground': !isActive,
+                  },
                 )}
               >
                 <Item.Icon className="h-5 w-5" />

@@ -1,32 +1,32 @@
-import { PREFIX_URL } from "@/constants/url";
-import http from "@/lib/httpUtils";
+import { PREFIX_URL } from '@/constants/url';
+import http from '@/lib/httpUtils';
 import {
   LogoutBodyType,
   RefreshTokenBodyType,
   RefreshTokenResType,
-} from "@/schemaValidations/auth.schema";
-import { MessageResType } from "@/schemaValidations/common.schema";
+} from '@/schemaValidations/auth.schema';
+import { MessageResType } from '@/schemaValidations/common.schema';
 import {
   GuestCreateOrdersBodyType,
   GuestCreateOrdersResType,
   GuestGetOrdersResType,
   GuestLoginBodyType,
   GuestLoginResType,
-} from "@/schemaValidations/guest.schema";
+} from '@/schemaValidations/guest.schema';
 
 export const guestActions = {
   refreshTokenRequest: null as Promise<RefreshTokenResType> | null,
   login: (body: GuestLoginBodyType) =>
     http.post<GuestLoginResType, GuestLoginBodyType>(
       `${PREFIX_URL.GUEST}/auth/login`,
-      body
+      body,
     ),
   //set cookies
   sLogin: (body: GuestLoginBodyType) =>
     http.post<GuestLoginResType, GuestLoginBodyType>(
       `api/guest/auth/login`,
       body,
-      { baseUrl: "" }
+      { baseUrl: '' },
     ),
 
   logout: ({
@@ -40,18 +40,18 @@ export const guestActions = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     ),
   //remove cookies
   sLogout: () =>
     http.post<MessageResType>(`api/guest/auth/logout`, undefined, {
-      baseUrl: "",
+      baseUrl: '',
     }),
 
   refreshToken: (body: RefreshTokenBodyType) =>
     http.post<RefreshTokenResType, RefreshTokenBodyType>(
       `${PREFIX_URL.GUEST}/auth/refresh-token`,
-      body
+      body,
     ),
   //update cookies
   sRefreshToken: async function () {
@@ -61,7 +61,7 @@ export const guestActions = {
     this.refreshTokenRequest = http.post<
       RefreshTokenResType,
       RefreshTokenBodyType
-    >(`api/guest/auth/refresh-token`, undefined, { baseUrl: "" });
+    >(`api/guest/auth/refresh-token`, undefined, { baseUrl: '' });
     const response = await this.refreshTokenRequest;
     this.refreshTokenRequest = null;
     return response;
@@ -73,6 +73,6 @@ export const guestActions = {
   createOrder: (body: GuestCreateOrdersBodyType) =>
     http.post<GuestCreateOrdersResType, GuestCreateOrdersBodyType>(
       `${PREFIX_URL.GUEST}/orders`,
-      body
+      body,
     ),
 };

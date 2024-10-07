@@ -1,7 +1,7 @@
-"use client";
-import { AccountItem, useAccountContext } from "@/context/accountContext";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+'use client';
+import { AccountItem, useAccountContext } from '@/context/accountContext';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,37 +9,37 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { useGetEmployeeDetail, useUpdateEmployee } from "@/queries/useAccount";
-import { useUploadAvatar } from "@/queries/useMedia";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { useGetEmployeeDetail, useUpdateEmployee } from '@/queries/useAccount';
+import { useUploadAvatar } from '@/queries/useMedia';
 import {
   UpdateEmployeeAccountBody,
   UpdateEmployeeAccountBodyType,
-} from "@/schemaValidations/account.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload } from "lucide-react";
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/account.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Upload } from 'lucide-react';
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Role } from "@/constants/type";
+} from '@/components/ui/select';
+import { Role } from '@/constants/type';
 export default function EditEmployee() {
   const { setEmployeeIdEdit, employeeIdEdit } = useAccountContext();
   const [file, setFile] = useState<File | null>(null);
@@ -47,8 +47,8 @@ export default function EditEmployee() {
   const form = useForm<UpdateEmployeeAccountBodyType>({
     resolver: zodResolver(UpdateEmployeeAccountBody),
     defaultValues: {
-      name: "",
-      email: "",
+      name: '',
+      email: '',
       avatar: undefined,
       password: undefined,
       confirmPassword: undefined,
@@ -57,9 +57,9 @@ export default function EditEmployee() {
     },
   });
   const { setError, reset, handleSubmit } = form;
-  const avatar = form.watch("avatar");
-  const name = form.watch("name");
-  const changePassword = form.watch("changePassword");
+  const avatar = form.watch('avatar');
+  const name = form.watch('name');
+  const changePassword = form.watch('changePassword');
 
   const { data } = useGetEmployeeDetail({ id: employeeIdEdit });
   const handleReset = useCallback(
@@ -67,7 +67,7 @@ export default function EditEmployee() {
       setFile(null);
       reset((pre) => ({ ...pre, ...data, avatar: avatar ?? undefined }));
     },
-    [reset]
+    [reset],
   );
   useMemo(() => {
     if (data) {
@@ -91,7 +91,7 @@ export default function EditEmployee() {
       let body = { ...dataForm };
       if (file) {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
         const { data } = await uploadAvatar(formData);
         body.avatar = data;
       }
@@ -143,7 +143,7 @@ export default function EditEmployee() {
                       <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                         <AvatarImage src={previewAvatarFromFile} />
                         <AvatarFallback className="rounded-none">
-                          {name || "Avatar"}
+                          {name || 'Avatar'}
                         </AvatarFallback>
                       </Avatar>
                       <input

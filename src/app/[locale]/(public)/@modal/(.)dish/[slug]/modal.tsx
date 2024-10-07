@@ -1,12 +1,12 @@
-"use client";
+'use client';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useRouter } from "@/navigation";
-import { PropsWithChildren, useState } from "react";
+} from '@/components/ui/dialog';
+import { useRouter } from '@/navigation';
+import { PropsWithChildren, useState } from 'react';
 
 const Modal = ({
   children,

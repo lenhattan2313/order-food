@@ -1,35 +1,35 @@
-import { Role } from "@/constants/type";
-import { Home, Salad, ShoppingCart, Table, Users2 } from "lucide-react";
+import { Role } from '@/constants/type';
+import { Home, Salad, ShoppingCart, Table, Users2 } from 'lucide-react';
 
 const menuItems = [
   {
-    title: "Dashboard",
+    title: 'Dashboard',
     Icon: Home,
-    href: "/manage/dashboard",
+    href: '/manage/dashboard',
     roles: [Role.Owner, Role.Employee],
   },
   {
-    title: "Đơn hàng",
+    title: 'Đơn hàng',
     Icon: ShoppingCart,
-    href: "/manage/orders",
+    href: '/manage/orders',
     roles: [Role.Owner, Role.Employee],
   },
   {
-    title: "Bàn ăn",
+    title: 'Bàn ăn',
     Icon: Table,
-    href: "/manage/tables",
+    href: '/manage/tables',
     roles: [Role.Owner, Role.Employee],
   },
   {
-    title: "Món ăn",
+    title: 'Món ăn',
     Icon: Salad,
-    href: "/manage/dishes",
+    href: '/manage/dishes',
     roles: [Role.Owner, Role.Employee],
   },
   {
-    title: "Nhân viên",
+    title: 'Nhân viên',
     Icon: Users2,
-    href: "/manage/accounts",
+    href: '/manage/accounts',
     roles: [Role.Owner],
   },
 ];

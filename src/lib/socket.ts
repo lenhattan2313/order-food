@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import envConfig from "@/config";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { localStorageUtil } from "@/lib/storageUtils";
-import { Socket, io } from "socket.io-client";
+import envConfig from '@/config';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { localStorageUtil } from '@/lib/storageUtils';
+import { Socket, io } from 'socket.io-client';
 
 class WebSocket {
   private socket: Socket | null = null;
 
   connect() {
-    const token = localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? "";
+    const token = localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? '';
     if (!token) {
       console.error("Don't have any access token to establish socket");
       return;
@@ -26,12 +26,12 @@ class WebSocket {
         timeout: 20000, // Connection timeout before failing
       });
 
-      this.socket.on("connect", () => {
-        console.log("WebSocket connected:", this.socket?.id);
+      this.socket.on('connect', () => {
+        console.log('WebSocket connected:', this.socket?.id);
       });
 
-      this.socket.on("disconnect", () => {
-        console.log("WebSocket disconnected");
+      this.socket.on('disconnect', () => {
+        console.log('WebSocket disconnected');
       });
     }
   }

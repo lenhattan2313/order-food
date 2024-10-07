@@ -1,5 +1,5 @@
-import { authActions } from "@/apiRequest/auth/authActions";
-import { useMutation } from "@tanstack/react-query";
+import { authActions } from '@/apiRequest/auth/authActions';
+import { useMutation } from '@tanstack/react-query';
 
 export const useLoginMutation = () =>
   useMutation({

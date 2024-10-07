@@ -4,8 +4,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { PropsWithChildren } from "react";
+} from '@/components/ui/card';
+import { PropsWithChildren } from 'react';
 type Props = {
   title: string;
   description: string;

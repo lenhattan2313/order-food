@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { dishActions } from "../../../apiRequest/dish/dishActions";
+import { NextResponse } from 'next/server';
+import { dishActions } from '../../../apiRequest/dish/dishActions';
 
 // Calculate and output sitemap URLs ex sitemap/1.xml
 async function generateSitemaps() {
@@ -34,12 +34,12 @@ export async function GET() {
 
     return new NextResponse(sitemapIndexXML, {
       headers: {
-        "Content-Type": "application/xml",
-        "Content-Length": Buffer.byteLength(sitemapIndexXML).toString(),
+        'Content-Type': 'application/xml',
+        'Content-Length': Buffer.byteLength(sitemapIndexXML).toString(),
       },
     });
   } catch (error) {
-    console.error("Error generating sitemap index:", error);
+    console.error('Error generating sitemap index:', error);
     return NextResponse.error();
   }
 }
@@ -49,11 +49,11 @@ async function buildSitemapIndex(sitemaps: string[]) {
   xml += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
   for (const sitemapURL of sitemaps) {
-    xml += "<sitemap>";
+    xml += '<sitemap>';
     xml += `<loc>${sitemapURL}</loc>`;
-    xml += "</sitemap>";
+    xml += '</sitemap>';
   }
 
-  xml += "</sitemapindex>";
+  xml += '</sitemapindex>';
   return xml;
 }

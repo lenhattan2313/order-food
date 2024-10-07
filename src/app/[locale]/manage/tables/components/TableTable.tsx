@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { ColumnDef } from "@tanstack/react-table";
+import { Button } from '@/components/ui/button';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { ColumnDef } from '@tanstack/react-table';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,29 +10,29 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { useMemo } from "react";
-import AddTable from "@/app/[locale]/manage/tables/components/AddTable";
-import { DeleteTable } from "@/app/[locale]/manage/tables/components/DeleteTable";
-import EditTable from "@/app/[locale]/manage/tables/components/EditTable";
-import { getVietnameseTableStatus } from "@/app/[locale]/manage/tables/utils/tablesUtils";
-import { QRCodeCanvas } from "@/components/_client/QRCode";
-import { DataTable } from "@/components/_client/Table";
-import { defaultPagination } from "@/constants/common";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { useMemo } from 'react';
+import AddTable from '@/app/[locale]/manage/tables/components/AddTable';
+import { DeleteTable } from '@/app/[locale]/manage/tables/components/DeleteTable';
+import EditTable from '@/app/[locale]/manage/tables/components/EditTable';
+import { getVietnameseTableStatus } from '@/app/[locale]/manage/tables/utils/tablesUtils';
+import { QRCodeCanvas } from '@/components/_client/QRCode';
+import { DataTable } from '@/components/_client/Table';
+import { defaultPagination } from '@/constants/common';
 import {
   TableItem,
   TableProvider,
   useTableContext,
-} from "@/context/tableContext";
-import { useTable } from "@/hooks/useTable";
-import { useGetTableList } from "@/queries/useTable";
+} from '@/context/tableContext';
+import { useTable } from '@/hooks/useTable';
+import { useGetTableList } from '@/queries/useTable';
 
 export default function TableTable() {
   const { data: tableList, isPending } = useGetTableList();
   const data = useMemo(
     () => tableList?.data ?? Array(defaultPagination.pageSize).fill({}),
-    [tableList]
+    [tableList],
   );
   const table = useTable({
     isPending,
@@ -52,10 +52,10 @@ export default function TableTable() {
           <Input
             placeholder="Lọc số bàn"
             value={
-              (table.getColumn("number")?.getFilterValue() as string) ?? ""
+              (table.getColumn('number')?.getFilterValue() as string) ?? ''
             }
             onChange={(event) =>
-              table.getColumn("number")?.setFilterValue(event.target.value)
+              table.getColumn('number')?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -71,38 +71,38 @@ export default function TableTable() {
 
 export const columns: ColumnDef<TableItem>[] = [
   {
-    accessorKey: "number",
-    header: "Số bàn",
+    accessorKey: 'number',
+    header: 'Số bàn',
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("number")}</div>
+      <div className="capitalize">{row.getValue('number')}</div>
     ),
   },
   {
-    accessorKey: "capacity",
-    header: "Sức chứa",
+    accessorKey: 'capacity',
+    header: 'Sức chứa',
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("capacity")}</div>
+      <div className="capitalize">{row.getValue('capacity')}</div>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Trạng thái",
+    accessorKey: 'status',
+    header: 'Trạng thái',
     cell: ({ row }) => (
-      <div>{getVietnameseTableStatus(row.getValue("status"))}</div>
+      <div>{getVietnameseTableStatus(row.getValue('status'))}</div>
     ),
   },
   {
-    accessorKey: "token",
-    header: "QR Code",
+    accessorKey: 'token',
+    header: 'QR Code',
     cell: ({ row }) => (
       <QRCodeCanvas
-        token={row.getValue("token")}
-        tableNumber={row.getValue("number")}
+        token={row.getValue('token')}
+        tableNumber={row.getValue('number')}
       />
     ),
   },
   {
-    id: "actions",
+    id: 'actions',
     enableHiding: false,
     cell: function Actions({ row }) {
       const { setTableIdEdit, setTableDelete } = useTableContext();

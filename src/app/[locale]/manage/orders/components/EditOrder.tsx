@@ -1,20 +1,20 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   UpdateOrderBody,
   UpdateOrderBodyType,
-} from "@/schemaValidations/order.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/order.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import {
   Form,
   FormControl,
@@ -22,29 +22,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { OrderStatus, OrderStatusValues } from "@/constants/type";
+} from '@/components/ui/form';
+import { OrderStatus, OrderStatusValues } from '@/constants/type';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { DishesDialog } from "@/app/[locale]/manage/orders/components/DishesDialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useEffect, useState } from "react";
-import { DishListResType } from "@/schemaValidations/dish.schema";
-import { getVietnameseOrderStatus } from "@/app/[locale]/manage/orders/utils/orderUtils";
-import { useOrderContext } from "@/context/orderContext";
-import { useGetOrderDetail, useUpdateOrder } from "@/queries/useOrder";
-import { handleApiError } from "@/lib/utils";
-import { toast } from "@/hooks/use-toast";
-import { Spinner } from "@/components/_client/Spinner";
+} from '@/components/ui/select';
+import { DishesDialog } from '@/app/[locale]/manage/orders/components/DishesDialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useEffect, useState } from 'react';
+import { DishListResType } from '@/schemaValidations/dish.schema';
+import { getVietnameseOrderStatus } from '@/app/[locale]/manage/orders/utils/orderUtils';
+import { useOrderContext } from '@/context/orderContext';
+import { useGetOrderDetail, useUpdateOrder } from '@/queries/useOrder';
+import { handleApiError } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
+import { Spinner } from '@/components/_client/Spinner';
 
 export default function EditOrder() {
   const [selectedDish, setSelectedDish] = useState<
-    DishListResType["data"][0] | undefined
+    DishListResType['data'][0] | undefined
   >();
   const { setOrderIdEdit, orderIdEdit } = useOrderContext();
   const { data: orderDetail, isPending } = useGetOrderDetail(orderIdEdit);

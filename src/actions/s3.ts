@@ -1,15 +1,15 @@
-"use server";
-import envConfig from "@/config";
-import { s3Client } from "@/lib/s3Utils";
-import { generateFileName } from "@/lib/serverUtils";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { getSignedUrl as getSignedUrlCloudFront } from "@aws-sdk/cloudfront-signer";
+'use server';
+import envConfig from '@/config';
+import { s3Client } from '@/lib/s3Utils';
+import { generateFileName } from '@/lib/serverUtils';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { getSignedUrl as getSignedUrlCloudFront } from '@aws-sdk/cloudfront-signer';
 const allowedFileTypes = [
-  "image/jpeg",
-  "image/png",
-  "video/mp4",
-  "video/quicktime",
+  'image/jpeg',
+  'image/png',
+  'video/mp4',
+  'video/quicktime',
 ];
 
 const maxFileSize = 1024 * 1024; // 1 MB
@@ -25,11 +25,11 @@ export async function getSignedURL({
 }: GetSignedURLParams) {
   // first just make sure in our code that we're only allowing the file types we want
   if (!allowedFileTypes.includes(fileType)) {
-    return { failure: "File type not allowed" };
+    return { failure: 'File type not allowed' };
   }
 
   if (fileSize > maxFileSize) {
-    return { failure: "File size too large" };
+    return { failure: 'File size too large' };
   }
   const fileName = generateFileName();
   const putObjectCommand = new PutObjectCommand({
@@ -43,10 +43,10 @@ export async function getSignedURL({
   const url = await getSignedUrl(
     s3Client,
     putObjectCommand,
-    { expiresIn: 60 } // 60 seconds
+    { expiresIn: 60 }, // 60 seconds
   );
 
-  return { success: { url, fileName }, message: "Create new pre signer URL" };
+  return { success: { url, fileName }, message: 'Create new pre signer URL' };
 }
 // create key pair
 // openssl genrsa -out private_key.pem 2048
@@ -59,5 +59,5 @@ export async function getSignedURLCloudFront({ url }: { url: string }) {
     dateLessThan: new Date(Date.now() + 1000 /*sec*/ * 60).toISOString(),
   });
 
-  return { success: { url, fileName }, message: "Create new pre signer URL" };
+  return { success: { url, fileName }, message: 'Create new pre signer URL' };
 }

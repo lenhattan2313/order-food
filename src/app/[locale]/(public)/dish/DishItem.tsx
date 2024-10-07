@@ -1,18 +1,18 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DishItem } from "@/context/dishContext";
-import { formatCurrency } from "@/lib/currency";
-import { generateSlugUrl } from "@/lib/utils";
-import { useRouter } from "@/navigation";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DishItem } from '@/context/dishContext';
+import { formatCurrency } from '@/lib/currency';
+import { generateSlugUrl } from '@/lib/utils';
+import { useRouter } from '@/navigation';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 type Props = {
   dish: DishItem;
 };
 
 const DishItemComp = ({ dish }: Props) => {
-  const tb = useTranslations("button");
+  const tb = useTranslations('button');
   const router = useRouter();
   function handleOpenDetail() {
     const slug = generateSlugUrl({ name: dish.name, id: dish.id });
@@ -49,7 +49,7 @@ const DishItemComp = ({ dish }: Props) => {
           <span className="text-2xl font-bold">
             {formatCurrency(dish.price)}
           </span>
-          <Button>{tb("detail")}</Button>
+          <Button>{tb('detail')}</Button>
         </div>
       </CardContent>
     </Card>

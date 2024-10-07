@@ -1,6 +1,6 @@
-import { StatusCodes } from "http-status-codes";
-export type HTTP_METHOD = "POST" | "GET" | "PUT" | "DELETE";
-export type IHttpOptions = Omit<RequestInit, "method" | "body"> & {
+import { StatusCodes } from 'http-status-codes';
+export type HTTP_METHOD = 'POST' | 'GET' | 'PUT' | 'DELETE';
+export type IHttpOptions = Omit<RequestInit, 'method' | 'body'> & {
   baseUrl?: string;
   body?: unknown;
 };

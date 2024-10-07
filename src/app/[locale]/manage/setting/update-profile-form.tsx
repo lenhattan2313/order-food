@@ -1,35 +1,35 @@
-"use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { useAccountMeMutation, useGetAccountMe } from "@/queries/useAccount";
-import { useUploadAvatar } from "@/queries/useMedia";
+'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { useAccountMeMutation, useGetAccountMe } from '@/queries/useAccount';
+import { useUploadAvatar } from '@/queries/useMedia';
 import {
   AccountResType,
   UpdateMeBody,
   UpdateMeBodyType,
-} from "@/schemaValidations/account.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload } from "lucide-react";
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/account.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Upload } from 'lucide-react';
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function UpdateProfileForm() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const { data } = useGetAccountMe({
-    queryKey: ["account_profile", "settings"],
+    queryKey: ['account_profile', 'settings'],
   });
 
   const form = useForm<UpdateMeBodyType>({
     resolver: zodResolver(UpdateMeBody),
     defaultValues: {
-      name: "",
+      name: '',
       avatar: null,
     },
   });
@@ -40,7 +40,7 @@ export default function UpdateProfileForm() {
     setError,
     formState: {},
   } = form;
-  const [avatar, name] = watch(["avatar", "name"]);
+  const [avatar, name] = watch(['avatar', 'name']);
 
   function handleChangeFile(e: ChangeEvent<HTMLInputElement>) {
     //TODO: validate type of file
@@ -53,7 +53,7 @@ export default function UpdateProfileForm() {
     if (file) {
       return URL.createObjectURL(file);
     }
-    return avatar ?? "";
+    return avatar ?? '';
   }, [avatar, file]);
   const { mutateAsync: uploadAvatar, isPending: isUploadAvatarLoading } =
     useUploadAvatar();
@@ -64,7 +64,7 @@ export default function UpdateProfileForm() {
       let body = { ...dataForm };
       if (file) {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
         const { data } = await uploadAvatar(formData);
         body.avatar = data;
       }
@@ -80,7 +80,7 @@ export default function UpdateProfileForm() {
       setFile(null);
       reset((pre) => ({ ...pre, name, avatar }));
     },
-    [reset]
+    [reset],
   );
   useMemo(() => {
     if (data) {

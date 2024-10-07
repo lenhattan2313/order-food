@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Card,
@@ -6,34 +6,34 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { DashboardIndicatorResType } from "@/schemaValidations/indicator.schema";
-import { format, parse } from "date-fns";
-import { useTranslations } from "next-intl";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+} from '@/components/ui/chart';
+import { DashboardIndicatorResType } from '@/schemaValidations/indicator.schema';
+import { format, parse } from 'date-fns';
+import { useTranslations } from 'next-intl';
+import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
 const chartConfig = {
   desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+    label: 'Desktop',
+    color: 'hsl(var(--chart-1))',
   },
 } satisfies ChartConfig;
 
 export function RevenueLineChart({
   revenueByDate,
 }: {
-  revenueByDate: DashboardIndicatorResType["data"]["revenueByDate"];
+  revenueByDate: DashboardIndicatorResType['data']['revenueByDate'];
 }) {
-  const t = useTranslations("dashboard");
+  const t = useTranslations('dashboard');
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("revenue")}</CardTitle>
+        <CardTitle>{t('revenue')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -56,10 +56,10 @@ export function RevenueLineChart({
                   return value;
                 }
                 if (revenueByDate.length < 33) {
-                  const date = parse(value, "dd/MM/yyyy", new Date());
-                  return format(date, "dd");
+                  const date = parse(value, 'dd/MM/yyyy', new Date());
+                  return format(date, 'dd');
                 }
-                return "";
+                return '';
               }}
             />
             <ChartTooltip

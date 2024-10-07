@@ -1,8 +1,8 @@
-import { guestActions } from "@/apiRequest/guest/guestActions";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { removeCookies } from "@/lib/cookieUtils";
-import { getTokenCookies } from "@/lib/serverUtils";
-import { StatusCodes } from "http-status-codes";
+import { guestActions } from '@/apiRequest/guest/guestActions';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { removeCookies } from '@/lib/cookieUtils';
+import { getTokenCookies } from '@/lib/serverUtils';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: Request) {
   try {
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     if (!accessToken || !refreshToken) {
       return Response.json(
         { message: "Don't have any accessToken or refreshToken" },
-        { status: StatusCodes.OK }
+        { status: StatusCodes.OK },
       );
     }
     const response = await guestActions.logout({ accessToken, refreshToken });
@@ -20,9 +20,9 @@ export async function POST(request: Request) {
   } catch (error) {
     return Response.json(
       {
-        message: "Somethings happened",
+        message: 'Somethings happened',
       },
-      { status: StatusCodes.OK }
+      { status: StatusCodes.OK },
     );
   }
 }

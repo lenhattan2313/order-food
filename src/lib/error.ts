@@ -1,4 +1,4 @@
-import { StatusCodes, getReasonPhrase } from "http-status-codes";
+import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 type ErrorType = {
   status?: StatusCodes;
   message?: string;

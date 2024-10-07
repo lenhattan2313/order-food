@@ -1,32 +1,32 @@
-import OrderGuestDetail from "@/app/[locale]/manage/orders/components/OrderGuestDetail";
+import OrderGuestDetail from '@/app/[locale]/manage/orders/components/OrderGuestDetail';
 import {
   Statics,
   StatusCountObject,
-} from "@/app/[locale]/manage/orders/components/OrderTable";
+} from '@/app/[locale]/manage/orders/components/OrderTable';
 import {
   OrderStatusIcon,
   getVietnameseOrderStatus,
-} from "@/app/[locale]/manage/orders/utils/orderUtils";
-import { Badge } from "@/components/ui/badge";
+} from '@/app/[locale]/manage/orders/utils/orderUtils';
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { OrderStatus, OrderStatusValues } from "@/constants/type";
-import { ServingGuestByTableNumber } from "@/context/orderContext";
-import { cn } from "@/lib/utils";
-import { TableListResType } from "@/schemaValidations/table.schema";
-import { Users } from "lucide-react";
-import { useState } from "react";
+} from '@/components/ui/tooltip';
+import { OrderStatus, OrderStatusValues } from '@/constants/type';
+import { ServingGuestByTableNumber } from '@/context/orderContext';
+import { cn } from '@/lib/utils';
+import { TableListResType } from '@/schemaValidations/table.schema';
+import { Users } from 'lucide-react';
+import { useState } from 'react';
 
 // Ví dụ:
 // const statics: Statics = {
@@ -62,7 +62,7 @@ export default function OrderStatics({
   servingGuestByTableNumber,
 }: {
   statics: Statics;
-  tableList: TableListResType["data"];
+  tableList: TableListResType['data'];
   servingGuestByTableNumber: ServingGuestByTableNumber;
 }) {
   const [selectedTableNumber, setSelectedTableNumber] = useState<number>(0);
@@ -119,7 +119,7 @@ export default function OrderStatics({
             Rejected: 0,
           };
           const servingGuestCount = Object.values(
-            servingGuestByTableNumber[tableNumber] ?? []
+            servingGuestByTableNumber[tableNumber] ?? [],
           ).length;
           if (tableStatics) {
             for (const guestId in tableStatics) {
@@ -148,11 +148,11 @@ export default function OrderStatics({
             <div
               key={tableNumber}
               className={cn(
-                "text-sm flex items-stretch gap-2 border p-2 rounded-md",
+                'text-sm flex items-stretch gap-2 border p-2 rounded-md',
                 {
-                  "bg-secondary": !isEmptyTable,
-                  "border-transparent": !isEmptyTable,
-                }
+                  'bg-secondary': !isEmptyTable,
+                  'border-transparent': !isEmptyTable,
+                },
               )}
               onClick={() => {
                 if (!isEmptyTable) setSelectedTableNumber(tableNumber);
@@ -178,8 +178,8 @@ export default function OrderStatics({
               </div>
               <Separator
                 orientation="vertical"
-                className={cn("flex-shrink-0 flex-grow h-auto", {
-                  "bg-muted-foreground": !isEmptyTable,
+                className={cn('flex-shrink-0 flex-grow h-auto', {
+                  'bg-muted-foreground': !isEmptyTable,
                 })}
               />
               {isEmptyTable && (
@@ -198,7 +198,7 @@ export default function OrderStatics({
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {getVietnameseOrderStatus(OrderStatus.Pending)}:{" "}
+                        {getVietnameseOrderStatus(OrderStatus.Pending)}:{' '}
                         {countObject[OrderStatus.Pending] ?? 0} đơn
                       </TooltipContent>
                     </Tooltip>
@@ -213,7 +213,7 @@ export default function OrderStatics({
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {getVietnameseOrderStatus(OrderStatus.Processing)}:{" "}
+                        {getVietnameseOrderStatus(OrderStatus.Processing)}:{' '}
                         {countObject[OrderStatus.Processing] ?? 0} đơn
                       </TooltipContent>
                     </Tooltip>
@@ -225,7 +225,7 @@ export default function OrderStatics({
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {getVietnameseOrderStatus(OrderStatus.Delivered)}:{" "}
+                        {getVietnameseOrderStatus(OrderStatus.Delivered)}:{' '}
                         {countObject[OrderStatus.Delivered] ?? 0} đơn
                       </TooltipContent>
                     </Tooltip>

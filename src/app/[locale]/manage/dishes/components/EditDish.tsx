@@ -1,7 +1,7 @@
-"use client";
-import { getVietnameseDishStatus } from "@/app/[locale]/manage/dishes/utils/dishesUtils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+'use client';
+import { getVietnameseDishStatus } from '@/app/[locale]/manage/dishes/utils/dishesUtils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,39 +9,39 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { DishStatus, DishStatusValues } from "@/constants/type";
-import { DishItem, useDishContext } from "@/context/dishContext";
-import { toast } from "@/hooks/use-toast";
-import { createImagePathS3, handleApiError } from "@/lib/utils";
-import { useGetDishDetail, useUpdateDish } from "@/queries/useDish";
-import { useUploadAvatar, useUploadImageToS3 } from "@/queries/useMedia";
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { DishStatus, DishStatusValues } from '@/constants/type';
+import { DishItem, useDishContext } from '@/context/dishContext';
+import { toast } from '@/hooks/use-toast';
+import { createImagePathS3, handleApiError } from '@/lib/utils';
+import { useGetDishDetail, useUpdateDish } from '@/queries/useDish';
+import { useUploadAvatar, useUploadImageToS3 } from '@/queries/useMedia';
 import {
   UpdateDishBody,
   UpdateDishBodyType,
-} from "@/schemaValidations/dish.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload } from "lucide-react";
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/dish.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Upload } from 'lucide-react';
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function EditDish() {
   const { setDishIdEdit, dishIdEdit } = useDishContext();
@@ -50,17 +50,17 @@ export default function EditDish() {
   const form = useForm<UpdateDishBodyType>({
     resolver: zodResolver(UpdateDishBody),
     defaultValues: {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       price: 0,
-      image: "",
+      image: '',
       status: DishStatus.Unavailable,
     },
   });
   const { setError, reset, handleSubmit } = form;
 
-  const image = form.watch("image");
-  const name = form.watch("name");
+  const image = form.watch('image');
+  const name = form.watch('name');
   const previewAvatarFromFile = useMemo(() => {
     if (file) {
       return URL.createObjectURL(file);
@@ -73,7 +73,7 @@ export default function EditDish() {
       setFile(null);
       reset((pre) => ({ ...pre, ...data, image: image ?? undefined }));
     },
-    [reset]
+    [reset],
   );
   useMemo(() => {
     if (data) {
@@ -100,11 +100,11 @@ export default function EditDish() {
       if (file) {
         const uploadImage = dataForm.isUploadS3 ? uploadToS3 : uploadAvatar;
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
         const { data } = await uploadImage(formData);
         ``;
         body.image = dataForm.isUploadS3
-          ? createImagePathS3(data, "dish")
+          ? createImagePathS3(data, 'dish')
           : data;
       }
 
@@ -171,7 +171,7 @@ export default function EditDish() {
                       <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                         <AvatarImage src={previewAvatarFromFile} />
                         <AvatarFallback className="rounded-none">
-                          {name || "Avatar"}
+                          {name || 'Avatar'}
                         </AvatarFallback>
                       </Avatar>
                       <input

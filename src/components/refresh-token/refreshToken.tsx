@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/components/provider/auth-provider";
-import { REFRESH_TOKEN_TIMEOUT } from "@/constants/common";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { SOCKET_EVENT } from "@/constants/socket";
-import { UNAUTHORIZED_URL } from "@/constants/url";
-import { socket } from "@/lib/socket";
-import { localStorageUtil } from "@/lib/storageUtils";
-import { checkAccessTokenExpire, decodeJWT } from "@/lib/utils";
-import { usePathname, useRouter } from "@/navigation";
-import { useEffect } from "react";
+import { useAuth } from '@/components/provider/auth-provider';
+import { REFRESH_TOKEN_TIMEOUT } from '@/constants/common';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { SOCKET_EVENT } from '@/constants/socket';
+import { UNAUTHORIZED_URL } from '@/constants/url';
+import { socket } from '@/lib/socket';
+import { localStorageUtil } from '@/lib/storageUtils';
+import { checkAccessTokenExpire, decodeJWT } from '@/lib/utils';
+import { usePathname, useRouter } from '@/navigation';
+import { useEffect } from 'react';
 //Do not allow accessToken expired, using interval to check
 export default function RefreshToken() {
   const pathname = usePathname();
@@ -22,7 +22,7 @@ export default function RefreshToken() {
       return checkAccessTokenExpire({
         onError: () => {
           clearInterval(intervalId);
-          router.push("/login");
+          router.push('/login');
         },
         force,
       });
@@ -34,7 +34,7 @@ export default function RefreshToken() {
     async function onRefreshTokenSocket() {
       await onRefreshToken(true);
       const accessToken =
-        localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? "";
+        localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? '';
       const role = decodeJWT(accessToken)?.role;
       role && setRole(role);
     }

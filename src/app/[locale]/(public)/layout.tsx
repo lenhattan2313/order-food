@@ -1,7 +1,7 @@
-import NavItems from "@/app/[locale]/(public)/NavItem";
-import { SwitchLocales } from "@/components/_client/SwitchLocales";
-import { Button } from "@/components/ui/button";
-import DarkModeToggle from "@/components/ui/dark-mode-toggle";
+import NavItems from '@/app/[locale]/(public)/NavItem';
+import { SwitchLocales } from '@/components/_client/SwitchLocales';
+import { Button } from '@/components/ui/button';
+import DarkModeToggle from '@/components/ui/dark-mode-toggle';
 import {
   Sheet,
   SheetContent,
@@ -9,10 +9,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Link } from "@/navigation";
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { Menu, Package2 } from "lucide-react";
+} from '@/components/ui/sheet';
+import { Link } from '@/navigation';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { Menu, Package2 } from 'lucide-react';
 
 export default async function Layout({
   children,

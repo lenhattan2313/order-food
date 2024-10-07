@@ -1,17 +1,17 @@
-import { PREFIX_URL } from "@/constants/url";
-import http from "@/lib/httpUtils";
+import { PREFIX_URL } from '@/constants/url';
+import http from '@/lib/httpUtils';
 import {
   CreateDishBodyType,
   DishListResType,
   DishParamsType,
   DishResType,
   UpdateDishBodyType,
-} from "@/schemaValidations/dish.schema";
+} from '@/schemaValidations/dish.schema';
 type IUpdateDishType = DishParamsType & UpdateDishBodyType;
 export const dishActions = {
   getList: () =>
     http.get<DishListResType>(`${PREFIX_URL.DISH}`, {
-      next: { tags: ["dishes"] },
+      next: { tags: ['dishes'] },
     }),
   createDish: (body: CreateDishBodyType) =>
     http.post<DishResType, CreateDishBodyType>(`${PREFIX_URL.DISH}`, body),
@@ -25,6 +25,6 @@ export const dishActions = {
 
   revalidate: (tag: string) =>
     http.get(`/api/dishes/revalidate?tag=${tag}`, {
-      baseUrl: "",
+      baseUrl: '',
     }),
 };

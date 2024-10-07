@@ -1,6 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { defaultPagination } from "@/constants/common";
-import { getSkeletonDimension } from "@/lib/utils";
+import { Skeleton } from '@/components/ui/skeleton';
+import { defaultPagination } from '@/constants/common';
+import { getSkeletonDimension } from '@/lib/utils';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,9 +11,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+} from '@tanstack/react-table';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 interface ITableProps<T> {
   isPending: boolean;
@@ -31,8 +31,8 @@ export function useTable<T>({
   skeleton,
 }: ITableProps<T>) {
   const searchParam = useSearchParams();
-  const page = searchParam.get("page")
-    ? Number(searchParam.get("page"))
+  const page = searchParam.get('page')
+    ? Number(searchParam.get('page'))
     : defaultPagination.page;
   const pageIndex = page - 1;
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -61,7 +61,7 @@ export function useTable<T>({
             },
           }))
         : columns,
-    [isPending]
+    [isPending],
   );
   const table = useReactTable({
     data,

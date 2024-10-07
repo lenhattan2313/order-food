@@ -1,8 +1,8 @@
-import { FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input, InputProps } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import React, { ReactNode } from "react";
-import { useFormContext } from "react-hook-form";
+import { FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Input, InputProps } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import React, { ReactNode } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 type Props = InputProps & {
   label: ReactNode;

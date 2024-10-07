@@ -1,13 +1,13 @@
-import { DishListResType } from "@/schemaValidations/dish.schema";
+import { DishListResType } from '@/schemaValidations/dish.schema';
 import {
   FC,
   PropsWithChildren,
   createContext,
   useContext,
   useState,
-} from "react";
+} from 'react';
 
-export type DishItem = DishListResType["data"][0];
+export type DishItem = DishListResType['data'][0];
 
 const DishTableContext = createContext<{
   setDishIdEdit: (value?: number) => void;

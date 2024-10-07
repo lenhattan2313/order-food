@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { RoleType, TokenPayload } from "@/interface/IAuth";
-import { socket } from "@/lib/socket";
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { RoleType, TokenPayload } from '@/interface/IAuth';
+import { socket } from '@/lib/socket';
 import {
   clearTokenFromLocalStorage,
   localStorageUtil,
-} from "@/lib/storageUtils";
-import { decodeJWT } from "@/lib/utils";
+} from '@/lib/storageUtils';
+import { decodeJWT } from '@/lib/utils';
 import {
   FC,
   PropsWithChildren,
@@ -18,7 +18,7 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 export type IAuthContext = {
   role?: RoleType;
   isAuth: boolean;
@@ -35,7 +35,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const socketRef = useRef(false);
   useEffect(() => {
     const accessToken =
-      localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? "";
+      localStorageUtil.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? '';
     const decodeRole = decodeJWT<TokenPayload>(accessToken);
 
     if (decodeRole) {

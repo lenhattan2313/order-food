@@ -4,9 +4,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import DishTable from "@/app/[locale]/manage/tables/components/TableTable";
-import { Suspense } from "react";
+} from '@/components/ui/card';
+import DishTable from '@/app/[locale]/manage/tables/components/TableTable';
+import { Suspense } from 'react';
 
 export default function TablesPage() {
   return (

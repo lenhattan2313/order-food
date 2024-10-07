@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import MenuOrderItem from "@/app/[locale]/guest/menu/components/MenuOrderItem";
-import { Spinner } from "@/components/_client/Spinner";
-import { Button } from "@/components/ui/button";
-import { DishStatus } from "@/constants/type";
-import { toast } from "@/hooks/use-toast";
-import { formatCurrency } from "@/lib/currency";
-import { handleApiError } from "@/lib/utils";
-import { useRouter } from "@/navigation";
-import { useGetDishList } from "@/queries/useDish";
-import { useGuestOrderMutation } from "@/queries/useGuest";
-import { GuestCreateOrdersBodyType } from "@/schemaValidations/guest.schema";
-import { useMemo, useState } from "react";
+import MenuOrderItem from '@/app/[locale]/guest/menu/components/MenuOrderItem';
+import { Spinner } from '@/components/_client/Spinner';
+import { Button } from '@/components/ui/button';
+import { DishStatus } from '@/constants/type';
+import { toast } from '@/hooks/use-toast';
+import { formatCurrency } from '@/lib/currency';
+import { handleApiError } from '@/lib/utils';
+import { useRouter } from '@/navigation';
+import { useGetDishList } from '@/queries/useDish';
+import { useGuestOrderMutation } from '@/queries/useGuest';
+import { GuestCreateOrdersBodyType } from '@/schemaValidations/guest.schema';
+import { useMemo, useState } from 'react';
 
 export default function MenuOrder() {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function MenuOrder() {
   const [orders, setOrders] = useState<GuestCreateOrdersBodyType>([]);
   const dishes = useMemo(
     () => data?.data.filter((item) => item.status !== DishStatus.Hidden) || [],
-    [data]
+    [data],
   );
   const totalPrice = useMemo(
     () =>
@@ -30,14 +30,14 @@ export default function MenuOrder() {
         }
         return acc + dish.price * cur.quantity;
       }, 0),
-    [orders, dishes]
+    [orders, dishes],
   );
   const totalCount = useMemo(
     () =>
       orders.reduce((acc, cur) => {
         return acc + cur.quantity;
       }, 0),
-    [orders]
+    [orders],
   );
   function handleChange(dishId: number, quantity: number) {
     setOrders((preState) => {
@@ -58,7 +58,7 @@ export default function MenuOrder() {
     try {
       const { message } = await mutateAsync(orders);
       toast({ description: message });
-      router.push("/guest/order");
+      router.push('/guest/order');
     } catch (error) {
       handleApiError(error);
     }

@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,36 +7,36 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusCircle } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   CreateTableBody,
   CreateTableBodyType,
-} from "@/schemaValidations/table.schema";
-import { TableStatus, TableStatusValues } from "@/constants/type";
+} from '@/schemaValidations/table.schema';
+import { TableStatus, TableStatusValues } from '@/constants/type';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { getVietnameseTableStatus } from "@/app/[locale]/manage/tables/utils/tablesUtils";
-import { useCreateTable } from "@/queries/useTable";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
+} from '@/components/ui/select';
+import { getVietnameseTableStatus } from '@/app/[locale]/manage/tables/utils/tablesUtils';
+import { useCreateTable } from '@/queries/useTable';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
 const defaultTable = {
   number: 0,
   capacity: 2,

@@ -1,13 +1,13 @@
-import { TableListResType } from "@/schemaValidations/table.schema";
+import { TableListResType } from '@/schemaValidations/table.schema';
 import {
   FC,
   PropsWithChildren,
   createContext,
   useContext,
   useState,
-} from "react";
+} from 'react';
 
-export type TableItem = TableListResType["data"][0];
+export type TableItem = TableListResType['data'][0];
 
 const TableContext = createContext<{
   setTableIdEdit: (value?: number) => void;

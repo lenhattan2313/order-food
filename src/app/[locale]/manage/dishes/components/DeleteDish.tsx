@@ -1,4 +1,4 @@
-import { useDishContext } from "@/context/dishContext";
+import { useDishContext } from '@/context/dishContext';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,10 +8,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { useDeleteDish } from "@/queries/useDish";
+} from '@/components/ui/alert-dialog';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { useDeleteDish } from '@/queries/useDish';
 export function DeleteDish() {
   const { setDishDelete, dishDelete } = useDishContext();
   const { mutateAsync, isPending } = useDeleteDish();
@@ -38,10 +38,10 @@ export function DeleteDish() {
         <AlertDialogHeader>
           <AlertDialogTitle>Xóa món ăn?</AlertDialogTitle>
           <AlertDialogDescription>
-            Món{" "}
+            Món{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">
               {dishDelete?.name}
-            </span>{" "}
+            </span>{' '}
             sẽ bị xóa vĩnh viễn
           </AlertDialogDescription>
         </AlertDialogHeader>

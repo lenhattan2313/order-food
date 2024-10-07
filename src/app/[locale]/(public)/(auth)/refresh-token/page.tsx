@@ -1,20 +1,20 @@
-"use client";
-import { useAuth } from "@/components/provider/auth-provider";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { localStorageUtil } from "@/lib/storageUtils";
-import { checkAccessTokenExpire } from "@/lib/utils";
-import { usePathname, useRouter } from "@/navigation";
-import { useSearchParams } from "next/navigation";
-import { Suspense, memo, useEffect } from "react";
+'use client';
+import { useAuth } from '@/components/provider/auth-provider';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { localStorageUtil } from '@/lib/storageUtils';
+import { checkAccessTokenExpire } from '@/lib/utils';
+import { usePathname, useRouter } from '@/navigation';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, memo, useEffect } from 'react';
 
 function RefreshToken() {
   const { setRole } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get("redirect") ?? "/";
+  const redirectPath = searchParams.get('redirect') ?? '/';
   const refreshTokenUrl =
-    searchParams.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN) ?? "/";
+    searchParams.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN) ?? '/';
   useEffect(() => {
     const refreshToken = localStorageUtil.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
     if (refreshToken !== refreshTokenUrl) {

@@ -1,4 +1,4 @@
-import type en from "../../messages/en.json";
+import type en from '../../messages/en.json';
 
 export type IPaginationParams = {
   page: number;
@@ -7,6 +7,6 @@ export type IPaginationParams = {
 
 export type TopLevelKeys<
   Translations extends object,
-  Namespace extends keyof Translations
+  Namespace extends keyof Translations,
 > = keyof Translations[Namespace];
-export type MenuTranslationKeys = TopLevelKeys<typeof en, "menu">;
+export type MenuTranslationKeys = TopLevelKeys<typeof en, 'menu'>;

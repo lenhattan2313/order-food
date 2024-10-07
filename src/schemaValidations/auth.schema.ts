@@ -1,13 +1,13 @@
-import { Role } from "@/constants/type";
-import z from "zod";
-import { useTranslations } from "next-intl";
+import { Role } from '@/constants/type';
+import z from 'zod';
+import { useTranslations } from 'next-intl';
 
 export const useLoginSchema = () => {
-  const t = useTranslations("form");
+  const t = useTranslations('form');
   return z
     .object({
-      email: z.string().email(t("emailInvalid")),
-      password: z.string().min(6, t("passwordInvalid")).max(100),
+      email: z.string().email(t('emailInvalid')),
+      password: z.string().min(6, t('passwordInvalid')).max(100),
     })
     .strict();
 };

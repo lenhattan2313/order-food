@@ -1,14 +1,14 @@
-import { getVietnameseDishStatus } from "@/app/[locale]/manage/dishes/utils/dishesUtils";
-import AutoPagination from "@/components/_client/AutoPagination";
-import { Button } from "@/components/ui/button";
+import { getVietnameseDishStatus } from '@/app/[locale]/manage/dishes/utils/dishesUtils';
+import AutoPagination from '@/components/_client/AutoPagination';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -16,12 +16,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { defaultPagination } from "@/constants/common";
-import { DishItem } from "@/context/dishContext";
-import { formatCurrency } from "@/lib/currency";
-import { simpleMatchText } from "@/lib/utils";
-import { useGetDishList } from "@/queries/useDish";
+} from '@/components/ui/table';
+import { defaultPagination } from '@/constants/common';
+import { DishItem } from '@/context/dishContext';
+import { formatCurrency } from '@/lib/currency';
+import { simpleMatchText } from '@/lib/utils';
+import { useGetDishList } from '@/queries/useDish';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -33,14 +33,14 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+} from '@tanstack/react-table';
+import Image from 'next/image';
+import { useEffect, useMemo, useState } from 'react';
 
 export const columns: ColumnDef<DishItem>[] = [
   {
-    id: "dishName",
-    header: "Món ăn",
+    id: 'dishName',
+    header: 'Món ăn',
     cell: ({ row }) => (
       <div className="flex items-center space-x-4">
         <Image
@@ -59,17 +59,17 @@ export const columns: ColumnDef<DishItem>[] = [
     },
   },
   {
-    accessorKey: "price",
-    header: "Giá cả",
+    accessorKey: 'price',
+    header: 'Giá cả',
     cell: ({ row }) => (
-      <div className="capitalize">{formatCurrency(row.getValue("price"))}</div>
+      <div className="capitalize">{formatCurrency(row.getValue('price'))}</div>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Trạng thái",
+    accessorKey: 'status',
+    header: 'Trạng thái',
     cell: ({ row }) => (
-      <div>{getVietnameseDishStatus(row.getValue("status"))}</div>
+      <div>{getVietnameseDishStatus(row.getValue('status'))}</div>
     ),
   },
 ];
@@ -140,12 +140,12 @@ export function DishesDialog({
               <Input
                 placeholder="Lọc tên"
                 value={
-                  (table.getColumn("dishName")?.getFilterValue() as string) ??
-                  ""
+                  (table.getColumn('dishName')?.getFilterValue() as string) ??
+                  ''
                 }
                 onChange={(event) =>
                   table
-                    .getColumn("dishName")
+                    .getColumn('dishName')
                     ?.setFilterValue(event.target.value)
                 }
                 className="max-w-sm"
@@ -163,7 +163,7 @@ export function DishesDialog({
                               ? null
                               : flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext()
+                                  header.getContext(),
                                 )}
                           </TableHead>
                         );
@@ -176,7 +176,7 @@ export function DishesDialog({
                     table.getRowModel().rows.map((row) => (
                       <TableRow
                         key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
+                        data-state={row.getIsSelected() && 'selected'}
                         onClick={() => choose(row.original)}
                         className="cursor-pointer"
                       >
@@ -184,7 +184,7 @@ export function DishesDialog({
                           <TableCell key={cell.id}>
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext()
+                              cell.getContext(),
                             )}
                           </TableCell>
                         ))}
@@ -205,8 +205,8 @@ export function DishesDialog({
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
               <div className="text-xs text-muted-foreground py-4 flex-1 ">
-                Hiển thị{" "}
-                <strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
+                Hiển thị{' '}
+                <strong>{table.getPaginationRowModel().rows.length}</strong>{' '}
                 trong <strong>{dishes.length}</strong> kết quả
               </div>
               <div>

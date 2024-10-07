@@ -1,31 +1,31 @@
-import { AuthProvider } from "@/components/provider/auth-provider";
-import ReactQueryProvider from "@/components/provider/react-query-provider";
-import { ThemeProvider } from "@/components/provider/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
-import { routing } from "@/i18n/routing";
-import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
+import { AuthProvider } from '@/components/provider/auth-provider';
+import ReactQueryProvider from '@/components/provider/react-query-provider';
+import { ThemeProvider } from '@/components/provider/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
+import { routing } from '@/i18n/routing';
+import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
 import {
   getMessages,
   getTranslations,
   unstable_setRequestLocale,
-} from "next-intl/server";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { baseOpenGraph } from "@/shareMetadata";
-import NextTopLoader from "nextjs-toploader";
-import Footer from "@/components/_client/Footer";
+} from 'next-intl/server';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { baseOpenGraph } from '@/shareMetadata';
+import NextTopLoader from 'nextjs-toploader';
+import Footer from '@/components/_client/Footer';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("home");
+  const t = await getTranslations('home');
   return {
-    title: { template: `%s | ${t("title")}`, default: t("title") },
-    description: t("description"),
-    authors: [{ name: "TanLe", url: "https://lenhattan.vn" }],
-    creator: "TanLe",
-    publisher: "TanLe",
+    title: { template: `%s | ${t('title')}`, default: t('title') },
+    description: t('description'),
+    authors: [{ name: 'TanLe', url: 'https://lenhattan.vn' }],
+    creator: 'TanLe',
+    publisher: 'TanLe',
     openGraph: { ...baseOpenGraph },
   };
 }

@@ -1,5 +1,5 @@
-import { mediaActions } from "@/apiRequest/media/mediaActions";
-import { useMutation } from "@tanstack/react-query";
+import { mediaActions } from '@/apiRequest/media/mediaActions';
+import { useMutation } from '@tanstack/react-query';
 
 export const useUploadAvatar = () =>
   useMutation({ mutationFn: mediaActions.uploadAvatar });

@@ -1,40 +1,40 @@
-"use client";
-import { InputForm } from "@/components/_client/Form";
-import { useAuth } from "@/components/provider/auth-provider";
-import { Button } from "@/components/ui/button";
+'use client';
+import { InputForm } from '@/components/_client/Form';
+import { useAuth } from '@/components/provider/auth-provider';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
-import { TokenPayload } from "@/interface/IAuth";
-import { getOauthGoogleUrl } from "@/lib/authUtils";
-import { socket } from "@/lib/socket";
-import { decodeJWT, handleApiError } from "@/lib/utils";
-import { Link, useRouter } from "@/navigation";
-import { useLoginMutation } from "@/queries/useAuth";
-import { LoginBodyType, useLoginSchema } from "@/schemaValidations/auth.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
-import { Suspense, memo, useEffect } from "react";
-import { useForm } from "react-hook-form";
+} from '@/components/ui/card';
+import { Form } from '@/components/ui/form';
+import { TokenPayload } from '@/interface/IAuth';
+import { getOauthGoogleUrl } from '@/lib/authUtils';
+import { socket } from '@/lib/socket';
+import { decodeJWT, handleApiError } from '@/lib/utils';
+import { Link, useRouter } from '@/navigation';
+import { useLoginMutation } from '@/queries/useAuth';
+import { LoginBodyType, useLoginSchema } from '@/schemaValidations/auth.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, memo, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 function LoginForm() {
-  const t = useTranslations("login");
+  const t = useTranslations('login');
   const router = useRouter();
   const searchParams = useSearchParams();
-  const clearToken = searchParams.get("clearToken");
+  const clearToken = searchParams.get('clearToken');
   const { setRole } = useAuth();
   const schema = useLoginSchema();
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -48,13 +48,13 @@ function LoginForm() {
       const decodeRole = decodeJWT<TokenPayload>(accessToken);
       decodeRole && setRole(decodeRole.role);
       socket.connect();
-      router.push("/manage/dashboard");
+      router.push('/manage/dashboard');
     } catch (error) {
       handleApiError(error, setError);
     }
   }
   useEffect(() => {
-    if (clearToken === "true") {
+    if (clearToken === 'true') {
       setRole(undefined);
     }
   }, [clearToken, setRole]);
@@ -69,8 +69,8 @@ function LoginForm() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">{t("title")}</CardTitle>
-        <CardDescription>{t("description")}</CardDescription>
+        <CardTitle className="text-2xl">{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -86,23 +86,23 @@ function LoginForm() {
                 type="email"
                 required
                 placeholder="m@example.com"
-                label={t("email")}
+                label={t('email')}
                 autoFocus
               />
               <InputForm
                 id="password"
                 name="password"
                 required
-                label={t("password")}
+                label={t('password')}
                 type="password"
               />
 
               <Button type="submit" className="w-full" isLoading={isPending}>
-                {t("title")}
+                {t('title')}
               </Button>
               <Link href={getOauthGoogleUrl()}>
                 <Button variant="outline" className="w-full" type="button">
-                  {t("google-access")}
+                  {t('google-access')}
                 </Button>
               </Link>
             </div>

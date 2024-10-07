@@ -1,9 +1,9 @@
-"use client";
-import { UpdateOrderType } from "@/apiRequest/order/orderActions";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { useUpdateOrder } from "@/queries/useOrder";
-import { GetOrdersResType } from "@/schemaValidations/order.schema";
+'use client';
+import { UpdateOrderType } from '@/apiRequest/order/orderActions';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { useUpdateOrder } from '@/queries/useOrder';
+import { GetOrdersResType } from '@/schemaValidations/order.schema';
 import {
   FC,
   PropsWithChildren,
@@ -11,9 +11,9 @@ import {
   useCallback,
   useContext,
   useState,
-} from "react";
+} from 'react';
 
-export type OrderObjectByGuestID = Record<number, GetOrdersResType["data"]>;
+export type OrderObjectByGuestID = Record<number, GetOrdersResType['data']>;
 export type ServingGuestByTableNumber = Record<number, OrderObjectByGuestID>;
 
 const OrderContext = createContext<{

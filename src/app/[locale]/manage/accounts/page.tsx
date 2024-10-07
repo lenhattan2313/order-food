@@ -4,10 +4,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
-import AccountTable from "@/app/[locale]/manage/accounts/components/AccountTable";
-import { Suspense } from "react";
+import AccountTable from '@/app/[locale]/manage/accounts/components/AccountTable';
+import { Suspense } from 'react';
 
 export default function Dashboard() {
   return (

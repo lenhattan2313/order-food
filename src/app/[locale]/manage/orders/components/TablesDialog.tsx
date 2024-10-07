@@ -1,14 +1,14 @@
-import { getVietnameseTableStatus } from "@/app/[locale]/manage/tables/utils/tablesUtils";
-import AutoPagination from "@/components/_client/AutoPagination";
-import { Button } from "@/components/ui/button";
+import { getVietnameseTableStatus } from '@/app/[locale]/manage/tables/utils/tablesUtils';
+import AutoPagination from '@/components/_client/AutoPagination';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -16,12 +16,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { defaultPagination } from "@/constants/common";
-import { TableStatus } from "@/constants/type";
-import { cn, simpleMatchText } from "@/lib/utils";
-import { useGetTableList } from "@/queries/useTable";
-import { TableListResType } from "@/schemaValidations/table.schema";
+} from '@/components/ui/table';
+import { defaultPagination } from '@/constants/common';
+import { TableStatus } from '@/constants/type';
+import { cn, simpleMatchText } from '@/lib/utils';
+import { useGetTableList } from '@/queries/useTable';
+import { TableListResType } from '@/schemaValidations/table.schema';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -33,17 +33,17 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+} from '@tanstack/react-table';
+import { useEffect, useMemo, useState } from 'react';
 
-type TableItem = TableListResType["data"][0];
+type TableItem = TableListResType['data'][0];
 
 export const columns: ColumnDef<TableItem>[] = [
   {
-    accessorKey: "number",
-    header: "Số bàn",
+    accessorKey: 'number',
+    header: 'Số bàn',
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("number")}</div>
+      <div className="capitalize">{row.getValue('number')}</div>
     ),
     filterFn: (row, columnId, filterValue: string) => {
       if (filterValue === undefined) return true;
@@ -51,17 +51,17 @@ export const columns: ColumnDef<TableItem>[] = [
     },
   },
   {
-    accessorKey: "capacity",
-    header: "Sức chứa",
+    accessorKey: 'capacity',
+    header: 'Sức chứa',
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("capacity")}</div>
+      <div className="capitalize">{row.getValue('capacity')}</div>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Trạng thái",
+    accessorKey: 'status',
+    header: 'Trạng thái',
     cell: ({ row }) => (
-      <div>{getVietnameseTableStatus(row.getValue("status"))}</div>
+      <div>{getVietnameseTableStatus(row.getValue('status'))}</div>
     ),
   },
 ];
@@ -77,7 +77,7 @@ export function TablesDialog({
     () =>
       data?.data.filter((table) => table.status === TableStatus.Available) ??
       [],
-    [data]
+    [data],
   );
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -137,10 +137,10 @@ export function TablesDialog({
               <Input
                 placeholder="Số bàn"
                 value={
-                  (table.getColumn("number")?.getFilterValue() as string) ?? ""
+                  (table.getColumn('number')?.getFilterValue() as string) ?? ''
                 }
                 onChange={(event) =>
-                  table.getColumn("number")?.setFilterValue(event.target.value)
+                  table.getColumn('number')?.setFilterValue(event.target.value)
                 }
                 className="w-[80px]"
               />
@@ -157,7 +157,7 @@ export function TablesDialog({
                               ? null
                               : flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext()
+                                  header.getContext(),
                                 )}
                           </TableHead>
                         );
@@ -170,7 +170,7 @@ export function TablesDialog({
                     table.getRowModel().rows.map((row) => (
                       <TableRow
                         key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
+                        data-state={row.getIsSelected() && 'selected'}
                         onClick={() => {
                           if (
                             row.original.status === TableStatus.Available ||
@@ -180,10 +180,10 @@ export function TablesDialog({
                           }
                         }}
                         className={cn({
-                          "cursor-pointer":
+                          'cursor-pointer':
                             row.original.status === TableStatus.Available ||
                             row.original.status === TableStatus.Reserved,
-                          "cursor-not-allowed":
+                          'cursor-not-allowed':
                             row.original.status === TableStatus.Hidden,
                         })}
                       >
@@ -191,7 +191,7 @@ export function TablesDialog({
                           <TableCell key={cell.id}>
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext()
+                              cell.getContext(),
                             )}
                           </TableCell>
                         ))}
@@ -212,8 +212,8 @@ export function TablesDialog({
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
               <div className="text-xs text-muted-foreground py-4 flex-1 ">
-                Hiển thị{" "}
-                <strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
+                Hiển thị{' '}
+                <strong>{table.getPaginationRowModel().rows.length}</strong>{' '}
                 trong <strong>{tables.length}</strong> kết quả
               </div>
               <div>

@@ -1,18 +1,18 @@
 export default function About() {
   return (
-    <div className='flex flex-col'>
-      <section className='bg-secondary  py-20 px-4 md:px-6 lg:px-8'>
-        <div className='max-w-4xl text-center'>
-          <h1 className='text-4xl font-bold sm:text-5xl md:text-6xl'>
+    <div className="flex flex-col">
+      <section className="bg-secondary  py-20 px-4 md:px-6 lg:px-8">
+        <div className="max-w-4xl text-center">
+          <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl">
             Chính sách bảo mật
           </h1>
         </div>
       </section>
-      <section className='py-12 md:py-20 lg:py-24'>
-        <div className='max-w-4xl space-y-8'>
+      <section className="py-12 md:py-20 lg:py-24">
+        <div className="max-w-4xl space-y-8">
           <div>
-            <h2 className='text-3xl font-bold'>Dữ liệu thu thập</h2>
-            <p className='mt-4 text-muted-foreground leading-8'>
+            <h2 className="text-3xl font-bold">Dữ liệu thu thập</h2>
+            <p className="mt-4 text-muted-foreground leading-8">
               Chúng tôi thu thập các thông tin cá nhân mà bạn cung cấp khi tạo
               tài khoản, đặt hàng hoặc liên hệ với chúng tôi. Các thông tin này
               có thể bao gồm tên. Ngoài ra, chúng tôi cũng thu thập một số thông
@@ -20,12 +20,12 @@ export default function About() {
               IP và loại trình duyệt.
             </p>
           </div>
-          <div className='space-y-4'>
-            <h2 className='text-3xl font-bold'>Mục đích sử dụng</h2>
-            <p className=' text-muted-foreground leading-8'>
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold">Mục đích sử dụng</h2>
+            <p className=" text-muted-foreground leading-8">
               Chúng tôi sử dụng thông tin cá nhân của bạn với các mục đích sau:
             </p>
-            <ul className='space-y-4 text-muted-foreground leading-8'>
+            <ul className="space-y-4 text-muted-foreground leading-8">
               <li>
                 Để xử lý đơn hàng của bạn: Chúng tôi sử dụng thông tin liên hệ
                 và thanh toán của bạn để xác nhận và xử lý đơn hàng, cũng như để
@@ -51,5 +51,5 @@ export default function About() {
         </div>
       </section>
     </div>
-  )
+  );
 }

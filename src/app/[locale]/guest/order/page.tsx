@@ -1,4 +1,4 @@
-import Order from "@/app/[locale]/guest/order/components/OrderGuest";
+import Order from '@/app/[locale]/guest/order/components/OrderGuest';
 
 export default async function OrderPage() {
   return (

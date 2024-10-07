@@ -1,9 +1,9 @@
-import { guestActions } from "@/apiRequest/guest/guestActions";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { setCookies } from "@/lib/cookieUtils";
-import { HttpError } from "@/lib/error";
-import { getTokenCookies } from "@/lib/serverUtils";
-import { StatusCodes } from "http-status-codes";
+import { guestActions } from '@/apiRequest/guest/guestActions';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { setCookies } from '@/lib/cookieUtils';
+import { HttpError } from '@/lib/error';
+import { getTokenCookies } from '@/lib/serverUtils';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     if (!token) {
       return Response.json(
         { message: "Don't have any  refreshToken" },
-        { status: StatusCodes.UNAUTHORIZED }
+        { status: StatusCodes.UNAUTHORIZED },
       );
     }
     const response = await guestActions.refreshToken({ refreshToken: token });
@@ -27,9 +27,9 @@ export async function POST(request: Request) {
     }
     return Response.json(
       {
-        message: "Somethings happened",
+        message: 'Somethings happened',
       },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR }
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
     );
   }
 }

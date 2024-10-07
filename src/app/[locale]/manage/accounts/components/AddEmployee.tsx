@@ -1,6 +1,6 @@
-"use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,28 +9,28 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { useCreateEmployee } from "@/queries/useAccount";
-import { useUploadAvatar } from "@/queries/useMedia";
+} from '@/components/ui/dialog';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { useCreateEmployee } from '@/queries/useAccount';
+import { useUploadAvatar } from '@/queries/useMedia';
 import {
   CreateEmployeeAccountBody,
   CreateEmployeeAccountBodyType,
-} from "@/schemaValidations/account.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle, Upload } from "lucide-react";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/account.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusCircle, Upload } from 'lucide-react';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 const defaultAccount = {
-  name: "",
-  email: "",
+  name: '',
+  email: '',
   avatar: undefined,
-  password: "",
-  confirmPassword: "",
+  password: '',
+  confirmPassword: '',
 };
 export default function AddEmployee() {
   const [file, setFile] = useState<File | null>(null);
@@ -42,8 +42,8 @@ export default function AddEmployee() {
   });
   const { setError, reset, handleSubmit } = form;
 
-  const avatar = form.watch("avatar");
-  const name = form.watch("name");
+  const avatar = form.watch('avatar');
+  const name = form.watch('name');
   const previewAvatarFromFile = useMemo(() => {
     if (file) {
       return URL.createObjectURL(file);
@@ -59,7 +59,7 @@ export default function AddEmployee() {
       let body = { ...dataForm };
       if (file) {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
         const { data } = await uploadAvatar(formData);
         ``;
         body.avatar = data;
@@ -119,7 +119,7 @@ export default function AddEmployee() {
                       <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                         <AvatarImage src={previewAvatarFromFile} />
                         <AvatarFallback className="rounded-none">
-                          {name || "Avatar"}
+                          {name || 'Avatar'}
                         </AvatarFallback>
                       </Avatar>
                       <input

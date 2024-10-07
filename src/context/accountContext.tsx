@@ -1,14 +1,14 @@
-"use client";
-import { AccountListResType } from "@/schemaValidations/account.schema";
+'use client';
+import { AccountListResType } from '@/schemaValidations/account.schema';
 import {
   FC,
   PropsWithChildren,
   createContext,
   useContext,
   useState,
-} from "react";
+} from 'react';
 
-export type AccountItem = AccountListResType["data"][0];
+export type AccountItem = AccountListResType['data'][0];
 
 const AccountTableContext = createContext<{
   setEmployeeIdEdit: (_value?: number) => void;
@@ -25,7 +25,7 @@ const AccountTableContext = createContext<{
 export const AccountProvider: FC<PropsWithChildren> = ({ children }) => {
   const [employeeIdEdit, setEmployeeIdEdit] = useState<number | undefined>();
   const [employeeDelete, setEmployeeDelete] = useState<AccountItem | null>(
-    null
+    null,
   );
   return (
     <AccountTableContext.Provider

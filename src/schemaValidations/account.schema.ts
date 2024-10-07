@@ -1,5 +1,5 @@
-import { Role } from "@/constants/type";
-import z from "zod";
+import { Role } from '@/constants/type';
+import z from 'zod';
 
 export const AccountSchema = z.object({
   id: z.number(),
@@ -39,9 +39,9 @@ export const CreateEmployeeAccountBody = z
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({
-        code: "custom",
-        message: "Mật khẩu không khớp",
-        path: ["confirmPassword"],
+        code: 'custom',
+        message: 'Mật khẩu không khớp',
+        path: ['confirmPassword'],
       });
     }
   });
@@ -65,15 +65,15 @@ export const UpdateEmployeeAccountBody = z
     if (changePassword) {
       if (!password || !confirmPassword) {
         ctx.addIssue({
-          code: "custom",
-          message: "Hãy nhập mật khẩu mới và xác nhận mật khẩu mới",
-          path: ["changePassword"],
+          code: 'custom',
+          message: 'Hãy nhập mật khẩu mới và xác nhận mật khẩu mới',
+          path: ['changePassword'],
         });
       } else if (confirmPassword !== password) {
         ctx.addIssue({
-          code: "custom",
-          message: "Mật khẩu không khớp",
-          path: ["confirmPassword"],
+          code: 'custom',
+          message: 'Mật khẩu không khớp',
+          path: ['confirmPassword'],
         });
       }
     }
@@ -102,9 +102,9 @@ export const ChangePasswordBody = z
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({
-        code: "custom",
-        message: "Mật khẩu mới không khớp",
-        path: ["confirmPassword"],
+        code: 'custom',
+        message: 'Mật khẩu mới không khớp',
+        path: ['confirmPassword'],
       });
     }
   });
@@ -125,7 +125,7 @@ export const GetListGuestsRes = z.object({
       tableNumber: z.number().nullable(),
       createdAt: z.date(),
       updatedAt: z.date(),
-    })
+    }),
   ),
   message: z.string(),
 });

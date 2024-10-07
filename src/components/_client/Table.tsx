@@ -1,4 +1,4 @@
-import AutoPagination from "@/components/_client/AutoPagination";
+import AutoPagination from '@/components/_client/AutoPagination';
 import {
   Table,
   TableBody,
@@ -6,12 +6,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { defaultPagination } from "@/constants/common";
-import { usePathname } from "@/navigation";
-import { Table as TableProps, flexRender } from "@tanstack/react-table";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+} from '@/components/ui/table';
+import { defaultPagination } from '@/constants/common';
+import { usePathname } from '@/navigation';
+import { Table as TableProps, flexRender } from '@tanstack/react-table';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 interface ITableProps<T> {
   table: TableProps<T>;
 }
@@ -19,8 +19,8 @@ interface ITableProps<T> {
 export function DataTable<T>({ table }: ITableProps<T>) {
   const pathname = usePathname();
   const searchParam = useSearchParams();
-  const page = searchParam.get("page")
-    ? Number(searchParam.get("page"))
+  const page = searchParam.get('page')
+    ? Number(searchParam.get('page'))
     : defaultPagination.page;
   const pageIndex = page - 1;
 
@@ -45,7 +45,7 @@ export function DataTable<T>({ table }: ITableProps<T>) {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -58,13 +58,13 @@ export function DataTable<T>({ table }: ITableProps<T>) {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -85,7 +85,7 @@ export function DataTable<T>({ table }: ITableProps<T>) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-xs text-muted-foreground py-4 flex-1 ">
-          Hiển thị <strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
+          Hiển thị <strong>{table.getPaginationRowModel().rows.length}</strong>{' '}
           trong <strong>{table.getRowCount()}</strong> kết quả
         </div>
         <div>

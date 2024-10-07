@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { ColumnDef } from "@tanstack/react-table";
+import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { ColumnDef } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
-import AddEmployee from "@/app/[locale]/manage/accounts/components/AddEmployee";
-import { DeleteAccountModal } from "@/app/[locale]/manage/accounts/components/DeleteAccountModal";
-import EditEmployee from "@/app/[locale]/manage/accounts/components/EditEmployee";
-import { DataTable } from "@/components/_client/Table";
-import { useAuth } from "@/components/provider/auth-provider";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import AddEmployee from '@/app/[locale]/manage/accounts/components/AddEmployee';
+import { DeleteAccountModal } from '@/app/[locale]/manage/accounts/components/DeleteAccountModal';
+import EditEmployee from '@/app/[locale]/manage/accounts/components/EditEmployee';
+import { DataTable } from '@/components/_client/Table';
+import { useAuth } from '@/components/provider/auth-provider';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,28 +18,28 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { defaultPagination } from "@/constants/common";
-import { Role } from "@/constants/type";
-import { AccountProvider, useAccountContext } from "@/context/accountContext";
-import { useTable } from "@/hooks/useTable";
-import { useGetAccountList } from "@/queries/useAccount";
-import { AccountType } from "@/schemaValidations/account.schema";
-import { useMemo } from "react";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { defaultPagination } from '@/constants/common';
+import { Role } from '@/constants/type';
+import { AccountProvider, useAccountContext } from '@/context/accountContext';
+import { useTable } from '@/hooks/useTable';
+import { useGetAccountList } from '@/queries/useAccount';
+import { AccountType } from '@/schemaValidations/account.schema';
+import { useMemo } from 'react';
 
 export const columns: ColumnDef<AccountType>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
+    accessorKey: 'id',
+    header: 'ID',
   },
   {
-    accessorKey: "avatar",
-    header: "Avatar",
+    accessorKey: 'avatar',
+    header: 'Avatar',
     cell: ({ row }) => (
       <div>
         <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
-          <AvatarImage src={row.getValue("avatar")} />
+          <AvatarImage src={row.getValue('avatar')} />
           <AvatarFallback className="rounded-none">
             {row.original.name}
           </AvatarFallback>
@@ -48,27 +48,27 @@ export const columns: ColumnDef<AccountType>[] = [
     ),
   },
   {
-    accessorKey: "name",
-    header: "Tên",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    accessorKey: 'name',
+    header: 'Tên',
+    cell: ({ row }) => <div className="capitalize">{row.getValue('name')}</div>,
   },
   {
-    accessorKey: "email",
+    accessorKey: 'email',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Email
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>,
   },
   {
-    id: "actions",
+    id: 'actions',
     enableHiding: false,
     cell: function Actions({ row }) {
       const { setEmployeeIdEdit, setEmployeeDelete } = useAccountContext();
@@ -108,7 +108,7 @@ export default function AccountTable() {
   const { data: accountList, isPending } = useGetAccountList();
   const data = useMemo(
     () => accountList?.data ?? Array(defaultPagination.pageSize).fill({}),
-    [accountList]
+    [accountList],
   );
   const table = useTable({
     isPending,
@@ -127,9 +127,9 @@ export default function AccountTable() {
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn('email')?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />

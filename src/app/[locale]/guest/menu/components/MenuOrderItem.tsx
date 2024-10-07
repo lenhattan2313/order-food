@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import Quantity from "@/app/[locale]/guest/menu/components/Quantity";
-import { DishStatus } from "@/constants/type";
-import { formatCurrency } from "@/lib/currency";
-import { cn } from "@/lib/utils";
-import { DishResType } from "@/schemaValidations/dish.schema";
-import Image from "next/image";
+import Quantity from '@/app/[locale]/guest/menu/components/Quantity';
+import { DishStatus } from '@/constants/type';
+import { formatCurrency } from '@/lib/currency';
+import { cn } from '@/lib/utils';
+import { DishResType } from '@/schemaValidations/dish.schema';
+import Image from 'next/image';
 
 type IOrderItem = {
-  dish: DishResType["data"];
+  dish: DishResType['data'];
   onChange: (dishId: number, quantity: number) => void;
   quantity: number;
 };
@@ -23,8 +23,8 @@ export default function MenuOrderItem({
   return (
     <div
       key={dish.id}
-      className={cn("flex gap-4", {
-        "pointer-events-none": dish.status === DishStatus.Unavailable,
+      className={cn('flex gap-4', {
+        'pointer-events-none': dish.status === DishStatus.Unavailable,
       })}
     >
       <div className="flex-shrink-0 relative">

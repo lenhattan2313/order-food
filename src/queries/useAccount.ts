@@ -1,19 +1,19 @@
-import { accountActions } from "@/apiRequest/account/accountActions";
-import { QUERY_KEYS } from "@/constants/queryKeys";
+import { accountActions } from '@/apiRequest/account/accountActions';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 import {
   AccountResType,
   GetGuestListQueryParamsType,
-} from "@/schemaValidations/account.schema";
+} from '@/schemaValidations/account.schema';
 import {
   UseQueryOptions,
   useMutation,
   useQuery,
   useQueryClient,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
 export const useGetAccountMe = (options?: UseQueryOptions<AccountResType>) =>
   useQuery<AccountResType>({
-    queryKey: ["account_profile"],
+    queryKey: ['account_profile'],
     queryFn: accountActions.getMe,
     ...options,
   });
@@ -25,7 +25,7 @@ export const useAccountMeMutation = () => {
     mutationFn: accountActions.updateMe,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["account_profile"],
+        queryKey: ['account_profile'],
         exact: true,
       });
     },

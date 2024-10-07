@@ -1,7 +1,7 @@
 // export const revalidate = 3600; // one hour
 
-import { dishActions } from "@/apiRequest/dish/dishActions";
-import { generateSlugUrl } from "@/lib/utils";
+import { dishActions } from '@/apiRequest/dish/dishActions';
+import { generateSlugUrl } from '@/lib/utils';
 
 export async function generateSitemaps() {
   //call DB or API
@@ -33,7 +33,7 @@ export default async function sitemap({ id }: { id: number }) {
       id: item.id,
     })}`,
     lastModified: item.updatedAt,
-    changeFrequency: "monthly",
+    changeFrequency: 'monthly',
     priority: 0.6,
   }));
 

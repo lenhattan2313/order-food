@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Spinner } from "@/components/_client/Spinner";
-import { useAuth } from "@/components/provider/auth-provider";
-import { LOCAL_STORAGE_KEY } from "@/constants/localStorage";
-import { toast } from "@/hooks/use-toast";
-import { decodeJWT } from "@/lib/utils";
-import { useRouter } from "@/navigation";
-import { useLoginOauth } from "@/queries/useAuth";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef } from "react";
+import { Spinner } from '@/components/_client/Spinner';
+import { useAuth } from '@/components/provider/auth-provider';
+import { LOCAL_STORAGE_KEY } from '@/constants/localStorage';
+import { toast } from '@/hooks/use-toast';
+import { decodeJWT } from '@/lib/utils';
+import { useRouter } from '@/navigation';
+import { useLoginOauth } from '@/queries/useAuth';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useRef } from 'react';
 
 function OAuth() {
   const router = useRouter();
@@ -17,12 +17,12 @@ function OAuth() {
   const { setRole } = useAuth();
   const isFirstRender = useRef(false);
   useEffect(() => {
-    const accessToken = searchParams.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? "";
+    const accessToken = searchParams.get(LOCAL_STORAGE_KEY.ACCESS_TOKEN) ?? '';
     const refreshToken =
-      searchParams.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN) ?? "";
+      searchParams.get(LOCAL_STORAGE_KEY.REFRESH_TOKEN) ?? '';
     if (!accessToken || !refreshToken) {
-      setTimeout(() => toast({ description: "Tài khoản không hợp lệ" }));
-      router.push("/login");
+      setTimeout(() => toast({ description: 'Tài khoản không hợp lệ' }));
+      router.push('/login');
       return;
     }
     //set cookie and local storage
@@ -33,11 +33,11 @@ function OAuth() {
       .then(({ data }) => {
         const decodeRole = decodeJWT(data.accessToken);
         decodeRole && setRole(decodeRole.role);
-        router.push("/manage/dashboard");
+        router.push('/manage/dashboard');
       })
       .catch((err) => {
         toast({ description: err.message });
-        router.push("/login");
+        router.push('/login');
       });
     isFirstRender.current = true;
   }, [searchParams]);

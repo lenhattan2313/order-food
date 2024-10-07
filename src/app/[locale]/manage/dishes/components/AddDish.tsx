@@ -1,8 +1,8 @@
-"use client";
-import { getSignedURL } from "@/actions/s3";
-import { getVietnameseDishStatus } from "@/app/[locale]/manage/dishes/utils/dishesUtils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+'use client';
+import { getSignedURL } from '@/actions/s3';
+import { getVietnameseDishStatus } from '@/app/[locale]/manage/dishes/utils/dishesUtils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,45 +10,45 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { DishStatus, DishStatusValues } from "@/constants/type";
-import { toast } from "@/hooks/use-toast";
-import { computeSHA256 } from "@/lib/fileUtils";
-import { createImagePathS3, handleApiError } from "@/lib/utils";
-import { useCreateDish } from "@/queries/useDish";
-import { useUploadAvatar } from "@/queries/useMedia";
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { DishStatus, DishStatusValues } from '@/constants/type';
+import { toast } from '@/hooks/use-toast';
+import { computeSHA256 } from '@/lib/fileUtils';
+import { createImagePathS3, handleApiError } from '@/lib/utils';
+import { useCreateDish } from '@/queries/useDish';
+import { useUploadAvatar } from '@/queries/useMedia';
 import {
   CreateDishBody,
   CreateDishBodyType,
-} from "@/schemaValidations/dish.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogDescription } from "@radix-ui/react-dialog";
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { PlusCircle, Upload } from "lucide-react";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/schemaValidations/dish.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DialogDescription } from '@radix-ui/react-dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { PlusCircle, Upload } from 'lucide-react';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const defaultDish = {
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   price: 0,
   image: undefined,
   status: DishStatus.Unavailable,
@@ -64,8 +64,8 @@ export default function AddDish() {
   });
   const { setError, reset, handleSubmit, setValue } = form;
 
-  const image = form.watch("image");
-  const name = form.watch("name");
+  const image = form.watch('image');
+  const name = form.watch('name');
   const previewAvatarFromFile = useMemo(() => {
     if (file) {
       return URL.createObjectURL(file);
@@ -93,16 +93,16 @@ export default function AddDish() {
           }
           const { url, fileName } = signedURLResult.success;
           await fetch(url, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-              "Content-Type": file.type,
+              'Content-Type': file.type,
             },
             body: file,
           });
-          body.image = createImagePathS3(fileName, "");
+          body.image = createImagePathS3(fileName, '');
         } else {
           const formData = new FormData();
-          formData.append("file", file);
+          formData.append('file', file);
           const { data } = await uploadAvatar(formData);
           ``;
           body.image = data;
@@ -126,7 +126,7 @@ export default function AddDish() {
     const inputFile = e.target.files?.[0];
     if (inputFile) {
       setFile(inputFile);
-      setValue("image", "http://localhost:3000/image", {
+      setValue('image', 'http://localhost:3000/image', {
         shouldValidate: true,
       });
     }
@@ -184,7 +184,7 @@ export default function AddDish() {
                       <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
                         <AvatarImage src={previewAvatarFromFile} />
                         <AvatarFallback className="rounded-none">
-                          {name || "Avatar"}
+                          {name || 'Avatar'}
                         </AvatarFallback>
                       </Avatar>
                       <input

@@ -1,30 +1,30 @@
-import { AccessToken } from "@/interface/IAuth";
-import http from "@/lib/httpUtils";
+import { AccessToken } from '@/interface/IAuth';
+import http from '@/lib/httpUtils';
 import {
   LoginBodyType,
   LoginResType,
   LogoutBodyType,
   RefreshTokenBodyType,
-} from "@/schemaValidations/auth.schema";
+} from '@/schemaValidations/auth.schema';
 
 export const authActions = {
   refreshTokenRequest: null as Promise<LoginResType> | null,
   sLogin: (body: LoginBodyType) =>
-    http.post<LoginResType, LoginBodyType>("/api/auth/login", body, {
-      baseUrl: "",
+    http.post<LoginResType, LoginBodyType>('/api/auth/login', body, {
+      baseUrl: '',
     }),
   login: (body: LoginBodyType) =>
-    http.post<LoginResType, LoginBodyType>("/auth/login", body),
-  sLogout: () => http.post("/api/auth/logout", undefined, { baseUrl: "" }),
+    http.post<LoginResType, LoginBodyType>('/auth/login', body),
+  sLogout: () => http.post('/api/auth/logout', undefined, { baseUrl: '' }),
   logout: (body: LogoutBodyType & { accessToken: string }) =>
     http.post<Response, LogoutBodyType>(
-      "/auth/logout",
+      '/auth/logout',
       { refreshToken: body.refreshToken },
       {
         headers: {
           Authorization: `Bearer ${body.accessToken}`,
         },
-      }
+      },
     ),
   sRefreshToken: async function () {
     //only call 1 time
@@ -32,9 +32,9 @@ export const authActions = {
       return this.refreshTokenRequest;
     }
     this.refreshTokenRequest = http.post<LoginResType, undefined>(
-      "/api/auth/refresh-token",
+      '/api/auth/refresh-token',
       undefined,
-      { baseUrl: "" }
+      { baseUrl: '' },
     );
     const result = await this.refreshTokenRequest;
 
@@ -43,10 +43,10 @@ export const authActions = {
     return result;
   },
   refreshToken: (body: RefreshTokenBodyType) =>
-    http.post<LoginResType, RefreshTokenBodyType>("/auth/refresh-token", body),
+    http.post<LoginResType, RefreshTokenBodyType>('/auth/refresh-token', body),
 
   setTokenFromOAuth: (body: AccessToken) =>
-    http.post<{ data: AccessToken }, AccessToken>("/api/auth/oauth", body, {
-      baseUrl: "",
+    http.post<{ data: AccessToken }, AccessToken>('/api/auth/oauth', body, {
+      baseUrl: '',
     }),
 };

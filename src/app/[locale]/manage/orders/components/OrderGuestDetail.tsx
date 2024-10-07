@@ -1,25 +1,25 @@
 import {
   OrderStatusIcon,
   getVietnameseOrderStatus,
-} from "@/app/[locale]/manage/orders/utils/orderUtils";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { OrderStatus } from "@/constants/type";
-import { toast } from "@/hooks/use-toast";
-import { formatCurrency } from "@/lib/currency";
+} from '@/app/[locale]/manage/orders/utils/orderUtils';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { OrderStatus } from '@/constants/type';
+import { toast } from '@/hooks/use-toast';
+import { formatCurrency } from '@/lib/currency';
 import {
   formatDateTimeToLocaleString,
   formatDateTimeToTimeString,
-} from "@/lib/dateUtils";
-import { handleApiError } from "@/lib/utils";
-import { usePaymentOrder } from "@/queries/useOrder";
+} from '@/lib/dateUtils';
+import { handleApiError } from '@/lib/utils';
+import { usePaymentOrder } from '@/queries/useOrder';
 
-import { GetOrdersResType } from "@/schemaValidations/order.schema";
-import Image from "next/image";
-import { Fragment } from "react";
+import { GetOrdersResType } from '@/schemaValidations/order.schema';
+import Image from 'next/image';
+import { Fragment } from 'react';
 
-type Guest = GetOrdersResType["data"][0]["guest"];
-type Orders = GetOrdersResType["data"];
+type Guest = GetOrdersResType['data'][0]['guest'];
+type Orders = GetOrdersResType['data'];
 export default function OrderGuestDetail({
   guest,
   orders,
@@ -33,7 +33,7 @@ export default function OrderGuestDetail({
     ? orders.filter(
         (order) =>
           order.status !== OrderStatus.Paid &&
-          order.status !== OrderStatus.Rejected
+          order.status !== OrderStatus.Rejected,
       )
     : [];
   const purchasedOrderFilter = guest
@@ -118,7 +118,7 @@ export default function OrderGuestDetail({
               <span
                 className="hidden sm:inline"
                 title={`Tạo: ${formatDateTimeToLocaleString(
-                  order.createdAt
+                  order.createdAt,
                 )} | Cập nhật: ${formatDateTimeToLocaleString(order.updatedAt)}
           `}
               >
@@ -127,7 +127,7 @@ export default function OrderGuestDetail({
               <span
                 className="sm:hidden"
                 title={`Tạo: ${formatDateTimeToLocaleString(
-                  order.createdAt
+                  order.createdAt,
                 )} | Cập nhật: ${formatDateTimeToLocaleString(order.updatedAt)}
           `}
               >
@@ -145,19 +145,19 @@ export default function OrderGuestDetail({
             {formatCurrency(
               ordersFilterToPurchase.reduce((acc, order) => {
                 return acc + order.quantity * order.dishSnapshot.price;
-              }, 0)
+              }, 0),
             )}
           </span>
         </Badge>
       </div>
       <div className="space-x-1">
         <span className="font-semibold">Đã thanh toán:</span>
-        <Badge variant={"outline"}>
+        <Badge variant={'outline'}>
           <span>
             {formatCurrency(
               purchasedOrderFilter.reduce((acc, order) => {
                 return acc + order.quantity * order.dishSnapshot.price;
-              }, 0)
+              }, 0),
             )}
           </span>
         </Badge>
@@ -166,8 +166,8 @@ export default function OrderGuestDetail({
       <div>
         <Button
           className="w-full"
-          size={"sm"}
-          variant={"secondary"}
+          size={'sm'}
+          variant={'secondary'}
           disabled={ordersFilterToPurchase.length === 0}
           isLoading={isPending}
           onClick={handlePayment}

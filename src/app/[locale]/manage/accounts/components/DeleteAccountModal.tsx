@@ -1,4 +1,4 @@
-import { useAccountContext } from "@/context/accountContext";
+import { useAccountContext } from '@/context/accountContext';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,10 +8,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { toast } from "@/hooks/use-toast";
-import { handleApiError } from "@/lib/utils";
-import { useDeleteEmployee } from "@/queries/useAccount";
+} from '@/components/ui/alert-dialog';
+import { toast } from '@/hooks/use-toast';
+import { handleApiError } from '@/lib/utils';
+import { useDeleteEmployee } from '@/queries/useAccount';
 export function DeleteAccountModal() {
   const { setEmployeeDelete, employeeDelete } = useAccountContext();
   const { mutateAsync, isPending } = useDeleteEmployee();
@@ -37,10 +37,10 @@ export function DeleteAccountModal() {
         <AlertDialogHeader>
           <AlertDialogTitle>Xóa nhân viên?</AlertDialogTitle>
           <AlertDialogDescription>
-            Tài khoản{" "}
+            Tài khoản{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">
               {employeeDelete?.name}
-            </span>{" "}
+            </span>{' '}
             sẽ bị xóa vĩnh viễn
           </AlertDialogDescription>
         </AlertDialogHeader>

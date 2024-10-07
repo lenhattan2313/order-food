@@ -1,5 +1,5 @@
-import { OrderStatus } from "@/constants/type";
-import { BookX, CookingPot, HandCoins, Loader, Truck } from "lucide-react";
+import { OrderStatus } from '@/constants/type';
+import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react';
 
 export const OrderStatusIcon = {
   [OrderStatus.Pending]: Loader,
@@ -9,18 +9,18 @@ export const OrderStatusIcon = {
   [OrderStatus.Paid]: HandCoins,
 };
 export const getVietnameseOrderStatus = (
-  status: (typeof OrderStatus)[keyof typeof OrderStatus]
+  status: (typeof OrderStatus)[keyof typeof OrderStatus],
 ) => {
   switch (status) {
     case OrderStatus.Delivered:
-      return "Đã phục vụ";
+      return 'Đã phục vụ';
     case OrderStatus.Paid:
-      return "Đã thanh toán";
+      return 'Đã thanh toán';
     case OrderStatus.Pending:
-      return "Chờ xử lý";
+      return 'Chờ xử lý';
     case OrderStatus.Processing:
-      return "Đang nấu";
+      return 'Đang nấu';
     default:
-      return "Từ chối";
+      return 'Từ chối';
   }
 };

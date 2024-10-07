@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { getVietnameseOrderStatus } from "@/app/[locale]/manage/orders/utils/orderUtils";
-import { Badge } from "@/components/ui/badge";
-import { formatCurrency } from "@/lib/currency";
-import { GetOrdersResType } from "@/schemaValidations/order.schema";
-import Image from "next/image";
+import { getVietnameseOrderStatus } from '@/app/[locale]/manage/orders/utils/orderUtils';
+import { Badge } from '@/components/ui/badge';
+import { formatCurrency } from '@/lib/currency';
+import { GetOrdersResType } from '@/schemaValidations/order.schema';
+import Image from 'next/image';
 
 type IOrderItem = {
-  order: GetOrdersResType["data"][0];
+  order: GetOrdersResType['data'][0];
 };
 export default function OrderItem({ order }: IOrderItem) {
   return (

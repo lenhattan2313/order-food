@@ -1,7 +1,7 @@
-import { DishStatusValues, OrderStatusValues } from "@/constants/type";
-import { AccountSchema } from "@/schemaValidations/account.schema";
-import { TableSchema } from "@/schemaValidations/table.schema";
-import z from "zod";
+import { DishStatusValues, OrderStatusValues } from '@/constants/type';
+import { AccountSchema } from '@/schemaValidations/account.schema';
+import { TableSchema } from '@/schemaValidations/table.schema';
+import z from 'zod';
 
 const DishSnapshotSchema = z.object({
   id: z.number(),
@@ -99,7 +99,7 @@ export const CreateOrdersBody = z
       z.object({
         dishId: z.number(),
         quantity: z.number(),
-      })
+      }),
     ),
   })
   .strict();

@@ -1,5 +1,5 @@
-import { PREFIX_URL } from "@/constants/url";
-import http from "@/lib/httpUtils";
+import { PREFIX_URL } from '@/constants/url';
+import http from '@/lib/httpUtils';
 
 import {
   CreateTableBodyType,
@@ -7,7 +7,7 @@ import {
   TableParamsType,
   TableResType,
   UpdateTableBodyType,
-} from "@/schemaValidations/table.schema";
+} from '@/schemaValidations/table.schema';
 type IUpdateTableType = TableParamsType & UpdateTableBodyType;
 export const tableActions = {
   getList: () => http.get<TableListResType>(`${PREFIX_URL.TABLE}`),
@@ -19,7 +19,7 @@ export const tableActions = {
   updateTable: ({ number, ...body }: IUpdateTableType) =>
     http.put<TableResType, UpdateTableBodyType>(
       `${PREFIX_URL.TABLE}/${number}`,
-      body
+      body,
     ),
   deleteTable: ({ number }: TableParamsType) =>
     http.delete<TableResType>(`${PREFIX_URL.TABLE}/${number}`),
