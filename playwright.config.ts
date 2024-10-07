@@ -1,16 +1,15 @@
-import envConfig from "@/config";
-import { defineConfig, devices } from "@playwright/test";
-import dotenv from "dotenv";
-import path from "path";
-dotenv.config({ path: path.resolve(__dirname, ".env.local") });
-const STORAGE_STATE = path.join(__dirname, "playwright/.auth/user.json");
+import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({ path: path.resolve(__dirname, '.env.local') });
+const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: "./tests",
-  globalSetup: "./tests/setup/global.setup.ts",
+  testDir: './tests',
+  globalSetup: './tests/setup/global.setup.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -20,30 +19,30 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: "html",
+  reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/en/`,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
-    colorScheme: "dark",
+    trace: 'on-first-retry',
+    colorScheme: 'dark',
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: 'chromium',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
         storageState: STORAGE_STATE,
       },
     },
 
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"], storageState: STORAGE_STATE },
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'], storageState: STORAGE_STATE },
     },
 
     // {
