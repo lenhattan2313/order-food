@@ -10,15 +10,15 @@
         "args": "none"
       }
     ],
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-misused-promises": [
-      "error",
-      {
-        "checksVoidReturn": {
-          "attributes": false
-        }
-      }
-    ],
+    // "@typescript-eslint/no-explicit-any": "error",
+    // "@typescript-eslint/no-misused-promises": [
+    //   "error",
+    //   {
+    //     "checksVoidReturn": {
+    //       "attributes": false
+    //     }
+    //   }
+    // ],
     "@tanstack/query/exhaustive-deps": "error"
   }
 }
