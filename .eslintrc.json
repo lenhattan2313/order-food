@@ -1,10 +1,10 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "plugin:@tanstack/eslint-plugin-query/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:jsx-a11y/recommended",
-    "airbnb"
+    "plugin:@tanstack/eslint-plugin-query/recommended"
+    // "plugin:react-hooks/recommended",
+    // "plugin:jsx-a11y/recommended",
+    // "airbnb"
   ],
   "rules": {
     "no-unused-vars": [
@@ -13,32 +13,32 @@
         "args": "none"
       }
     ],
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": ["Link"],
-        "specialLink": ["hrefLeft", "hrefRight"],
-        "aspects": ["invalidHref", "preferButton"]
-      }
-    ],
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [".ts", ".tsx", ".js", ".jsx"]
-      }
-    ],
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-uses-react": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "js": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never"
-      }
-    ],
+    // "jsx-a11y/anchor-is-valid": [
+    //   "error",
+    //   {
+    //     "components": ["Link"],
+    //     "specialLink": ["hrefLeft", "hrefRight"],
+    //     "aspects": ["invalidHref", "preferButton"]
+    //   }
+    // ],
+    // "react/jsx-filename-extension": [
+    //   1,
+    //   {
+    //     "extensions": [".ts", ".tsx", ".js", ".jsx"]
+    //   }
+    // ],
+    // "react/react-in-jsx-scope": "off",
+    // "react/jsx-uses-react": "off",
+    // "import/extensions": [
+    //   "error",
+    //   "ignorePackages",
+    //   {
+    //     "js": "never",
+    //     "jsx": "never",
+    //     "ts": "never",
+    //     "tsx": "never"
+    //   }
+    // ],
     // "@typescript-eslint/no-explicit-any": "error",
     // "@typescript-eslint/no-misused-promises": [
     //   "error",
@@ -48,7 +48,7 @@
     //     }
     //   }
     // ],
-    "import/prefer-default-export": "off", // Disable the prefer-default-export rule globally
+    // "import/prefer-default-export": "off", // Disable the prefer-default-export rule globally
     "@tanstack/query/exhaustive-deps": "error"
   }
 }

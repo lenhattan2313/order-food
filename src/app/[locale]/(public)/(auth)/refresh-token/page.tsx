@@ -21,6 +21,7 @@ function RefreshToken() {
       setRole(undefined);
       return;
     }
+    console.log('refresh-token');
     checkAccessTokenExpire({
       onSuccess: () => {
         router.push(redirectPath);

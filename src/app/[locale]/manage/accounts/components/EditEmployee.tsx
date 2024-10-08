@@ -1,5 +1,5 @@
 'use client';
-import { AccountItem, useAccountContext } from '@/context/accountContext';
+import { FormSelect, FormSwitch, InputForm } from '@/components/_client/Form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,16 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import { Form, FormField, FormItem } from '@/components/ui/form';
+import { Role } from '@/constants/type';
+import { AccountItem, useAccountContext } from '@/context/accountContext';
 import { toast } from '@/hooks/use-toast';
 import { handleApiError } from '@/lib/utils';
 import { useGetEmployeeDetail, useUpdateEmployee } from '@/queries/useAccount';
@@ -30,17 +23,11 @@ import {
 } from '@/schemaValidations/account.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Role } from '@/constants/type';
 export default function EditEmployee() {
+  const t = useTranslations();
   const { setEmployeeIdEdit, employeeIdEdit } = useAccountContext();
   const [file, setFile] = useState<File | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
@@ -57,8 +44,7 @@ export default function EditEmployee() {
     },
   });
   const { setError, reset, handleSubmit } = form;
-  const avatar = form.watch('avatar');
-  const name = form.watch('name');
+  const [name, avatar] = form.watch(['name', 'avatar']);
   const changePassword = form.watch('changePassword');
 
   const { data } = useGetEmployeeDetail({ id: employeeIdEdit });
@@ -71,7 +57,7 @@ export default function EditEmployee() {
   );
   useMemo(() => {
     if (data) {
-      handleReset(data.data);
+      setTimeout(() => handleReset(data.data));
     }
   }, [data, handleReset]);
   function handleChangeFile(e: ChangeEvent<HTMLInputElement>) {
@@ -117,14 +103,22 @@ export default function EditEmployee() {
       data && handleReset(data.data);
     }
   }
+  const options = useMemo(
+    () =>
+      Object.values(Role)
+        .filter((item) => item !== Role.Guest)
+        .map((role) => ({
+          value: role,
+          label: role,
+        })),
+    [],
+  );
   return (
     <Dialog open={Boolean(employeeIdEdit)} onOpenChange={handleCloseModal}>
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Cập nhật tài khoản</DialogTitle>
-          <DialogDescription>
-            Các trường tên, email, mật khẩu là bắt buộc
-          </DialogDescription>
+          <DialogTitle>{t('accounts.editTitle')}</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <Form {...form}>
           <form
@@ -165,134 +159,35 @@ export default function EditEmployee() {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Tên</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Input id="name" className="w-full" {...field} />
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="email">Email</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Input id="email" className="w-full" {...field} />
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
+              <InputForm name="name" label={t('common.name')} required />
+              <InputForm name="email" label={t('common.email')} required />
+              <FormSelect
                 name="role"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="description">Vai trò</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Chọn trạng thái" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {Object.values(Role)
-                              .filter((item) => item !== Role.Guest)
-                              .map((role) => (
-                                <SelectItem key={role} value={role}>
-                                  {role}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
+                label={t('common.role')}
+                required
+                placeholder={t('accounts.selectRole')}
+                options={options}
               />
-              <FormField
-                control={form.control}
+              <FormSwitch
                 name="changePassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="email">Đổi mật khẩu</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
+                label={t('accounts.changePassword')}
               />
+
               {changePassword && (
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                        <Label htmlFor="password">Mật khẩu mới</Label>
-                        <div className="col-span-3 w-full space-y-2">
-                          <Input
-                            id="password"
-                            className="w-full"
-                            type="password"
-                            {...field}
-                          />
-                          <FormMessage />
-                        </div>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              )}
-              {changePassword && (
-                <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                        <Label htmlFor="confirmPassword">
-                          Xác nhận mật khẩu mới
-                        </Label>
-                        <div className="col-span-3 w-full space-y-2">
-                          <Input
-                            id="confirmPassword"
-                            className="w-full"
-                            type="password"
-                            {...field}
-                          />
-                          <FormMessage />
-                        </div>
-                      </div>
-                    </FormItem>
-                  )}
-                />
+                <>
+                  <InputForm
+                    name="password"
+                    label={t('accounts.newPassword')}
+                    required
+                    type="password"
+                  />
+                  <InputForm
+                    name="confirmPassword"
+                    label={t('accounts.confirmNewPassword')}
+                    required
+                    type="password"
+                  />
+                </>
               )}
             </div>
           </form>
@@ -303,7 +198,7 @@ export default function EditEmployee() {
             form="edit-employee-form"
             isLoading={isUpdatePending || isUploadPending}
           >
-            Lưu
+            {t('common.save')}
           </Button>
         </DialogFooter>
       </DialogContent>

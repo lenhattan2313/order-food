@@ -15,7 +15,19 @@
     "notFound": "Not Found",
     "noResult": "No result",
     "from": "From",
-    "to": "To"
+    "to": "To",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "save": "Save",
+    "id": "ID",
+    "avatar": "Avatar",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "role": "Role"
   },
   "menu": {
     "login": "Login",
@@ -61,5 +73,18 @@
     "table": "Served Table",
     "dishesRating": "Dishes rating",
     "mostRequestedDishes": "Most requested dishes"
+  },
+  "accounts": {
+    "title": "Accounts",
+    "description": "Manage accounts",
+    "filterEmail": "Filter email...",
+    "createAccount": "Create an account",
+    "editTitle": "Edit an account",
+    "changePassword": "Change password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "deleteTitle": "Delete account?",
+    "deleteDesc": "will be permanently deleted",
+    "selectRole": "Select Role"
   }
 }

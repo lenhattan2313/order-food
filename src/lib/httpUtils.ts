@@ -76,7 +76,8 @@ const request = async <T = Response>(
             logoutRequest = null;
             localStorageUtil.remove('accessToken');
             localStorageUtil.remove('refreshToken');
-            redirect(`/${locale}/login`);
+            // redirect(`/${locale}/login`);
+            location.href = `/${locale}/login`;
           }
         }
       } else {

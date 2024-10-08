@@ -1,30 +1,20 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-
 import AccountTable from '@/app/[locale]/manage/accounts/components/AccountTable';
-import { Suspense } from 'react';
+import { Page } from '@/components/_client/Page';
+import { Suspense } from '@/components/_client/Suspense';
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
-export default function Dashboard() {
+export default async function AccountPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
+  const t = await getTranslations('accounts');
   return (
-    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-      <div className="space-y-2">
-        <Card x-chunk="dashboard-06-chunk-0">
-          <CardHeader>
-            <CardTitle>Tài khoản</CardTitle>
-            <CardDescription>Quản lý tài khoản nhân viên</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Suspense>
-              <AccountTable />
-            </Suspense>
-          </CardContent>
-        </Card>
-      </div>
-    </main>
+    <Page title={t('title')} description={t('description')}>
+      <Suspense>
+        <AccountTable />
+      </Suspense>
+    </Page>
   );
 }

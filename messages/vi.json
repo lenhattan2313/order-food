@@ -15,7 +15,19 @@
     "notFound": "Không tìm thấy",
     "noResult": "Không có dữ liệu",
     "from": "Từ",
-    "to": "Đến"
+    "to": "Đến",
+    "actions": "Hành động",
+    "edit": "Sửa",
+    "delete": "Xoá",
+    "add": "Thêm",
+    "save": "Lưu",
+    "id": "ID",
+    "avatar": "Ảnh đại diện",
+    "name": "Tên",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận lại mật khẩu",
+    "role": "Vai trò"
   },
   "menu": {
     "login": "Đăng nhập",
@@ -61,5 +73,18 @@
     "table": "Bàn phục vụ",
     "dishesRating": "Xếp hạng món ăn",
     "mostRequestedDishes": "Được gọi nhiều nhất"
+  },
+  "accounts": {
+    "title": "Tài khoản",
+    "description": "Quản lý tài khoản nhân viên",
+    "filterEmail": "Lọc dữ liệu theo email...",
+    "createAccount": "Tạo tài khoản",
+    "editTitle": "Cập nhật tài khoản",
+    "changePassword": "Đổi mật khẩu",
+    "newPassword": "Mật khẩu mới",
+    "confirmNewPassword": "Xác nhận mật khẩu mới",
+    "deleteTitle": "Xoá nhân viên?",
+    "deleteDesc": "sẽ bị xoá vĩnh viễn",
+    "selectRole": "Chọn vai trò"
   }
 }

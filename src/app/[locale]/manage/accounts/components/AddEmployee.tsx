@@ -1,4 +1,5 @@
 'use client';
+import { InputForm } from '@/components/_client/Form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,9 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Form, FormField, FormItem } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
 import { handleApiError } from '@/lib/utils';
 import { useCreateEmployee } from '@/queries/useAccount';
@@ -23,6 +22,7 @@ import {
 } from '@/schemaValidations/account.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusCircle, Upload } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 const defaultAccount = {
@@ -31,8 +31,9 @@ const defaultAccount = {
   avatar: undefined,
   password: '',
   confirmPassword: '',
-};
+} as const;
 export default function AddEmployee() {
+  const t = useTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
@@ -41,9 +42,7 @@ export default function AddEmployee() {
     defaultValues: defaultAccount,
   });
   const { setError, reset, handleSubmit } = form;
-
-  const avatar = form.watch('avatar');
-  const name = form.watch('name');
+  const [avatar, name] = form.watch(['avatar', 'name']);
   const previewAvatarFromFile = useMemo(() => {
     if (file) {
       return URL.createObjectURL(file);
@@ -91,16 +90,14 @@ export default function AddEmployee() {
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Tạo tài khoản
+            {t('accounts.createAccount')}
           </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Tạo tài khoản</DialogTitle>
-          <DialogDescription>
-            Các trường tên, email, mật khẩu là bắt buộc
-          </DialogDescription>
+          <DialogTitle>{t('accounts.createAccount')}</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <Form {...form}>
           <form
@@ -142,75 +139,19 @@ export default function AddEmployee() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Tên</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Input id="name" className="w-full" {...field} />
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="email">Email</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Input id="email" className="w-full" {...field} />
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
+              <InputForm name="name" label={t('common.name')} required />
+              <InputForm name="email" label={t('common.email')} required />
+              <InputForm
                 name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="password">Mật khẩu</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Input
-                          id="password"
-                          className="w-full"
-                          type="password"
-                          {...field}
-                        />
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
+                label={t('common.password')}
+                required
+                type="password"
               />
-              <FormField
-                control={form.control}
+              <InputForm
                 name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
-                      <div className="col-span-3 w-full space-y-2">
-                        <Input
-                          id="confirmPassword"
-                          className="w-full"
-                          type="password"
-                          {...field}
-                        />
-                        <FormMessage />
-                      </div>
-                    </div>
-                  </FormItem>
-                )}
+                label={t('common.confirmPassword')}
+                required
+                type="password"
               />
             </div>
           </form>
@@ -221,7 +162,7 @@ export default function AddEmployee() {
             form="add-employee-form"
             isLoading={isCreatePending || isUploadPending}
           >
-            Thêm
+            {t('common.add')}
           </Button>
         </DialogFooter>
       </DialogContent>

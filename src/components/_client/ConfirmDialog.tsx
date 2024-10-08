@@ -17,6 +17,8 @@ type Props = {
   description: ReactNode;
   onClick: () => void;
   isPending: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
 export const ConfirmDialog = ({
@@ -24,10 +26,12 @@ export const ConfirmDialog = ({
   description,
   onClick,
   isPending,
+  onOpenChange,
+  open,
 }: Props) => {
   const t = useTranslations('button');
   return (
-    <AlertDialog>
+    <AlertDialog onOpenChange={onOpenChange} open={open}>
       <AlertDialogTrigger asChild>
         <div className="cursor-pointer text-muted-foreground hover:text-foreground">
           {title}
