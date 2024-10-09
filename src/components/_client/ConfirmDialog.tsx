@@ -12,16 +12,19 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useTranslations } from 'next-intl';
 import { ReactNode } from 'react';
-type Props = {
+export type IDialogProps = {
   title: ReactNode;
   description: ReactNode;
-  onClick: () => void;
-  isPending: boolean;
+  dataTestId: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
-
+type Props = IDialogProps & {
+  onClick: () => void;
+  isPending: boolean;
+};
 export const ConfirmDialog = ({
+  dataTestId,
   title,
   description,
   onClick,
@@ -31,7 +34,11 @@ export const ConfirmDialog = ({
 }: Props) => {
   const t = useTranslations('button');
   return (
-    <AlertDialog onOpenChange={onOpenChange} open={open}>
+    <AlertDialog
+      onOpenChange={onOpenChange}
+      open={open}
+      data-testid={dataTestId}
+    >
       <AlertDialogTrigger asChild>
         <div className="cursor-pointer text-muted-foreground hover:text-foreground">
           {title}
