@@ -14,9 +14,10 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 interface ITableProps<T> {
   table: TableProps<T>;
+  dataTestId?: string;
 }
 
-export function DataTable<T>({ table }: ITableProps<T>) {
+export function DataTable<T>({ table, dataTestId }: ITableProps<T>) {
   const pathname = usePathname();
   const searchParam = useSearchParams();
   const page = searchParam.get('page')
@@ -33,7 +34,7 @@ export function DataTable<T>({ table }: ITableProps<T>) {
 
   return (
     <>
-      <div className="rounded-md border">
+      <div className="rounded-md border" data-testid={dataTestId}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -11,8 +11,8 @@ test.describe('Login page', () => {
 
   test('login native', async ({ page }) => {
     //check content
-    const emailInput = await page.locator('#email');
-    const passwordInput = await page.locator('#password');
+    const emailInput = await page.getByTestId('email');
+    const passwordInput = await page.getByTestId('password');
     const loginBtn = await page.getByRole('button', { name: /login/i });
     await expect(emailInput).toBeVisible();
     await expect(passwordInput).toBeVisible();

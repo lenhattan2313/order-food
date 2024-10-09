@@ -1,3 +1,5 @@
+import envConfig from '@/config';
+import { normalizeUrl } from '@/lib/utils';
 import { Page, Route } from '@playwright/test';
 
 export async function mockApiResponse(
@@ -5,17 +7,25 @@ export async function mockApiResponse(
   urlPattern: string,
   response: Record<string, unknown>,
   status = 200,
-  options?: { headers?: Record<string, string> },
+  options?: {
+    headers?: Record<string, string>;
+    method?: 'POST' | 'GET' | 'DELETE' | 'PUT';
+  },
 ) {
-  await page.route(urlPattern, (route: Route) => {
-    const headers = options?.headers || { 'Content-Type': 'application/json' };
-    route.fulfill({
-      status,
-      contentType: 'application/json',
-      headers,
-      body: JSON.stringify(response),
-    });
-  });
+  await page.route(
+    `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/${normalizeUrl(urlPattern)}`,
+    (route: Route) => {
+      const headers = options?.headers || {
+        'Content-Type': 'application/json',
+      };
+      route.fulfill({
+        status,
+        contentType: 'application/json',
+        headers,
+        body: JSON.stringify(response),
+      });
+    },
+  );
 }
 
 export async function mockMultipleApiResponses(

@@ -26,7 +26,7 @@ export const FormInput = ({ label, name, id, ...inputProps }: Props) => {
           <div className="grid gap-2">
             <FormLabel label={label} required={inputProps.required} />
             <FormControl>
-              <Input {...field} {...inputProps} />
+              <Input {...inputProps} {...field} />
             </FormControl>
             <FormMessage />
           </div>

@@ -59,12 +59,13 @@ export default function AccountTable() {
               table.getColumn('email')?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
+            data-testid="filter-box"
           />
           <div className="ml-auto flex items-center gap-2">
             <AddEmployee />
           </div>
         </div>
-        <DataTable table={table} />
+        <DataTable table={table} dataTestId="account-table" />
       </div>
     </AccountProvider>
   );

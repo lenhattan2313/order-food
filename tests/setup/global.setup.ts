@@ -9,9 +9,13 @@ async function globalSetup() {
   const page = await context.newPage();
   // Perform authentication steps. Replace these actions with your own.
   await page.goto('http://localhost:3000/en/login');
-  const emailInput = await page.locator('#email');
-  const passwordInput = await page.locator('#password');
+  const emailInput = await page.getByTestId('email');
+  const passwordInput = await page.getByTestId('password');
   const loginBtn = await page.getByRole('button', { name: /login/i });
+
+  await expect(emailInput).toBeVisible();
+  await expect(passwordInput).toBeVisible();
+  await expect(loginBtn).toBeVisible();
   await emailInput.fill(process.env.NEXT_ACCOUNT_USER ?? '');
   await passwordInput.fill(process.env.NEXT_ACCOUNT_PASSWORD ?? '');
   await loginBtn.click();

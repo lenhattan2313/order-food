@@ -1,5 +1,5 @@
 'use client';
-import { InputForm } from '@/components/_client/Form';
+import { FormInput } from '@/components/_client/Form';
 import { useAuth } from '@/components/provider/auth-provider';
 import { Button } from '@/components/ui/button';
 import {
@@ -80,21 +80,21 @@ function LoginForm() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid gap-4">
-              <InputForm
-                id="email"
+              <FormInput
                 name="email"
                 type="email"
                 required
                 placeholder="m@example.com"
                 label={t('email')}
                 autoFocus
+                data-testid="email"
               />
-              <InputForm
-                id="password"
+              <FormInput
                 name="password"
                 required
                 label={t('password')}
                 type="password"
+                data-testid="password"
               />
 
               <Button type="submit" className="w-full" isLoading={isPending}>

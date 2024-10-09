@@ -1,5 +1,5 @@
 'use client';
-import { InputForm } from '@/components/_client/Form';
+import { FormInput } from '@/components/_client/Form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -87,14 +87,17 @@ export default function AddEmployee() {
   return (
     <Dialog onOpenChange={handleReset} open={open}>
       <DialogTrigger asChild>
-        <Button size="sm" className="h-7 gap-1">
+        <Button size="sm" className="h-7 gap-1" data-testid="add-button">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
             {t('accounts.createAccount')}
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
+      <DialogContent
+        className="sm:max-w-[600px] max-h-screen overflow-auto"
+        data-testid="dialog-add-employee"
+      >
         <DialogHeader>
           <DialogTitle>{t('accounts.createAccount')}</DialogTitle>
           <DialogDescription />
@@ -139,19 +142,31 @@ export default function AddEmployee() {
                 )}
               />
 
-              <InputForm name="name" label={t('common.name')} required />
-              <InputForm name="email" label={t('common.email')} required />
-              <InputForm
+              <FormInput
+                name="name"
+                label={t('common.name')}
+                required
+                data-testid="name"
+              />
+              <FormInput
+                name="email"
+                label={t('common.email')}
+                required
+                data-testid="email"
+              />
+              <FormInput
                 name="password"
                 label={t('common.password')}
                 required
                 type="password"
+                data-testid="password"
               />
-              <InputForm
+              <FormInput
                 name="confirmPassword"
                 label={t('common.confirmPassword')}
                 required
                 type="password"
+                data-testid="confirmPassword"
               />
             </div>
           </form>

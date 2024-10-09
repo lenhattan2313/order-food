@@ -1,5 +1,5 @@
 'use client';
-import { FormSelect, FormSwitch, InputForm } from '@/components/_client/Form';
+import { FormSelect, FormSwitch, FormInput } from '@/components/_client/Form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -159,8 +159,8 @@ export default function EditEmployee() {
                   </FormItem>
                 )}
               />
-              <InputForm name="name" label={t('common.name')} required />
-              <InputForm name="email" label={t('common.email')} required />
+              <FormInput name="name" label={t('common.name')} required />
+              <FormInput name="email" label={t('common.email')} required />
               <FormSelect
                 name="role"
                 label={t('common.role')}
@@ -175,13 +175,13 @@ export default function EditEmployee() {
 
               {changePassword && (
                 <>
-                  <InputForm
+                  <FormInput
                     name="password"
                     label={t('accounts.newPassword')}
                     required
                     type="password"
                   />
-                  <InputForm
+                  <FormInput
                     name="confirmPassword"
                     label={t('accounts.confirmNewPassword')}
                     required
