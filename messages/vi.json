@@ -30,6 +30,7 @@
     "role": "Vai trò"
   },
   "menu": {
+    "shop": "Cửa hàng",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "dish": "Món ăn",

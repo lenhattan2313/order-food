@@ -71,7 +71,7 @@ const menuItems: {
   hideWhenLogin?: boolean;
 }[] = [
   {
-    name: 'menu',
+    name: 'shop',
     href: '/',
   },
   {

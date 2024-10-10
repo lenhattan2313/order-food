@@ -24,7 +24,7 @@ export const getTableLink = ({
 }) => {
   return (
     envConfig.NEXT_PUBLIC_BASE_URL +
-    `${defaultLocale}/tables/` +
+    `/${defaultLocale}/tables/` +
     tableNumber +
     '?token=' +
     token

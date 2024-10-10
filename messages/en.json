@@ -30,6 +30,7 @@
     "role": "Role"
   },
   "menu": {
+    "shop": "Shop",
     "login": "Login",
     "logout": "Logout",
     "dish": "Dish",
