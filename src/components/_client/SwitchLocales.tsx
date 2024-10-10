@@ -25,7 +25,7 @@ export const SwitchLocales = () => {
       }}
       value={locale}
     >
-      <SelectTrigger className="w-[120px]">
+      <SelectTrigger className="w-[120px]" aria-label="switch-locale">
         <SelectValue placeholder="Languages" />
       </SelectTrigger>
       <SelectContent>

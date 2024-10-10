@@ -2,6 +2,7 @@ import { Page, expect, test } from '@playwright/test';
 import { mockApiResponse } from '../../utils/mockUtils';
 import { accountResponse, newAccountResponse } from './data.mock';
 import path from 'path';
+import { accessibilityTest } from '../../fixture';
 
 const myTest = test.extend<{ webApp: Page }>({
   webApp: async ({ page }, use) => {
@@ -95,3 +96,16 @@ myTest('delete account', async ({ webApp }) => {
 
   await expect(actionsIcon).not.toBeVisible();
 });
+accessibilityTest(
+  'accessibility check',
+  async ({ page, axeBuilder }, testInfo) => {
+    await page.goto('./manage/accounts');
+
+    const { violations } = await axeBuilder().analyze();
+    await testInfo.attach('accessibility-scan-results', {
+      body: JSON.stringify(violations, null, 2),
+      contentType: 'application/json',
+    });
+    await expect(violations).toHaveLength(0);
+  },
+);

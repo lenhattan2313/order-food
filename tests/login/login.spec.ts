@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { accessibilityTest } from '../fixture';
 test.use({ storageState: { cookies: [], origins: [] } });
 test.describe('Login page', () => {
   test.beforeEach(async ({ page }) => {
@@ -43,3 +44,16 @@ test.describe('Login page', () => {
     await expect(page).toHaveURL('./manage/dashboard');
   });
 });
+accessibilityTest(
+  'accessibility check',
+  async ({ page, axeBuilder }, testInfo) => {
+    await page.goto('./login');
+
+    const { violations } = await axeBuilder().analyze();
+    await testInfo.attach('accessibility-scan-results', {
+      body: JSON.stringify(violations, null, 2),
+      contentType: 'application/json',
+    });
+    await expect(violations).toHaveLength(0);
+  },
+);

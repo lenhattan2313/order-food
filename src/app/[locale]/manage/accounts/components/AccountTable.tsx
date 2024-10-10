@@ -84,7 +84,7 @@ export const useColumns = (): ColumnDef<AccountType>[] => {
       cell: ({ row }) => (
         <div>
           <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
-            <AvatarImage src={row.getValue('avatar')} />
+            <AvatarImage src={row.getValue('avatar')} alt={row.original.name} />
             <AvatarFallback className="rounded-none">
               {row.original.name}
             </AvatarFallback>
@@ -119,6 +119,7 @@ export const useColumns = (): ColumnDef<AccountType>[] => {
     {
       id: 'actions',
       enableHiding: false,
+      header: t('common.actions'),
       cell: function Actions({ row }) {
         const { setEmployeeIdEdit, setEmployeeDelete } = useAccountContext();
         const { role } = useAuth();

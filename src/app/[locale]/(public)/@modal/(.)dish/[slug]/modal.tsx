@@ -22,9 +22,8 @@ const Modal = ({
         setOpen(!value);
         router.back();
       }}
-      data-testid={dataTestId}
     >
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" data-testid={dataTestId}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
