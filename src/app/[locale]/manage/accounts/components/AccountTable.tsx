@@ -132,7 +132,11 @@ export const useColumns = (): ColumnDef<AccountType>[] => {
         return (
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0"
+                data-testid={`action-button-${row.original.id}`}
+              >
                 <span className="sr-only">Open menu</span>
                 <DotsHorizontalIcon className="h-4 w-4" />
               </Button>

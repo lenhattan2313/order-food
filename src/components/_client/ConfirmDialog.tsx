@@ -15,7 +15,6 @@ import { ReactNode } from 'react';
 export type IDialogProps = {
   title: ReactNode;
   description: ReactNode;
-  dataTestId: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
@@ -24,7 +23,6 @@ type Props = IDialogProps & {
   isPending: boolean;
 };
 export const ConfirmDialog = ({
-  dataTestId,
   title,
   description,
   onClick,
@@ -34,11 +32,7 @@ export const ConfirmDialog = ({
 }: Props) => {
   const t = useTranslations('button');
   return (
-    <AlertDialog
-      onOpenChange={onOpenChange}
-      open={open}
-      data-testid={dataTestId}
-    >
+    <AlertDialog onOpenChange={onOpenChange} open={open}>
       <AlertDialogTrigger asChild>
         <div className="cursor-pointer text-muted-foreground hover:text-foreground">
           {title}

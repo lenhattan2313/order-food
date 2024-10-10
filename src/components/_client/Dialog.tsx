@@ -16,7 +16,6 @@ type Props = IDialogProps & {
   footer?: ReactNode[];
 };
 export const Dialog: FC<Props> = ({
-  dataTestId,
   title,
   description,
   onOpenChange,
@@ -25,11 +24,7 @@ export const Dialog: FC<Props> = ({
 }) => {
   const t = useTranslations('button');
   return (
-    <DialogShad
-      open={open}
-      onOpenChange={onOpenChange}
-      data-testid={dataTestId}
-    >
+    <DialogShad open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

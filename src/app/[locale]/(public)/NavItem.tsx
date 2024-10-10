@@ -50,7 +50,6 @@ export default function NavItems({ className }: { className?: string }) {
   if (role) {
     menu.push(
       <ConfirmDialog
-        dataTestId="dialog-logout"
         key="logout"
         title={t('logout')}
         description={

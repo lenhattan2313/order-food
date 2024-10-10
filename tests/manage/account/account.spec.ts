@@ -1,8 +1,9 @@
-import { expect, test } from '@playwright/test';
+import { Page, expect, test } from '@playwright/test';
 import { mockApiResponse } from '../../utils/mockUtils';
 import { accountResponse, newAccountResponse } from './data.mock';
+import path from 'path';
 
-const myTest = test.extend({
+const myTest = test.extend<{ webApp: Page }>({
   webApp: async ({ page }, use) => {
     await mockApiResponse(page, '/accounts', accountResponse);
     // show content page
@@ -47,6 +48,10 @@ myTest('add new account', async ({ webApp }) => {
   await expect(dialog).toBeVisible();
 
   //fill data
+  const file = await webApp.locator('input[type="file"]');
+  const filePath = path.resolve(__dirname, './pho.jpeg');
+
+  await file.setInputFiles(filePath);
   await webApp.getByTestId('name').fill('test');
   await webApp.getByTestId('email').fill('tan@gmail.com');
   await webApp.getByTestId('password').fill('123123');
@@ -65,4 +70,28 @@ myTest('add new account', async ({ webApp }) => {
     exact: true,
   });
   await expect(firstRow).toBeVisible();
+});
+
+myTest('delete account', async ({ webApp }) => {
+  //find actions button
+  const actionsIcon = await webApp.getByTestId('action-button-20');
+  await expect(actionsIcon).toBeVisible();
+
+  //click delete menu
+  await actionsIcon.click();
+  const deleteItem = await webApp.getByRole('menuitem', { name: /delete/i });
+  await deleteItem.click();
+  const dialog = await webApp.getByLabel('Delete account?');
+  await expect(dialog).toBeVisible();
+  await mockApiResponse(webApp, '/accounts/detail/20', {});
+  await webApp.getByRole('button', { name: /continue/i }).click();
+  //update api get
+  const newAccountList = {
+    ...accountResponse,
+    data: accountResponse.data.slice(1),
+  };
+  await mockApiResponse(webApp, '/accounts', newAccountList);
+  await expect(dialog).not.toBeVisible();
+
+  await expect(actionsIcon).not.toBeVisible();
 });

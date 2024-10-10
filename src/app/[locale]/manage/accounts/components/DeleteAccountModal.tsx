@@ -23,7 +23,6 @@ export function DeleteAccountModal() {
   }
   return (
     <Dialog
-      dataTestId="dialog-delete-account"
       title={t('deleteTitle')}
       description={
         <>
