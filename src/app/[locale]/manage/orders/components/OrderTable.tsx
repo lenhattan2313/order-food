@@ -254,7 +254,7 @@ export default function OrderTable() {
         tableList={tableList}
         servingGuestByTableNumber={servingGuestByTableNumber}
       />
-      <DataTable table={table} />
+      <DataTable table={table} dataTestId="table-order" />
     </div>
   );
 }
