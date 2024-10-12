@@ -12,12 +12,24 @@ import { usePathname } from '@/navigation';
 import { Table as TableProps, flexRender } from '@tanstack/react-table';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
+
+type IPagination = {
+  onClick?: (page: number) => void;
+  isButton?: boolean;
+};
 interface ITableProps<T> {
   table: TableProps<T>;
   dataTestId?: string;
+  onRowClick?: (dish: T) => void;
+  pagination?: IPagination;
 }
 
-export function DataTable<T>({ table, dataTestId }: ITableProps<T>) {
+export function DataTable<T>({
+  table,
+  dataTestId,
+  onRowClick,
+  pagination,
+}: ITableProps<T>) {
   const pathname = usePathname();
   const searchParam = useSearchParams();
   const page = searchParam.get('page')
@@ -60,6 +72,7 @@ export function DataTable<T>({ table, dataTestId }: ITableProps<T>) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onClick={() => onRowClick && onRowClick(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -93,7 +106,9 @@ export function DataTable<T>({ table, dataTestId }: ITableProps<T>) {
           <AutoPagination
             page={table.getState().pagination.pageIndex + 1}
             pageSize={table.getPageCount()}
-            pathname={pathname}
+            pathname={pagination?.onClick ? undefined : pathname}
+            onClick={pagination?.onClick}
+            isButton={pagination?.isButton}
           />
         </div>
       </div>

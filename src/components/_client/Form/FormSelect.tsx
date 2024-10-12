@@ -1,8 +1,8 @@
+import { FormLabel } from '@/components/_client/Form';
 import {
   FormField,
   FormItem,
   FormMessage,
-  FormLabel,
   FormControl,
 } from '@/components/ui/form';
 import {
@@ -22,7 +22,7 @@ export type IOption = {
 type Props = SelectProps & {
   label: ReactNode;
   name: string;
-  placeholder: string;
+  placeholder?: string;
   options: IOption[];
 };
 
@@ -41,23 +41,21 @@ export const FormSelect = ({
       render={({ field }) => (
         <FormItem>
           <div className="grid gap-2">
-            <FormLabel>Email</FormLabel>
+            <FormLabel label={label} />
             <Select
               onValueChange={field.onChange}
-              value={field.value?.toString()}
+              defaultValue={field.value}
+              value={field.value}
               {...selectProps}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger aria-label={name}>
                   <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
                 {options.map((option) => (
-                  <SelectItem
-                    key={option.value}
-                    value={option.value.toString()}
-                  >
+                  <SelectItem key={option.value} value={option.value as string}>
                     {option.label}
                   </SelectItem>
                 ))}

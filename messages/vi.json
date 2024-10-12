@@ -27,7 +27,16 @@
     "email": "Email",
     "password": "Mật khẩu",
     "confirmPassword": "Xác nhận lại mật khẩu",
-    "role": "Vai trò"
+    "role": "Vai trò",
+    "dish": "Món ăn",
+    "price": "Giá",
+    "status": "Trạng thái",
+    "quantity": "Số lượng",
+    "tableNumber": "Số bàn",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "guest": "Khách hàng",
+    "capacity": "Sức chứa"
   },
   "menu": {
     "shop": "Cửa hàng",
@@ -44,6 +53,7 @@
     "term": "Điều khoản dịch vụ",
     "policy": "Chính sách bảo mật",
     "about": "Về chúng tôi",
+    "order": "Đơn hàng",
     "title": "Tannrest"
   },
   "button": {
@@ -87,5 +97,46 @@
     "deleteTitle": "Xoá nhân viên?",
     "deleteDesc": "sẽ bị xoá vĩnh viễn",
     "selectRole": "Chọn vai trò"
+  },
+  "order": {
+    "title": "Đơn hàng",
+    "description": "Quản lý đơn hàng",
+    "createOrder": "Tạo đơn hàng",
+    "newGuest": "Khách Hàng mới",
+    "guestName": "Tên Khách Hàng",
+    "selectTable": "Chọn bàn",
+    "guestSelected": "Khách đã chọn",
+    "table": "Bàn",
+    "outOfStock": "Hết hàng",
+    "placeOrder": "Đặt hàng",
+    "dish": "Món",
+    "pickGuest": "Hãy chọn một khách hàng",
+    "change": "Thay đổi",
+    "selectDish": "Chọn món ăn",
+    "filterName": "Lọc tên",
+    "editOrder": "Cập nhật đơn hàng",
+    "hasBeenDeleted": "Đã bị xoá",
+    "handler": "Người xử lí",
+    "createdUpdatedAt": "Tạo/Cập nhật",
+    "unpaid": "Chưa thanh toán",
+    "paid": "Đã thanh toán",
+    "paidAll": "Thanh toán tất cả",
+    "guestTable": "Khách đang ngồi tại bàn",
+    "serving": "Đang phục vụ",
+    "guest": "Khách hàng",
+    "order": "đơn",
+    "updatedBy": "vừa được cập nhật bởi",
+    "paidSuccessfully": "vừa thanh toán thành công",
+    "pickTable": "Chọn bàn",
+    "tableNumber": "Số bàn",
+    "Delivered": "Đã phục vụ",
+    "Paid": "Đã thanh toán",
+    "Pending": "Chờ xử lý",
+    "Processing": "Đang nấu",
+    "Rejected": "Từ chối"
+  },
+  "guest": {
+    "selectGuest": "Chọn khách",
+    "nameOrId": "Tên hoặc ID"
   }
 }

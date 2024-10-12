@@ -15,6 +15,7 @@ export default function Quantity({ onChange, value }: IQuantityProps) {
         className="h-6 w-6 p-0"
         disabled={value === 0}
         onClick={() => onChange(value - 1)}
+        aria-label="minus"
       >
         <Minus className="w-3 h-3" />
       </Button>
@@ -31,8 +32,14 @@ export default function Quantity({ onChange, value }: IQuantityProps) {
           onChange(value);
         }}
         value={value}
+        aria-label="quantity"
       />
-      <Button className="h-6 w-6 p-0" onClick={() => onChange(value + 1)}>
+
+      <Button
+        className="h-6 w-6 p-0"
+        onClick={() => onChange(value + 1)}
+        aria-label="plus"
+      >
         <Plus className="w-3 h-3" />
       </Button>
     </div>
