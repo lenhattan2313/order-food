@@ -19,6 +19,7 @@ async function globalSetup() {
   await emailInput.fill(process.env.NEXT_ACCOUNT_USER ?? '');
   await passwordInput.fill(process.env.NEXT_ACCOUNT_PASSWORD ?? '');
   await loginBtn.click();
+  await loginBtn.waitFor();
   // Wait until the page receives the cookies.
   //
   // Sometimes login flow sets cookies in the process of several redirects.

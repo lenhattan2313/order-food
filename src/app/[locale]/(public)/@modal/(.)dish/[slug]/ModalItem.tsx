@@ -73,7 +73,6 @@ const ModalItem = async ({ params: { slug, locale } }: DishParams) => {
   const data = response.data;
   return (
     <div className="flex gap-4 w flex-col items-center">
-      <h2 role="heading">Dish detail</h2>
       <div className="flex-shrink-0">
         <Image
           width={300}
