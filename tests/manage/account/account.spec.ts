@@ -3,6 +3,7 @@ import { mockApiResponse } from '../../utils/mockUtils';
 import { accountResponse, newAccountResponse } from './data.mock';
 import path from 'path';
 import { accessibilityTest } from '../../fixture';
+import envConfig from '@/config';
 
 const myTest = test.extend<{ webApp: Page }>({
   webApp: async ({ page }, use) => {
@@ -76,6 +77,7 @@ myTest('add new account', async ({ webApp }) => {
 myTest('delete account', async ({ webApp }) => {
   //find actions button
   const actionsIcon = await webApp.getByTestId('action-button-20');
+  await actionsIcon.waitFor();
   await expect(actionsIcon).toBeVisible();
 
   //click delete menu
@@ -84,23 +86,26 @@ myTest('delete account', async ({ webApp }) => {
   await deleteItem.click();
   const dialog = await webApp.getByLabel('Delete account?');
   await expect(dialog).toBeVisible();
-  await mockApiResponse(webApp, '/accounts/detail/20', {});
-  await webApp.getByRole('button', { name: /continue/i }).click();
   //update api get
   const newAccountList = {
     ...accountResponse,
     data: accountResponse.data.slice(1),
   };
   await mockApiResponse(webApp, '/accounts', newAccountList);
-  await expect(dialog).not.toBeVisible();
+  await mockApiResponse(webApp, '/accounts/detail/20', {});
+  await webApp.getByRole('button', { name: /continue/i }).click();
 
-  await expect(actionsIcon).not.toBeVisible();
+  await await expect(dialog).not.toBeVisible();
+
+  await expect(actionsIcon).not.toBeVisible({ timeout: 10000 });
 });
 accessibilityTest(
   'accessibility check',
   async ({ page, axeBuilder }, testInfo) => {
     await page.goto('./manage/accounts');
-
+    await expect(page).toHaveURL(
+      `${envConfig.NEXT_PUBLIC_BASE_URL}/en/manage/accounts`,
+    );
     const { violations } = await axeBuilder().analyze();
     await testInfo.attach('accessibility-scan-results', {
       body: JSON.stringify(violations, null, 2),

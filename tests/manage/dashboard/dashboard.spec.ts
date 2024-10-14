@@ -2,13 +2,14 @@ import { expect, test } from '@playwright/test';
 import { mockApiResponse } from '../../utils/mockUtils';
 import { responseDashboard } from './data.mock';
 import { accessibilityTest } from '../../fixture';
+import envConfig from '@/config';
 
 test.describe('Dashboard page', () => {
   test('display content', async ({ page }) => {
     // show content page
     await mockApiResponse(
       page,
-      '/indicators/dashboard?fromDate=2024-10-09T17%3A00%3A00.000Z&toDate=2024-10-10T16%3A59%3A59.999Z',
+      '/indicators/dashboard?fromDate=2024-10-09T17%3A00%3A00.000Z&toDate=2024-10-10T16%3A59%3A00.000Z',
       responseDashboard,
     );
     await page.goto('./manage/dashboard');
@@ -39,7 +40,9 @@ accessibilityTest(
   'accessibility check',
   async ({ page, axeBuilder }, testInfo) => {
     await page.goto('./manage/dashboard');
-
+    await expect(page).toHaveURL(
+      `${envConfig.NEXT_PUBLIC_BASE_URL}/en/manage/dashboard`,
+    );
     const { violations } = await axeBuilder().analyze();
     await testInfo.attach('accessibility-scan-results', {
       body: JSON.stringify(violations, null, 2),

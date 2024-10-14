@@ -2,6 +2,7 @@ import test, { Page, expect } from '@playwright/test';
 import { accessibilityTest } from '../../fixture';
 import { mockMultipleApiResponses } from '../../utils/mockUtils';
 import { dishesData, orderData, tableData } from './data.mock';
+import envConfig from '@/config';
 
 const myTest = test.extend<{ webApp: Page }>({
   webApp: async ({ page }, use) => {
@@ -11,7 +12,7 @@ const myTest = test.extend<{ webApp: Page }>({
         response: dishesData,
       },
       {
-        url: '/orders?fromDate=2024-10-11T17%3A00%3A00.000Z&toDate=2024-10-12T16%3A59%3A59.999Z',
+        url: '/orders?fromDate=2024-10-09T17%3A00%3A00.000Z&toDate=2024-10-10T16%3A59%3A00.000Z',
         response: orderData,
       },
       {
@@ -32,7 +33,8 @@ myTest('display content', async ({ webApp }) => {
   await myTest.step('check table data', async () => {
     const table = await webApp.getByTestId('table-order');
     await expect(table).toBeVisible();
-
+    await webApp.getByPlaceholder('From').fill('2024-10-10T00:00');
+    await webApp.getByPlaceholder('To').fill('2024-10-10T23:59');
     //check data
     const guestName = await webApp.getByRole('button', { name: 'Tan(#123)' });
     await expect(guestName).toBeVisible();
@@ -43,7 +45,9 @@ accessibilityTest(
   'accessibility check',
   async ({ page, axeBuilder }, testInfo) => {
     await page.goto('./manage/orders');
-
+    await expect(page).toHaveURL(
+      `${envConfig.NEXT_PUBLIC_BASE_URL}/en/manage/orders`,
+    );
     const { violations } = await axeBuilder().analyze();
     await testInfo.attach('accessibility-scan-results', {
       body: JSON.stringify(violations, null, 2),

@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { baseOpenGraph } from '@/shareMetadata';
 import { cache } from 'react';
 import NoResult from '@/components/_client/NoResult';
-const getDetail = cache((id: number) =>
+export const getDetail = cache((id: number) =>
   wrapServerApi(() => dishActions.getDishDetail({ id })),
 );
 export type DishParams = { params: { slug: string; locale: string } };
@@ -63,7 +63,7 @@ export async function generateStaticParams() {
   );
 }
 
-const DishDetail = async ({ params: { slug, locale } }: DishParams) => {
+const ModalItem = async ({ params: { slug, locale } }: DishParams) => {
   unstable_setRequestLocale(locale);
   const id = getIdFromSlugUrl(slug);
   const response = await getDetail(id);
@@ -89,4 +89,4 @@ const DishDetail = async ({ params: { slug, locale } }: DishParams) => {
   );
 };
 
-export default DishDetail;
+export default ModalItem;

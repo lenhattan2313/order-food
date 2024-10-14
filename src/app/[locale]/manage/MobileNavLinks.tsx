@@ -31,7 +31,12 @@ export default function MobileNavLinks() {
         <VisuallyHidden.Root>Menu</VisuallyHidden.Root>
       </SheetTitle>
       <SheetTrigger asChild>
-        <Button size="icon" variant="outline" className="sm:hidden">
+        <Button
+          size="icon"
+          variant="outline"
+          className="sm:hidden"
+          aria-label="toggle menu"
+        >
           <PanelLeft className="h-5 w-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>

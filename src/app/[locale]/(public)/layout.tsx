@@ -49,6 +49,7 @@ export default async function Layout({
                 variant="outline"
                 size="icon"
                 className="shrink-0 md:hidden"
+                aria-label="toggle menu"
               >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>

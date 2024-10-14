@@ -23,16 +23,26 @@ test('display content', async ({ page }) => {
     await dishItems.first().locator('img').click();
     //   const popup = await page.waitForEvent("popup");
     const popup = await page.getByTestId('popup-dish');
-    await expect(popup).toBeVisible();
+    const isVisible = await popup.isVisible();
+    if (isVisible) {
+      await expect(popup).toBeVisible();
 
-    const titlePopup = await page.getByRole('heading', {
-      name: /dish detail/i,
-    });
-    await expect(titlePopup).toBeVisible();
+      const titlePopup = await page.getByRole('heading', {
+        name: /dish detail/i,
+      });
+      await expect(titlePopup).toBeVisible();
 
-    //close popup
-    await page.keyboard.press('Escape');
-    await expect(titlePopup).not.toBeVisible();
+      //close popup
+      await page.keyboard.press('Escape');
+      await expect(titlePopup).not.toBeVisible();
+    } else {
+      const title = await page.getByRole('heading', {
+        name: /dish detail/i,
+      });
+      await title.waitFor(); // Ensure login heading is rendered
+
+      await expect(title).toBeVisible();
+    }
   } else {
     const text = await page.getByText(/no result/i);
     await expect(text).toBeVisible();

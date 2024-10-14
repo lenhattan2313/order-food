@@ -47,6 +47,7 @@ export default function DropdownAvatar() {
           variant="outline"
           size="icon"
           className="overflow-hidden rounded-full"
+          aria-label="avatar"
         >
           <Avatar>
             <AvatarImage
