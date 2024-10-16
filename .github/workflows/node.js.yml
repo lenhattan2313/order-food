@@ -30,8 +30,36 @@ jobs:
         with:
           node-version: 18.x
           cache: 'npm'
+
+      # Cache node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: node-modules-cache
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+
+      # Cache Playwright browsers
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - run: npm ci
       - run: npm run build --if-present
+      - name: Start Next.js server
+        run: npm run start
+      - name: Wait for Next.js to start
+        run: |
+          echo "Waiting for Next.js to start..."
+          timeout 60 bash -c 'until curl -s http://localhost:3000 > /dev/null; do echo "Waiting..."; sleep 5; done'
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
