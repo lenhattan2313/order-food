@@ -4,7 +4,7 @@ import path from 'path';
 
 const authFile = path.join(__dirname, '../../playwright/.auth/user.json');
 async function globalSetup() {
-  const browsers = await chromium.launch({ headless: false });
+  const browsers = await chromium.launch();
   const context = await browsers.newContext();
   const page = await context.newPage();
   // Perform authentication steps. Replace these actions with your own.
