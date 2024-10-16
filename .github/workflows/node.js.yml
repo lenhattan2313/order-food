@@ -13,21 +13,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     env:
       NEXT_PUBLIC_API_ENDPOINT: ${{ vars.NEXT_PUBLIC_API_ENDPOINT }}
       NEXT_PUBLIC_BASE_URL: ${{ vars.NEXT_PUBLIC_API_ENDPOINT }}
       NEXT_ACCOUNT_USER: ${{ secrets.NEXT_ACCOUNT_USER }}
       NEXT_ACCOUNT_PASSWORD: ${{ secrets.NEXT_ACCOUNT_PASSWORD }}
+      NEXT_AWS_REGION: ${{ secrets.NEXT_AWS_REGION }}
+      NEXT_AWS_ACCESS_KEY_ID: ${{ secrets.NEXT_AWS_ACCESS_KEY_ID }}
+      NEXT_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEXT_AWS_SECRET_ACCESS_KEY }}
+      NEXT_AWS_S3_BUCKET_NAME: ${{ secrets.NEXT_AWS_S3_BUCKET_NAME }}
+      NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE: ${{ secrets.NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE }}
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
           cache: 'npm'
       - run: npm ci
       - run: npm run build --if-present
