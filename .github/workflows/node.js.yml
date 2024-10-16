@@ -5,27 +5,34 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_ENDPOINT: http://localhost:4000
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
+      # NEXT_CLOUDFRONT_KEYPAIR_ID:
+      # NEXT_CLOUDFRONT_PRIVATE_KEY:
 
+      NEXT_ACCOUNT_USER: admin@order.com
+      NEXT_ACCOUNT_PASSWORD: 123456
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
