@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "playwright test --ui"
+    "test": "playwright test"
   },
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.662.0",
