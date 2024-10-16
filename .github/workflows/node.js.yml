@@ -17,6 +17,11 @@ jobs:
       matrix:
         node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+      NEXT_PUBLIC_API_ENDPOINT: ${{ vars.NEXT_PUBLIC_API_ENDPOINT }}
+      NEXT_PUBLIC_BASE_URL: ${{ vars.NEXT_PUBLIC_API_ENDPOINT }}
+      NEXT_ACCOUNT_USER: ${{ secrets.NEXT_ACCOUNT_USER }}
+      NEXT_ACCOUNT_PASSWORD: ${{ secrets.NEXT_ACCOUNT_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -25,5 +30,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
-      # - run: npm run build --if-present
+      - run: npm run build --if-present
       - run: npm test

@@ -35,6 +35,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api-bigboy.duthanhduoc.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
