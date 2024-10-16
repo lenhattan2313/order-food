@@ -95,6 +95,6 @@ export const useOrderService = (orderList: GetOrdersResType['data']) => {
         ? result.orderObjectByGuestId
         : undefined,
     );
-  }, [result]);
+  }, [result, setOrderObjectByGuestId]);
   return result;
 };

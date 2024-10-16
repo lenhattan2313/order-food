@@ -61,7 +61,7 @@ export function useTable<T>({
             },
           }))
         : columns,
-    [isPending],
+    [isPending, skeleton, columns],
   );
   const table = useReactTable({
     data,

@@ -35,14 +35,17 @@ export const OrderProvider: FC<PropsWithChildren> = ({ children }) => {
     OrderObjectByGuestID | undefined
   >();
   const { mutateAsync } = useUpdateOrder();
-  const changeStatus = useCallback(async (body: UpdateOrderType) => {
-    try {
-      const { message } = await mutateAsync(body);
-      toast({ description: message });
-    } catch (error) {
-      handleApiError(error);
-    }
-  }, []);
+  const changeStatus = useCallback(
+    async (body: UpdateOrderType) => {
+      try {
+        const { message } = await mutateAsync(body);
+        toast({ description: message });
+      } catch (error) {
+        handleApiError(error);
+      }
+    },
+    [mutateAsync],
+  );
   return (
     <OrderContext.Provider
       value={{

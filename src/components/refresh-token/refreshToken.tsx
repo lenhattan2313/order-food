@@ -46,6 +46,6 @@ export default function RefreshToken() {
 
       socket.off(SOCKET_EVENT.REFRESH_TOKEN, onRefreshTokenSocket);
     };
-  }, [pathname, router]);
+  }, [pathname, router, setRole]);
   return null;
 }

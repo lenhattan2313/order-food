@@ -7,9 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getTranslations } from 'next-intl/server';
-export default async function Login() {
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+export default async function Login({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
   const t = await getTranslations('login');
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="mx-auto max-w-sm">

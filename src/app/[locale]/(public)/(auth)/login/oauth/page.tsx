@@ -40,7 +40,7 @@ function OAuth() {
         router.push('/login');
       });
     isFirstRender.current = true;
-  }, [searchParams]);
+  }, [searchParams, mutateAsync, router, setRole]);
   return <Spinner />;
 }
 

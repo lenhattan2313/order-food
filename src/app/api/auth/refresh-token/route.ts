@@ -16,7 +16,6 @@ export async function POST(_request: Request) {
         { status: StatusCodes.UNAUTHORIZED },
       );
     }
-    console.log('refreshToken', refreshToken);
     const response = await authActions.refreshToken({ refreshToken });
     const {
       data: { accessToken, refreshToken: refreshTokenNew },

@@ -33,7 +33,7 @@ export default function DropdownAvatar() {
     } catch (error) {
       handleApiError(error);
     }
-  }, []);
+  }, [setRole, router, mutateAsync]);
   useEffect(() => {
     socket.on('logout', handleLogout);
     return () => {

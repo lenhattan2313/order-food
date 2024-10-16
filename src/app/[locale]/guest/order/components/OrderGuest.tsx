@@ -15,6 +15,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 export default function Order() {
   const [orders, setOrders] = useState<GuestGetOrdersResType['data']>([]);
+  const { data, isPending, refetch } = useGuestGetOrder();
+
   useEffect(() => {
     function handleRefetchStatus() {
       refetch();
@@ -43,8 +45,7 @@ export default function Order() {
       socket.off(SOCKET_EVENT.UPDATE_ORDER, handleRefetchStatus);
       socket.off(SOCKET_EVENT.PAYMENT, handlePayment);
     };
-  }, []);
-  const { data, isPending, refetch } = useGuestGetOrder();
+  }, [refetch]);
   useMemo(() => {
     if (data) {
       setOrders(data.data);

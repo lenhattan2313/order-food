@@ -137,7 +137,7 @@ export default function OrderTable() {
       socket.off(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
       socket.off(SOCKET_EVENT.PAYMENT, handlePayment);
     };
-  }, []);
+  }, [refetchGetOrderList, t]);
   return (
     <div className="w-full">
       <EditOrder />

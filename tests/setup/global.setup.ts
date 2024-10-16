@@ -28,7 +28,6 @@ async function globalSetup() {
     `${envConfig.NEXT_PUBLIC_BASE_URL}/en/manage/dashboard`,
   );
   // End of authentication steps.
-  console.log(authFile);
   await page.context().storageState({ path: authFile });
   await browsers.close();
 }
