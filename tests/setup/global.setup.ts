@@ -26,6 +26,7 @@ async function globalSetup() {
 
   await page.waitForURL(
     `${envConfig.NEXT_PUBLIC_BASE_URL}/en/manage/dashboard`,
+    { waitUntil: 'networkidle' },
   );
   // End of authentication steps.
   await page.context().storageState({ path: authFile });
