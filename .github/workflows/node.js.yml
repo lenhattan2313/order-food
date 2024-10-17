@@ -67,6 +67,7 @@ jobs:
     steps:
       # Checkout repository (for accessing the code)
       - uses: actions/checkout@v4
+      - run: npm ci
 
       # Download build artifact
       - name: Download build artifact
