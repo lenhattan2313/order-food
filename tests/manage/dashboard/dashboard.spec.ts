@@ -32,6 +32,7 @@ test.describe('Dashboard page', () => {
     await page.getByPlaceholder('To').fill('2024-10-10T23:59');
 
     const firstCard = await cardItem.first();
+    await firstCard.waitFor();
     await expect(firstCard).toContainText('290.000');
   });
 });

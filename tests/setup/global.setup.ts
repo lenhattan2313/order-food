@@ -19,12 +19,12 @@ async function globalSetup() {
   await emailInput.fill(process.env.NEXT_ACCOUNT_USER ?? '');
   await passwordInput.fill(process.env.NEXT_ACCOUNT_PASSWORD ?? '');
   await loginBtn.click();
-  await loginBtn.waitFor();
   // Wait until the page receives the cookies.
   //
   // Sometimes login flow sets cookies in the process of several redirects.
   // Wait for the final URL to ensure that the cookies are actually set.
-  await expect(page).toHaveURL(
+
+  await page.waitForURL(
     `${envConfig.NEXT_PUBLIC_BASE_URL}/en/manage/dashboard`,
   );
   // End of authentication steps.
