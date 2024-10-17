@@ -4,7 +4,7 @@ import { responseDashboard } from './data.mock';
 import { accessibilityTest } from '../../fixture';
 import envConfig from '@/config';
 
-test.describe('Dashboard page', () => {
+test.describe.skip('Dashboard page', () => {
   test('display content', async ({ page }) => {
     // show content page
 

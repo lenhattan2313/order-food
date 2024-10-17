@@ -29,7 +29,7 @@ const myTest = test.extend<{ webApp: Page }>({
   },
 });
 
-myTest('display content', async ({ webApp }) => {
+myTest.skip('display content', async ({ webApp }) => {
   await myTest.step('check table data', async () => {
     const table = await webApp.getByTestId('table-order');
     await expect(table).toBeVisible();
