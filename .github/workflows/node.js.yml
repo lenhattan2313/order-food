@@ -52,7 +52,7 @@ jobs:
         with:
           name: nextjs-build
           path: |
-          **/.next
+            **/.next
 
   # Test phase
   test:
