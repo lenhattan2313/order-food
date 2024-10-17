@@ -4,6 +4,7 @@ import NextBundleAnalyzer from '@next/bundle-analyzer';
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
+  output: 'export', // <=== enables static exports
   images: {
     remotePatterns: [
       {
