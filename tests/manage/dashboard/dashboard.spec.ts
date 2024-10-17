@@ -4,10 +4,15 @@ import { responseDashboard } from './data.mock';
 import { accessibilityTest } from '../../fixture';
 import envConfig from '@/config';
 
-test.describe.skip('Dashboard page', () => {
+test.describe('Dashboard page', () => {
   test('display content', async ({ page }) => {
     // show content page
-
+    // update from to date
+    await mockApiResponse(
+      page,
+      '/indicators/dashboard?fromDate=2024-10-09T17%3A00%3A00.000Z&toDate=2024-10-10T16%3A59%3A00.000Z',
+      responseDashboard,
+    );
     await page.goto('./manage/dashboard');
 
     const heading = await page.getByRole('heading', { name: /dashboard/i });
@@ -22,15 +27,13 @@ test.describe.skip('Dashboard page', () => {
     await expect(revenueChart).toBeVisible();
     await expect(barChart).toBeVisible();
 
-    // update from to date
-    await mockApiResponse(
-      page,
-      '/indicators/dashboard?fromDate=2024-10-09T17%3A00%3A00.000Z&toDate=2024-10-10T16%3A59%3A00.000Z',
-      responseDashboard,
-    );
     await page.getByPlaceholder('From').fill('2024-10-10T00:00');
     await page.getByPlaceholder('To').fill('2024-10-10T23:59');
-
+    await page.waitForResponse(
+      (response) =>
+        response.url().includes('/indicators/dashboard') &&
+        response.status() === 200,
+    );
     const firstCard = await cardItem.first();
     await firstCard.waitFor();
     await expect(firstCard).toContainText('290.000');
