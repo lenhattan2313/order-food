@@ -12,7 +12,7 @@ const myTest = test.extend<{ webApp: Page }>({
         response: dishesData,
       },
       {
-        url: '/orders?fromDate=2024-10-09T17%3A00%3A00.000Z&toDate=2024-10-10T16%3A59%3A00.000Z',
+        url: '/orders?fromDate=**',
         response: orderData,
       },
       {
@@ -29,7 +29,7 @@ const myTest = test.extend<{ webApp: Page }>({
   },
 });
 
-myTest.skip('display content', async ({ webApp }) => {
+myTest('display content', async ({ webApp }) => {
   await myTest.step('check table data', async () => {
     const table = await webApp.getByTestId('table-order');
     await expect(table).toBeVisible();
