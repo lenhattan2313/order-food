@@ -49,9 +49,9 @@ jobs:
       # Upload build artifact (for use in the test phase)
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
-        include-hidden-files: true
         with:
           name: nextjs-build
+          include-hidden-files: true
           path: .next/
 
   # Test phase
