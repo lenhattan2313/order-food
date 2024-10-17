@@ -14,8 +14,6 @@ jobs:
     env:
       NEXT_PUBLIC_API_ENDPOINT: ${{ vars.NEXT_PUBLIC_API_ENDPOINT }}
       NEXT_PUBLIC_BASE_URL: ${{ vars.NEXT_PUBLIC_BASE_URL }}
-      NEXT_ACCOUNT_USER: ${{ secrets.NEXT_ACCOUNT_USER }}
-      NEXT_ACCOUNT_PASSWORD: ${{ secrets.NEXT_ACCOUNT_PASSWORD }}
       NEXT_AWS_REGION: ${{ secrets.NEXT_AWS_REGION }}
       NEXT_AWS_ACCESS_KEY_ID: ${{ secrets.NEXT_AWS_ACCESS_KEY_ID }}
       NEXT_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEXT_AWS_SECRET_ACCESS_KEY }}
@@ -65,12 +63,6 @@ jobs:
       NEXT_PUBLIC_BASE_URL: ${{ vars.NEXT_PUBLIC_BASE_URL }}
       NEXT_ACCOUNT_USER: ${{ secrets.NEXT_ACCOUNT_USER }}
       NEXT_ACCOUNT_PASSWORD: ${{ secrets.NEXT_ACCOUNT_PASSWORD }}
-      NEXT_AWS_REGION: ${{ secrets.NEXT_AWS_REGION }}
-      NEXT_AWS_ACCESS_KEY_ID: ${{ secrets.NEXT_AWS_ACCESS_KEY_ID }}
-      NEXT_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEXT_AWS_SECRET_ACCESS_KEY }}
-      NEXT_AWS_S3_BUCKET_NAME: ${{ secrets.NEXT_AWS_S3_BUCKET_NAME }}
-      NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE: ${{ secrets.NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE }}
-
     steps:
       # Checkout repository (for accessing the code)
       - uses: actions/checkout@v4
@@ -92,10 +84,8 @@ jobs:
           echo "Waiting for Next.js to start..."
           timeout 60 bash -c 'until curl -s http://localhost:3000 > /dev/null; do echo "Waiting..."; sleep 5; done'
 
-      # Install Playwright Browsers and cache them
-      - name: Install and Cache Playwright Browsers
-        run: |
-          npx playwright install --with-deps
+      # Cache Playwright browsers
+      - name: Cache Playwright browsers
         uses: actions/cache@v4
         id: playwright-cache
         with:
@@ -103,6 +93,10 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             playwright-${{ runner.os }}-
+
+      # Install Playwright Browsers
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
       # Run Playwright tests
       - name: Run Playwright tests
