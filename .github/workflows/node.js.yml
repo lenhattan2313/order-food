@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
@@ -10,6 +7,7 @@ on:
     branches: ['main']
 
 jobs:
+  # Build phase
   build:
     runs-on: ubuntu-latest
 
@@ -23,9 +21,13 @@ jobs:
       NEXT_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEXT_AWS_SECRET_ACCESS_KEY }}
       NEXT_AWS_S3_BUCKET_NAME: ${{ secrets.NEXT_AWS_S3_BUCKET_NAME }}
       NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE: ${{ secrets.NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE }}
+
     steps:
+      # Checkout repository
       - uses: actions/checkout@v4
-      - name: Use Node.js 18.x
+
+      # Setup Node.js and cache dependencies
+      - name: Use Node.js 18.x and cache dependencies
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
@@ -42,8 +44,58 @@ jobs:
           restore-keys: |
             node-modules-${{ runner.os }}-
 
-      # Cache Playwright browsers
-      - name: Cache Playwright browsers
+      # Install dependencies and build the Next.js app
+      - run: npm ci
+      - run: npm run build --if-present
+
+      # Upload build artifact (for use in the test phase)
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next/
+
+  # Test phase
+  test:
+    runs-on: ubuntu-latest
+    needs: build # Ensure the test phase only runs after the build phase
+
+    env:
+      NEXT_PUBLIC_API_ENDPOINT: ${{ vars.NEXT_PUBLIC_API_ENDPOINT }}
+      NEXT_PUBLIC_BASE_URL: ${{ vars.NEXT_PUBLIC_BASE_URL }}
+      NEXT_ACCOUNT_USER: ${{ secrets.NEXT_ACCOUNT_USER }}
+      NEXT_ACCOUNT_PASSWORD: ${{ secrets.NEXT_ACCOUNT_PASSWORD }}
+      NEXT_AWS_REGION: ${{ secrets.NEXT_AWS_REGION }}
+      NEXT_AWS_ACCESS_KEY_ID: ${{ secrets.NEXT_AWS_ACCESS_KEY_ID }}
+      NEXT_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEXT_AWS_SECRET_ACCESS_KEY }}
+      NEXT_AWS_S3_BUCKET_NAME: ${{ secrets.NEXT_AWS_S3_BUCKET_NAME }}
+      NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE: ${{ secrets.NEXT_PUBLIC_AWS_S3_IMAGE_SOURCE }}
+
+    steps:
+      # Checkout repository (for accessing the code)
+      - uses: actions/checkout@v4
+
+      # Download build artifact
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next/
+
+      # Start the Next.js server (use the downloaded build)
+      - name: Start Next.js server
+        run: npm run start &
+
+      # Wait for the server to be ready
+      - name: Wait for Next.js to start
+        run: |
+          echo "Waiting for Next.js to start..."
+          timeout 60 bash -c 'until curl -s http://localhost:3000 > /dev/null; do echo "Waiting..."; sleep 5; done'
+
+      # Install Playwright Browsers and cache them
+      - name: Install and Cache Playwright Browsers
+        run: |
+          npx playwright install --with-deps
         uses: actions/cache@v4
         id: playwright-cache
         with:
@@ -52,21 +104,13 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
 
-      - run: npm ci
-      - run: npm run build --if-present
-      - name: Start Next.js server
-        run: npm run start &
-      - name: Wait for Next.js to start
-        run: |
-          echo "Waiting for Next.js to start..."
-          timeout 60 bash -c 'until curl -s http://localhost:3000 > /dev/null; do echo "Waiting..."; sleep 5; done'
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      # Run Playwright tests
       - name: Run Playwright tests
-        run: npm test
+        run: npx playwright test
+
+      # Upload Playwright test report
       - uses: actions/upload-artifact@v4
-        if: ${{ always() }}
+        if: always() # Upload report even if tests fail
         with:
           name: playwright-report
           path: playwright-report/
