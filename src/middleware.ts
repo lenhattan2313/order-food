@@ -3,43 +3,35 @@ import { getTokenCookies } from '@/lib/serverUtils';
 import { decodeJWT } from '@/lib/utils';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import createMiddleware from 'next-intl/middleware';
-import { routing } from '@/i18n/routing';
-import { cookies } from 'next/headers';
-import { NEXT_LOCALE, defaultLocale } from '@/constants/locale';
-import { generatePaths } from '@/lib/authUtils';
 const basePaths = {
-  guest: '/guest',
-  manage: '/manage',
-  owner: '/manage/accounts',
+  guest: ['/guest'],
+  manage: ['/manage'],
+  owner: ['/manage/accounts'],
   unAuth: ['/login', '/register', '/tables'],
-  root: '',
+  root: [''],
 };
-const guestPaths = generatePaths(basePaths.guest);
-const managePaths = generatePaths(basePaths.manage);
-const ownerPaths = generatePaths(basePaths.owner);
-const unAuthPaths = generatePaths(basePaths.unAuth);
-const rootPaths = generatePaths(basePaths.root);
+const guestPaths = basePaths.guest;
+const managePaths = basePaths.manage;
+const ownerPaths = basePaths.owner;
+const unAuthPaths = basePaths.unAuth;
+const rootPaths = basePaths.root;
 
 export function middleware(request: NextRequest) {
-  const handleI18nRouting = createMiddleware(routing);
-  const response = handleI18nRouting(request);
-
-  const cookieStore = cookies();
-  const locale = cookieStore.get(NEXT_LOCALE)?.value ?? defaultLocale;
   const { pathname, searchParams } = request.nextUrl;
   const { accessToken, refreshToken } = getTokenCookies();
-  const isUnAuthPaths = unAuthPaths.some((route) => pathname.includes(route));
+  const isUnAuthPaths = unAuthPaths.some(
+    (route) => pathname.includes(route) && !pathname.includes('/manage'),
+  );
   const isRootRoutes = rootPaths.some((route) => pathname.includes(route));
   //when not log in or accessToken expired
   if (!accessToken) {
     if ((isUnAuthPaths && refreshToken) || pathname === '/') {
-      return NextResponse.redirect(new URL(`/${locale}`, request.url));
+      return NextResponse.redirect(new URL(`/`, request.url));
     }
     if (!isUnAuthPaths && !isRootRoutes) {
-      let url = new URL(`/${locale}/login`, request.url);
+      let url = new URL(`/login`, request.url);
       if (refreshToken) {
-        url = new URL(`/${locale}/refresh-token`, request.url);
+        url = new URL(`/refresh-token`, request.url);
         url.searchParams.set('refreshToken', refreshToken);
         url.searchParams.set('redirect', pathname);
       } else {
@@ -54,9 +46,9 @@ export function middleware(request: NextRequest) {
     if (isUnAuthPaths) {
       const params = searchParams.get('accessToken');
       if (params) {
-        return response;
+        return NextResponse.next();
       }
-      return NextResponse.redirect(new URL(`/${locale}/`, request.url));
+      return NextResponse.redirect(new URL(`/`, request.url));
     }
     //try to access path without permission
     const role = decodeJWT(accessToken)?.role;
@@ -71,13 +63,19 @@ export function middleware(request: NextRequest) {
         (role !== Role.Guest && isGuestPaths) ||
         (role !== Role.Owner && isOwnerPaths))
     ) {
-      return NextResponse.redirect(new URL(`/${locale}`, request.url));
+      return NextResponse.redirect(new URL(`/`, request.url));
     }
   }
 
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/', '/(vi|en)/:path*'],
+  matcher: [
+    '/login',
+    '/register',
+    '/manage/:path*',
+    '/guest/:path*',
+    '/tables/:path*',
+  ],
 };

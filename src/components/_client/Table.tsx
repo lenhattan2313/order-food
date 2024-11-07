@@ -8,9 +8,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { defaultPagination } from '@/constants/common';
-import { usePathname } from '@/navigation';
 import { Table as TableProps, flexRender } from '@tanstack/react-table';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 type IPagination = {

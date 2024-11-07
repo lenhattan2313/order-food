@@ -1,6 +1,5 @@
 import { dishActions } from '@/apiRequest/dish/dishActions';
 import envConfig from '@/config';
-import { locales } from '@/constants/locale';
 import { generateSlugUrl } from '@/lib/utils';
 import { Languages } from 'next/dist/lib/metadata/types/alternative-urls-types';
 export type Sitemap = Array<{
@@ -45,21 +44,16 @@ export default async function sitemap(): Promise<Sitemap> {
   //       },
   //     },
   //   }));
-  const staticSitemap = locales.reduce((acc: Sitemap, locale) => {
-    return [
-      ...acc,
-      ...staticRoutes.map((route) => ({
-        ...route,
-        url: `${envConfig.NEXT_PUBLIC_BASE_URL}${route.url}/${locale}`,
-        lastModified: new Date(),
-      })),
-    ];
-  }, []);
+  const staticSitemap = staticRoutes.map((route) => ({
+    ...route,
+    url: `${envConfig.NEXT_PUBLIC_BASE_URL}${route.url}`,
+    lastModified: new Date(),
+  }));
 
   const dish = await dishActions.getList();
   if (dish) {
     const dynamicDishes: Sitemap = dish.data.map((item) => ({
-      url: `${generateSlugUrl({
+      url: `${envConfig.NEXT_PUBLIC_BASE_URL}/${generateSlugUrl({
         name: item.name,
         id: item.id,
       })}`,
@@ -68,16 +62,7 @@ export default async function sitemap(): Promise<Sitemap> {
       priority: 0.9,
     }));
 
-    const dynamicDishesSitemap = locales.reduce((acc: Sitemap, locale) => {
-      return [
-        ...acc,
-        ...dynamicDishes.map((route) => ({
-          ...route,
-          url: `${envConfig.NEXT_PUBLIC_BASE_URL}/${route.url}/${locale}`,
-        })),
-      ];
-    }, []);
-    return [...staticSitemap, ...dynamicDishesSitemap];
+    return [...staticSitemap, ...dynamicDishes];
   }
   return [...staticSitemap];
 }

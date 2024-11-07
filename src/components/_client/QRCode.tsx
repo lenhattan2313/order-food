@@ -1,5 +1,5 @@
 'use client';
-import { getTableLink } from '@/app/[locale]/manage/tables/utils/tablesUtils';
+import { getTableLink } from '@/app/manage/tables/utils/tablesUtils';
 import QRCode from 'qrcode';
 import { useEffect, useRef } from 'react';
 

@@ -1,6 +1,6 @@
-import { Link } from '@/navigation';
 import { Beef } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 
 export default async function Footer() {
   const t = await getTranslations('footer');

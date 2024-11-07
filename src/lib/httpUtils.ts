@@ -1,13 +1,11 @@
 import envConfig from '@/config';
-import { NEXT_LOCALE } from '@/constants/locale';
 import { HTTP_METHOD, IHttpOptions } from '@/interface/http';
 import { EntityError, HttpError } from '@/lib/error';
 import { localStorageUtil } from '@/lib/storageUtils';
 import { isClient, normalizeUrl } from '@/lib/utils';
-import { redirect } from '@/navigation';
 import { LoginResType } from '@/schemaValidations/auth.schema';
 import { StatusCodes } from 'http-status-codes';
-import Cookies from 'js-cookie';
+import { redirect } from 'next/navigation';
 const loginPaths = ['api/auth/login', 'api/guest/auth/login', 'api/auth/oauth'];
 //this file is using in server and client
 let logoutRequest: (() => Promise<Response>) | null = null;
@@ -57,8 +55,6 @@ const request = async <T = Response>(
     } else if (response.status === StatusCodes.UNAUTHORIZED) {
       //handle UNAUTHORIZED
       if (isClient) {
-        const locale = Cookies.get(NEXT_LOCALE);
-
         //handle at client side
         if (!logoutRequest) {
           logoutRequest = () =>
@@ -76,8 +72,7 @@ const request = async <T = Response>(
             logoutRequest = null;
             localStorageUtil.remove('accessToken');
             localStorageUtil.remove('refreshToken');
-            // redirect(`/${locale}/login`);
-            location.href = `/${locale}/login`;
+            location.href = `/login`;
           }
         }
       } else {
@@ -88,7 +83,6 @@ const request = async <T = Response>(
             ? baseOptions.headers.Authorization.split('Bearer ')[1]
             : '';
 
-        // const locale = cookies().get(NEXT_LOCALE)?.value ?? "";
         accessToken && redirect(`/login?accessToken=${accessToken}`);
       }
     }
