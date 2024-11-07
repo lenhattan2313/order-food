@@ -1,13 +1,12 @@
 import { dishActions } from '@/apiRequest/dish/dishActions';
+import NoResult from '@/components/_client/NoResult';
 import envConfig from '@/config';
 import { htmlToTextForDesc, wrapServerApi } from '@/lib/serverUtils';
 import { generateSlugUrl, getIdFromSlugUrl } from '@/lib/utils';
-import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
-import Image from 'next/image';
 import { baseOpenGraph } from '@/shareMetadata';
+import { Metadata } from 'next';
+import Image from 'next/image';
 import { cache } from 'react';
-import NoResult from '@/components/_client/NoResult';
 const getDetail = cache((id: number) =>
   wrapServerApi(() => dishActions.getDishDetail({ id })),
 );
@@ -18,13 +17,12 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const t = await getTranslations('common');
   const id = getIdFromSlugUrl(slug);
   const dish = await getDetail(id);
   if (!dish) {
     return {
-      title: t('notFound'),
-      description: t('notFound'),
+      title: 'Không tìm thấy',
+      description: 'Không tìm thấy',
     };
   }
   const { data } = dish;

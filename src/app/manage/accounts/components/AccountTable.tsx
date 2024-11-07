@@ -27,10 +27,8 @@ import { useTable } from '@/hooks/useTable';
 import { useGetAccountList } from '@/queries/useAccount';
 import { AccountType } from '@/schemaValidations/account.schema';
 import { useMemo } from 'react';
-import { useTranslations } from 'next-intl';
 
 export default function AccountTable() {
-  const t = useTranslations('accounts');
   const { data: accountList, isPending } = useGetAccountList();
   const data = useMemo(
     () => accountList?.data ?? Array(defaultPagination.pageSize).fill({}),
@@ -53,7 +51,7 @@ export default function AccountTable() {
         <DeleteAccountModal />
         <div className="flex items-center py-4">
           <Input
-            placeholder={t('filterEmail')}
+            placeholder="Lọc dữ liệu theo email..."
             value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
               table.getColumn('email')?.setFilterValue(event.target.value)
@@ -71,16 +69,14 @@ export default function AccountTable() {
   );
 }
 export const useColumns = (): ColumnDef<AccountType>[] => {
-  const t = useTranslations();
-
   return [
     {
       accessorKey: 'id',
-      header: t('common.id'),
+      header: 'ID',
     },
     {
       accessorKey: 'avatar',
-      header: t('common.avatar'),
+      header: 'Ảnh đại diện',
       cell: ({ row }) => (
         <div>
           <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
@@ -94,7 +90,7 @@ export const useColumns = (): ColumnDef<AccountType>[] => {
     },
     {
       accessorKey: 'name',
-      header: t('common.name'),
+      header: 'Tên',
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue('name')}</div>
       ),
@@ -107,7 +103,7 @@ export const useColumns = (): ColumnDef<AccountType>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            {t('common.email')}
+            Email
             <CaretSortIcon className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -119,7 +115,7 @@ export const useColumns = (): ColumnDef<AccountType>[] => {
     {
       id: 'actions',
       enableHiding: false,
-      header: t('common.actions'),
+      header: 'Hành động',
       cell: function Actions({ row }) {
         const { setEmployeeIdEdit, setEmployeeDelete } = useAccountContext();
         const { role } = useAuth();
@@ -144,14 +140,14 @@ export const useColumns = (): ColumnDef<AccountType>[] => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{t('common.actions')}</DropdownMenuLabel>
+              <DropdownMenuLabel>Hành động</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={openEditEmployee}>
-                {t('common.edit')}
+                Chỉnh sửa
               </DropdownMenuItem>
               {role === Role.Owner && (
                 <DropdownMenuItem onClick={openDeleteEmployee}>
-                  {t('common.delete')}
+                  Xoá
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>

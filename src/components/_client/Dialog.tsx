@@ -9,7 +9,6 @@ import {
   Dialog as DialogShad,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useTranslations } from 'next-intl';
 import { FC, ReactNode } from 'react';
 
 type Props = IDialogProps & {
@@ -22,7 +21,6 @@ export const Dialog: FC<Props> = ({
   open,
   footer = [],
 }) => {
-  const t = useTranslations('button');
   return (
     <DialogShad open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -33,7 +31,7 @@ export const Dialog: FC<Props> = ({
         <DialogFooter>
           {!Boolean(footer.length) && (
             <DialogClose>
-              <Button>{t('cancel')}</Button>
+              <Button>Huỷ</Button>
             </DialogClose>
           )}
           {footer}

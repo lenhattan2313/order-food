@@ -5,59 +5,49 @@ import { ThemeProvider } from '@/components/provider/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { baseOpenGraph } from '@/shareMetadata';
 import type { Metadata } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('home');
+export function generateMetadata(): Metadata {
   return {
-    title: { template: `%s | ${t('title')}`, default: t('title') },
-    description: t('description'),
+    title: { template: `%s | Tannrest`, default: 'Tannrest' },
+    description: 'Phục vụ đồ ăn và thức uống',
     authors: [{ name: 'TanLe', url: 'https://lenhattan.vn' }],
     creator: 'TanLe',
     publisher: 'TanLe',
     openGraph: { ...baseOpenGraph },
   };
 }
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={'vi'} suppressHydrationWarning>
       <body className={inter.className}>
         <NextTopLoader
           showSpinner={false}
           color="hsl(var(--muted-foreground))"
         />
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ReactQueryProvider>
+              {children}
+              <Footer />
 
-        <NextIntlClientProvider messages={messages}>
-          <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <ReactQueryProvider>
-                {children}
-                <Footer />
-
-                <Toaster />
-              </ReactQueryProvider>
-            </ThemeProvider>
-          </AuthProvider>
-        </NextIntlClientProvider>
+              <Toaster />
+            </ReactQueryProvider>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

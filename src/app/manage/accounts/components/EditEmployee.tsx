@@ -1,5 +1,5 @@
 'use client';
-import { FormSelect, FormSwitch, FormInput } from '@/components/_client/Form';
+import { FormInput, FormSelect, FormSwitch } from '@/components/_client/Form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,11 +23,9 @@ import {
 } from '@/schemaValidations/account.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 export default function EditEmployee() {
-  const t = useTranslations();
   const { setEmployeeIdEdit, employeeIdEdit } = useAccountContext();
   const [file, setFile] = useState<File | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
@@ -117,7 +115,7 @@ export default function EditEmployee() {
     <Dialog open={Boolean(employeeIdEdit)} onOpenChange={handleCloseModal}>
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>{t('accounts.editTitle')}</DialogTitle>
+          <DialogTitle>Cập nhật tài khoản</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <Form {...form}>
@@ -159,31 +157,28 @@ export default function EditEmployee() {
                   </FormItem>
                 )}
               />
-              <FormInput name="name" label={t('common.name')} required />
-              <FormInput name="email" label={t('common.email')} required />
+              <FormInput name="name" label="Tên" required />
+              <FormInput name="email" label="Email" required />
               <FormSelect
                 name="role"
-                label={t('common.role')}
+                label="Vai trò"
                 required
-                placeholder={t('accounts.selectRole')}
+                placeholder="Chọn vai trò"
                 options={options}
               />
-              <FormSwitch
-                name="changePassword"
-                label={t('accounts.changePassword')}
-              />
+              <FormSwitch name="changePassword" label="Đổi mật khẩu" />
 
               {changePassword && (
                 <>
                   <FormInput
                     name="password"
-                    label={t('accounts.newPassword')}
+                    label="Mật khẩu mới"
                     required
                     type="password"
                   />
                   <FormInput
                     name="confirmPassword"
-                    label={t('accounts.confirmNewPassword')}
+                    label="Xác nhận mật khẩu mới"
                     required
                     type="password"
                   />
@@ -198,7 +193,7 @@ export default function EditEmployee() {
             form="edit-employee-form"
             isLoading={isUpdatePending || isUploadPending}
           >
-            {t('common.save')}
+            Lưu
           </Button>
         </DialogFooter>
       </DialogContent>

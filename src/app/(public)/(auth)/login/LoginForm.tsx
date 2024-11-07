@@ -10,14 +10,12 @@ import { decodeJWT, handleApiError } from '@/lib/utils';
 import { useLoginMutation } from '@/queries/useAuth';
 import { LoginBodyType, useLoginSchema } from '@/schemaValidations/auth.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, memo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 function LoginForm() {
-  const t = useTranslations('login');
   const router = useRouter();
   const searchParams = useSearchParams();
   const clearToken = searchParams.get('clearToken');
@@ -72,24 +70,24 @@ function LoginForm() {
             type="email"
             required
             placeholder="m@example.com"
-            label={t('email')}
+            label="Email"
             autoFocus
             data-testid="email"
           />
           <FormInput
             name="password"
             required
-            label={t('password')}
+            label="Mật Khẩu"
             type="password"
             data-testid="password"
           />
 
           <Button type="submit" className="w-full" isLoading={isPending}>
-            {t('title')}
+            Đăng nhập
           </Button>
           <Link href={getOauthGoogleUrl()}>
             <Button variant="outline" className="w-full" type="button">
-              {t('google-access')}
+              Đăng nhập bằng Google
             </Button>
           </Link>
         </div>

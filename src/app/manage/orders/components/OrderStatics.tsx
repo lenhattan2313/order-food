@@ -23,7 +23,6 @@ import { ServingGuestByTableNumber } from '@/context/orderContext';
 import { cn } from '@/lib/utils';
 import { TableListResType } from '@/schemaValidations/table.schema';
 import { Users } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 // Ví dụ:
@@ -63,7 +62,6 @@ export default function OrderStatics({
   tableList: TableListResType['data'];
   servingGuestByTableNumber: ServingGuestByTableNumber;
 }) {
-  const t = useTranslations('order');
   const [selectedTableNumber, setSelectedTableNumber] = useState<number>(0);
   const selectedServingGuest = servingGuestByTableNumber[selectedTableNumber];
   return (
@@ -79,9 +77,7 @@ export default function OrderStatics({
         <DialogContent className="max-h-full overflow-auto">
           {selectedServingGuest && (
             <DialogHeader>
-              <DialogTitle>
-                {t('guestTable')} {selectedTableNumber}
-              </DialogTitle>
+              <DialogTitle>Bàn số {selectedTableNumber}</DialogTitle>
             </DialogHeader>
           )}
           <div>
@@ -170,7 +166,7 @@ export default function OrderStatics({
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                      {t('serving')}: {servingGuestCount} {t('guest')}
+                      Phục vụ: {servingGuestCount} Khách
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -197,8 +193,8 @@ export default function OrderStatics({
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {t(OrderStatus.Pending)}:{' '}
-                        {countObject[OrderStatus.Pending] ?? 0} {t('order')}
+                        {OrderStatus.Pending}:{' '}
+                        {countObject[OrderStatus.Pending] ?? 0} Món
                       </TooltipContent>
                     </Tooltip>
 
@@ -212,8 +208,8 @@ export default function OrderStatics({
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {t(OrderStatus.Processing)}:{' '}
-                        {countObject[OrderStatus.Processing] ?? 0} {t('order')}
+                        {OrderStatus.Processing}:{' '}
+                        {countObject[OrderStatus.Processing] ?? 0} Món
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -224,8 +220,8 @@ export default function OrderStatics({
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {t(OrderStatus.Delivered)}:{' '}
-                        {countObject[OrderStatus.Delivered] ?? 0} {t('order')}
+                        {OrderStatus.Delivered}:{' '}
+                        {countObject[OrderStatus.Delivered] ?? 0} Món
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -238,7 +234,7 @@ export default function OrderStatics({
       <div className="flex justify-start items-end gap-4 flex-wrap py-4">
         {OrderStatusValues.map((status) => (
           <Badge variant="secondary" key={status}>
-            {t(status)}: {statics.status[status] ?? 0}
+            Trạng thái: {statics.status[status] ?? 0}
           </Badge>
         ))}
       </div>

@@ -30,7 +30,6 @@ import {
 import { CreateOrdersBodyType } from '@/schemaValidations/order.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusCircle } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -39,7 +38,6 @@ const initialData = {
   tableNumber: 0,
 };
 export default function AddOrder() {
-  const t = useTranslations('order');
   const [open, setOpen] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState<
     GetListGuestsResType['data'][0] | null
@@ -95,7 +93,7 @@ export default function AddOrder() {
       }
       if (!guestId) {
         toast({
-          description: t('pickGuest'),
+          description: 'Hãy chọn một khách hàng',
         });
         return;
       }
@@ -131,16 +129,16 @@ export default function AddOrder() {
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            {t('createOrder')}
+            Tạo đơn hàng
           </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>{t('createOrder')}</DialogTitle>
+          <DialogTitle>Tạo đơn hàng</DialogTitle>
         </DialogHeader>
         <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-          <Label htmlFor="isNewGuest">{t('newGuest')}</Label>
+          <Label htmlFor="isNewGuest">Khách Hàng mới</Label>
           <div className="col-span-3 flex items-center">
             <Switch
               id="isNewGuest"
@@ -160,7 +158,7 @@ export default function AddOrder() {
               <div className="grid gap-4 py-4">
                 <FormInput
                   name="name"
-                  label={t('guestName')}
+                  label="Tên Khách Hàng"
                   required
                   data-testid="name"
                 />
@@ -171,7 +169,7 @@ export default function AddOrder() {
                   render={({ field }) => (
                     <FormItem>
                       <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                        <Label htmlFor="tableNumber">{t('selectTable')}</Label>
+                        <Label htmlFor="tableNumber">Chọn bàn</Label>
                         <div className="col-span-3 w-full space-y-2">
                           <div className="flex items-center gap-4">
                             <div>{field.value}</div>
@@ -199,14 +197,12 @@ export default function AddOrder() {
         )}
         {!isNewGuest && selectedGuest && (
           <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-            <Label htmlFor="selectedGuest">{t('guestSelected')}</Label>
+            <Label htmlFor="selectedGuest">Khách đã chọn</Label>
             <div className="col-span-3 w-full gap-4 flex items-center">
               <div>
                 {selectedGuest.name} (#{selectedGuest.id})
               </div>
-              <div>
-                {t('table')}: {selectedGuest.tableNumber}
-              </div>
+              <div>Bàn: {selectedGuest.tableNumber}</div>
             </div>
           </div>
         )}
@@ -222,7 +218,7 @@ export default function AddOrder() {
               <div className="flex-shrink-0 relative">
                 {dish.status === DishStatus.Unavailable && (
                   <span className="absolute inset-0 flex items-center justify-center text-sm">
-                    {t('outOfStock')}
+                    Hết hàng
                   </span>
                 )}
                 <Image
@@ -259,9 +255,7 @@ export default function AddOrder() {
             disabled={orders.length === 0}
             isLoading={isCreateOrderPending || isCreateGuestPending}
           >
-            <span>
-              {t('placeOrder')} · {orders.length} {t('dish')}
-            </span>
+            <span>Đặt hàng · {orders.length} Món</span>
             <span>{formatCurrency(totalPrice)}</span>
           </Button>
         </DialogFooter>

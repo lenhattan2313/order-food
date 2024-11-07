@@ -1,10 +1,7 @@
 import DishMain from '@/app/(public)/dish/DishMain';
-import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 
-export default async function HomePage() {
-  const t = await getTranslations('home');
-
+export default function HomePage() {
   return (
     <div className="w-full space-y-4">
       <div className="relative">
@@ -20,10 +17,10 @@ export default async function HomePage() {
         />
         <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
           <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold">
-            {t('title')}
+            Tannrest
           </h1>
           <p className="text-center text-sm sm:text-base mt-4">
-            {t('description')}
+            Phục vụ đồ ăn và thức uống
           </p>
         </div>
       </div>

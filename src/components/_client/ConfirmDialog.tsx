@@ -10,7 +10,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useTranslations } from 'next-intl';
 import { ReactNode } from 'react';
 export type IDialogProps = {
   title: ReactNode;
@@ -30,7 +29,6 @@ export const ConfirmDialog = ({
   onOpenChange,
   open,
 }: Props) => {
-  const t = useTranslations('button');
   return (
     <AlertDialog onOpenChange={onOpenChange} open={open}>
       <AlertDialogTrigger asChild>
@@ -44,9 +42,9 @@ export const ConfirmDialog = ({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+          <AlertDialogCancel>Huỷ</AlertDialogCancel>
           <AlertDialogAction onClick={onClick} disabled={isPending}>
-            {t('continue')}
+            Tiếp tục
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

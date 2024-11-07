@@ -1,14 +1,12 @@
 import OrderTable from '@/app/manage/orders/components/OrderTable';
 import { Page } from '@/components/_client/Page';
 import { OrderProvider } from '@/context/orderContext';
-import { getTranslations } from 'next-intl/server';
 
 import { Suspense } from 'react';
 
-export default async function OrderPage() {
-  const t = await getTranslations('order');
+export default function OrderPage() {
   return (
-    <Page title={t('title')} description={t('description')}>
+    <Page title="Đơn hàng" description="Quản lý đơn hàng">
       <Suspense>
         <OrderProvider>
           <OrderTable />

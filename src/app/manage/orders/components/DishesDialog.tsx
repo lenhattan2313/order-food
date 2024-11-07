@@ -15,16 +15,14 @@ import { formatCurrency } from '@/lib/currency';
 import { simpleMatchText } from '@/lib/utils';
 import { useGetDishList } from '@/queries/useDish';
 import { ColumnDef } from '@tanstack/react-table';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
 export const useColumns = (): ColumnDef<DishItem>[] => {
-  const t = useTranslations('common');
   return [
     {
       id: 'dishName',
-      header: t('dish'),
+      header: 'Món ăn',
       cell: ({ row }) => (
         <div className="flex items-center space-x-4">
           <Image
@@ -44,7 +42,7 @@ export const useColumns = (): ColumnDef<DishItem>[] => {
     },
     {
       accessorKey: 'price',
-      header: t('price'),
+      header: 'Gía',
       cell: ({ row }) => (
         <div className="capitalize">
           {formatCurrency(row.getValue('price'))}
@@ -53,7 +51,7 @@ export const useColumns = (): ColumnDef<DishItem>[] => {
     },
     {
       accessorKey: 'status',
-      header: t('status'),
+      header: 'Trạng thái',
       cell: ({ row }) => (
         <div>{getVietnameseDishStatus(row.getValue('status'))}</div>
       ),
@@ -66,7 +64,6 @@ export function DishesDialog({
 }: {
   onChoose: (dish: DishItem) => void;
 }) {
-  const t = useTranslations('order');
   const [open, setOpen] = useState(false);
   const { data, isPending } = useGetDishList();
   const dishes = useMemo(() => data?.data ?? [], [data]);
@@ -86,17 +83,17 @@ export function DishesDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{t('change')}</Button>
+        <Button variant="outline">Thay đổi</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>{t('selectDish')}</DialogTitle>
+          <DialogTitle>Chọn món ăn</DialogTitle>
         </DialogHeader>
         <div>
           <div className="w-full">
             <div className="flex items-center py-4">
               <Input
-                placeholder={t('filterName')}
+                placeholder="Lọc tên"
                 value={
                   (table.getColumn('dishName')?.getFilterValue() as string) ??
                   ''

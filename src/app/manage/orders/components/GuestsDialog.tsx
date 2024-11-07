@@ -17,17 +17,15 @@ import { useGetGuestList } from '@/queries/useAccount';
 import { GetListGuestsResType } from '@/schemaValidations/account.schema';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
 type GuestItem = GetListGuestsResType['data'][0];
 
 export const useColumns = (): ColumnDef<GuestItem>[] => {
-  const t = useTranslations('common');
   return [
     {
       accessorKey: 'name',
-      header: t('name'),
+      header: 'Tên',
       cell: ({ row }) => (
         <div className="capitalize">
           {row.getValue('name')} | (#{row.original.id})
@@ -43,7 +41,7 @@ export const useColumns = (): ColumnDef<GuestItem>[] => {
     },
     {
       accessorKey: 'tableNumber',
-      header: t('tableNumber'),
+      header: 'Số bàn',
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue('tableNumber')}</div>
       ),
@@ -57,7 +55,7 @@ export const useColumns = (): ColumnDef<GuestItem>[] => {
     },
     {
       accessorKey: 'createdAt',
-      header: t('createdAt'),
+      header: 'Ngày tạo',
       cell: ({ row }) => (
         <div className="flex items-center space-x-4 text-sm">
           {formatDateTimeToLocaleString(row.getValue('createdAt'))}
@@ -71,7 +69,6 @@ export default function GuestsDialog({
 }: {
   onChoose: (guest: GuestItem) => void;
 }) {
-  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const [fromDate, setFromDate] = useState(dateRangeDefault.fromDate);
   const [toDate, setToDate] = useState(dateRangeDefault.toDate);
@@ -97,21 +94,21 @@ export default function GuestsDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen} data-testid="dialog-guest">
       <DialogTrigger asChild>
-        <Button variant="outline">{t('guest.selectGuest')}</Button>
+        <Button variant="outline">Chọn khách</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-full overflow-auto">
         <DialogHeader>
-          <DialogTitle>{t('guest.selectGuest')}</DialogTitle>
+          <DialogTitle>Chọn khách</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <div>
           <div className="w-full">
             <div className="flex flex-wrap gap-2">
               <div className="flex items-center">
-                <span className="mr-2">{t('common.from')}</span>
+                <span className="mr-2">Từ</span>
                 <Input
                   type="datetime-local"
-                  placeholder={t('common.from')}
+                  placeholder="Từ"
                   className="text-sm"
                   value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                   onChange={(event) =>
@@ -120,10 +117,10 @@ export default function GuestsDialog({
                 />
               </div>
               <div className="flex items-center">
-                <span className="mr-2">{t('common.to')}</span>
+                <span className="mr-2">Đến</span>
                 <Input
                   type="datetime-local"
-                  placeholder={t('common.to')}
+                  placeholder="Đến"
                   value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                   onChange={(event) => setToDate(new Date(event.target.value))}
                 />
@@ -133,12 +130,12 @@ export default function GuestsDialog({
                 variant={'outline'}
                 onClick={resetDateFilter}
               >
-                {t('button.reset')}
+                Reset
               </Button>
             </div>
             <div className="flex items-center py-4 gap-2">
               <Input
-                placeholder={t('guest.nameOrId')}
+                placeholder="Tên hoặc ID"
                 value={
                   (table.getColumn('name')?.getFilterValue() as string) ?? ''
                 }
@@ -148,7 +145,7 @@ export default function GuestsDialog({
                 className="w-[170px]"
               />
               <Input
-                placeholder={t('common.tableNumber')}
+                placeholder="Số bàn"
                 value={
                   (table
                     .getColumn('tableNumber')

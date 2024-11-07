@@ -1,16 +1,14 @@
 import { Beef } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
-export default async function Footer() {
-  const t = await getTranslations('footer');
+export default function Footer() {
   return (
     <footer className="w-full p-4 md:p-8 text-muted-foreground border-t">
       <div className=" flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
         <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4">
           <Link href="/" className="flex items-center gap-2 " prefetch={false}>
             <Beef className="h-6 w-6 hover:text-foreground" />
-            <span className="text-sm font-medium">{t('title')}</span>
+            <span className="text-sm font-medium">Tannrest</span>
           </Link>
           <div className="flex flex-col sm:flex-row items-center gap-4 text-sm">
             <Link
@@ -18,17 +16,17 @@ export default async function Footer() {
               className="hover:underline"
               prefetch={false}
             >
-              {t('term')}
+              Điều khoản dịch vụ
             </Link>
             <Link
               href="/privacy-policy"
               className="hover:underline"
               prefetch={false}
             >
-              {t('policy')}
+              Chính sách bảo mật
             </Link>
             <Link href="/about" className="hover:underline" prefetch={false}>
-              {t('about')}
+              Về chúng tôi
             </Link>
           </div>
         </div>

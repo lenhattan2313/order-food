@@ -1,12 +1,10 @@
 import AccountTable from '@/app/manage/accounts/components/AccountTable';
 import { Page } from '@/components/_client/Page';
 import { Suspense } from '@/components/_client/Suspense';
-import { getTranslations } from 'next-intl/server';
 
-export default async function AccountPage() {
-  const t = await getTranslations('accounts');
+export default function AccountPage() {
   return (
-    <Page title={t('title')} description={t('description')}>
+    <Page title="Tài khoản" description="Quản lý tài khoản nhân viên">
       <Suspense>
         <AccountTable />
       </Suspense>

@@ -7,16 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getTranslations } from 'next-intl/server';
-export default async function Login() {
-  const t = await getTranslations('login');
-
+export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">{t('title')}</CardTitle>
-          <CardDescription>{t('description')}</CardDescription>
+          <CardTitle className="text-2xl">Đăng nhập</CardTitle>
+          <CardDescription>Bạn có thể sẽ mất đơn hàng của mình</CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />

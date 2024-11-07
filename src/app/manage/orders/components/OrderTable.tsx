@@ -37,7 +37,6 @@ import { cn } from '@/lib/utils';
 import { useGetOrderList } from '@/queries/useOrder';
 import { useGetTableList } from '@/queries/useTable';
 import { format } from 'date-fns';
-import { useTranslations } from 'next-intl';
 
 export type StatusCountObject = Record<
   (typeof OrderStatusValues)[number],
@@ -49,7 +48,6 @@ export type Statics = {
 };
 
 export default function OrderTable() {
-  const t = useTranslations();
   const [openStatusFilter, setOpenStatusFilter] = useState(false);
   const [fromDate, setFromDate] = useState(dateRangeDefault.fromDate);
   const [toDate, setToDate] = useState(dateRangeDefault.toDate);
@@ -91,7 +89,7 @@ export default function OrderTable() {
     function handleUpdateOrder(data: UpdateOrderResType['data']) {
       refetchGetOrderList();
       toast({
-        description: `${t('common.tableNumber')} ${data.tableNumber} ${t('order.updatedBy')} ${data.orderHandler?.name}`,
+        description: `Bàn số ${data.tableNumber} cập nhật bởi ${data.orderHandler?.name}`,
       });
     }
     function getInfoTableOrder(data: CreateOrdersResType['data']) {
@@ -112,9 +110,8 @@ export default function OrderTable() {
       const description = Object.entries(tables).map(
         ([tableNumber, dishCount]) => (
           <p key={tableNumber}>
-            {t('common.tableNumber')} <Badge>{tableNumber}</Badge>{' '}
-            {t('order.order')}
-            <Badge>{dishCount}</Badge> {t('common.dish')}
+            Bàn số <Badge>{tableNumber}</Badge> đơn hàng
+            <Badge>{dishCount}</Badge> món
           </p>
         ),
       );
@@ -125,7 +122,7 @@ export default function OrderTable() {
       const data = response[0];
       refetchGetOrderList();
       toast({
-        description: `${t('common.tableNumber')}  ${data.tableNumber} ${t('order.paidSuccessfully')}`,
+        description: `Bàn số  ${data.tableNumber} thanh toán thành công`,
       });
     }
     socket.on(SOCKET_EVENT.UPDATE_ORDER, handleUpdateOrder);
@@ -137,33 +134,33 @@ export default function OrderTable() {
       socket.off(SOCKET_EVENT.NEW_ORDER, handleNewOrder);
       socket.off(SOCKET_EVENT.PAYMENT, handlePayment);
     };
-  }, [refetchGetOrderList, t]);
+  }, [refetchGetOrderList]);
   return (
     <div className="w-full">
       <EditOrder />
       <div className=" flex items-center">
         <div className="flex flex-wrap gap-2">
           <div className="flex items-center">
-            <span className="mr-2">{t('common.from')}</span>
+            <span className="mr-2">Từ</span>
             <Input
               type="datetime-local"
-              placeholder={t('common.from')}
+              placeholder="Từ"
               className="text-sm"
               value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
               onChange={(event) => setFromDate(new Date(event.target.value))}
             />
           </div>
           <div className="flex items-center">
-            <span className="mr-2">{t('common.to')}</span>
+            <span className="mr-2">Đến</span>
             <Input
               type="datetime-local"
-              placeholder={t('common.to')}
+              placeholder="Đến"
               value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
               onChange={(event) => setToDate(new Date(event.target.value))}
             />
           </div>
           <Button className="" variant={'outline'} onClick={resetDateFilter}>
-            {t('button.reset')}
+            Reset
           </Button>
         </div>
         <div className="ml-auto">
@@ -172,7 +169,7 @@ export default function OrderTable() {
       </div>
       <div className="flex flex-wrap items-center gap-4 py-4">
         <Input
-          placeholder={t('order.guestName')}
+          placeholder="Tên khách"
           value={
             (table.getColumn('guestName')?.getFilterValue() as string) ?? ''
           }
@@ -182,7 +179,7 @@ export default function OrderTable() {
           className="max-w-[150px]"
         />
         <Input
-          placeholder={t('common.tableNumber')}
+          placeholder="Bàn số"
           value={
             (table.getColumn('tableNumber')?.getFilterValue() as string) ?? ''
           }
@@ -201,14 +198,10 @@ export default function OrderTable() {
               aria-label="status-button"
             >
               {table.getColumn('status')?.getFilterValue()
-                ? t(
-                    `order.${
-                      table
-                        .getColumn('status')
-                        ?.getFilterValue() as (typeof OrderStatusValues)[number]
-                    }`,
-                  )
-                : t('common.status')}
+                ? (table
+                    .getColumn('status')
+                    ?.getFilterValue() as (typeof OrderStatusValues)[number])
+                : 'trạng thái'}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -240,7 +233,7 @@ export default function OrderTable() {
                             : 'opacity-0',
                         )}
                       />
-                      {t(`order.${status}`)}
+                      {status}
                     </CommandItem>
                   ))}
                 </CommandList>

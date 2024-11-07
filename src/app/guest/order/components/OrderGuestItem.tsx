@@ -3,14 +3,12 @@
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/lib/currency';
 import { GetOrdersResType } from '@/schemaValidations/order.schema';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 type IOrderItem = {
   order: GetOrdersResType['data'][0];
 };
 export default function OrderItem({ order }: IOrderItem) {
-  const t = useTranslations('order');
   return (
     <div key={order.id} className="flex gap-4">
       <div className="flex-shrink-0 relative">
@@ -35,7 +33,7 @@ export default function OrderItem({ order }: IOrderItem) {
       </div>
       <div className="flex-shrink-0 ml-auto flex justify-center items-center">
         <div className="flex gap-1 ">
-          <Badge variant="outline">{t(order.status)}</Badge>
+          <Badge variant="outline">{order.status}</Badge>
         </div>
       </div>
     </div>

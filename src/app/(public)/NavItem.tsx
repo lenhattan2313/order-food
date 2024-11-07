@@ -5,19 +5,15 @@ import { useAuth } from '@/components/provider/auth-provider';
 
 import { Role } from '@/constants/type';
 import { RoleType } from '@/interface/IAuth';
-import { MenuTranslationKeys } from '@/interface/common';
 import { socket } from '@/lib/socket';
 import { handleApiError } from '@/lib/utils';
 import { useLogoutMutation } from '@/queries/useAuth';
 import { useGuestLogout } from '@/queries/useGuest';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 export default function NavItems({ className }: { className?: string }) {
-  const t = useTranslations('menu');
-  const tl = useTranslations('login');
   const { role, setRole } = useAuth();
   const router = useRouter();
   const { mutateAsync: logout, isPending: isLogoutPending } =
@@ -41,7 +37,7 @@ export default function NavItems({ className }: { className?: string }) {
     if ((role && item.roles?.includes(role)) || canShow) {
       return (
         <Link href={item.href} key={item.href} className={className}>
-          {t(item.name)}
+          {item.name}
         </Link>
       );
     }
@@ -52,9 +48,11 @@ export default function NavItems({ className }: { className?: string }) {
     menu.push(
       <ConfirmDialog
         key="logout"
-        title={t('logout')}
+        title="Đăng xuất"
         description={
-          role === Role.Guest ? tl('guest-logout') : tl('account-logout')
+          role === Role.Guest
+            ? 'Bạn có thể sẽ mất đơn hàng của mình'
+            : 'Bạn muốn đăng xuất?'
         }
         onClick={handleLogout}
         isPending={isGuestLogoutPending || isLogoutPending}
@@ -66,32 +64,32 @@ export default function NavItems({ className }: { className?: string }) {
 }
 
 const menuItems: {
-  name: MenuTranslationKeys;
+  name: string;
   href: string;
   roles?: RoleType[];
   hideWhenLogin?: boolean;
 }[] = [
   {
-    name: 'shop',
+    name: 'Shop',
     href: '/',
   },
   {
-    name: 'menu',
+    name: 'Menu',
     href: '/guest/menu',
     roles: [Role.Guest],
   },
   {
-    name: 'order',
+    name: 'Đơn hàng',
     href: '/guest/order',
     roles: [Role.Guest],
   },
   {
-    name: 'login',
+    name: 'Đăng nhập',
     href: '/login',
     hideWhenLogin: true,
   },
   {
-    name: 'dashboard',
+    name: 'Dashboard',
     href: '/manage/dashboard',
     roles: [Role.Owner, Role.Employee],
   },

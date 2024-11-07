@@ -22,7 +22,6 @@ import {
 } from '@/schemaValidations/account.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusCircle, Upload } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 const defaultAccount = {
@@ -33,7 +32,6 @@ const defaultAccount = {
   confirmPassword: '',
 } as const;
 export default function AddEmployee() {
-  const t = useTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
@@ -90,7 +88,7 @@ export default function AddEmployee() {
         <Button size="sm" className="h-7 gap-1" data-testid="add-button">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            {t('accounts.createAccount')}
+            Tạo tài khoản
           </span>
         </Button>
       </DialogTrigger>
@@ -99,7 +97,7 @@ export default function AddEmployee() {
         data-testid="dialog-add-employee"
       >
         <DialogHeader>
-          <DialogTitle>{t('accounts.createAccount')}</DialogTitle>
+          <DialogTitle>Tạo tài khoản</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <Form {...form}>
@@ -142,28 +140,23 @@ export default function AddEmployee() {
                 )}
               />
 
-              <FormInput
-                name="name"
-                label={t('common.name')}
-                required
-                data-testid="name"
-              />
+              <FormInput name="name" label="Tên" required data-testid="name" />
               <FormInput
                 name="email"
-                label={t('common.email')}
+                label="Email"
                 required
                 data-testid="email"
               />
               <FormInput
                 name="password"
-                label={t('common.password')}
+                label="Mật khẩu"
                 required
                 type="password"
                 data-testid="password"
               />
               <FormInput
                 name="confirmPassword"
-                label={t('common.confirmPassword')}
+                label="Xác nhận mật khẩu"
                 required
                 type="password"
                 data-testid="confirmPassword"
@@ -177,7 +170,7 @@ export default function AddEmployee() {
             form="add-employee-form"
             isLoading={isCreatePending || isUploadPending}
           >
-            {t('common.add')}
+            Tạo
           </Button>
         </DialogFooter>
       </DialogContent>

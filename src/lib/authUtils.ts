@@ -1,5 +1,4 @@
 import envConfig from '@/config';
-import { locales } from '@/constants/locale';
 
 export const getOauthGoogleUrl = () => {
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -16,10 +15,4 @@ export const getOauthGoogleUrl = () => {
   };
   const qs = new URLSearchParams(options);
   return `${rootUrl}?${qs.toString()}`;
-};
-export const generatePaths = (base: string | string[]): string[] => {
-  if (Array.isArray(base)) {
-    return locales.flatMap((lang) => base.map((path) => `/${lang}${path}`));
-  }
-  return locales.map((lang) => `/${lang}${base}`);
 };

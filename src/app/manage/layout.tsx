@@ -2,7 +2,6 @@ import DarkModeToggle from '@/components/ui/dark-mode-toggle';
 import DropdownAvatar from '@/app/manage/DropdownAvatar';
 import NavLinks from '@/app/manage/NavLinks';
 import MobileNavLinks from '@/app/manage/MobileNavLinks';
-import { SwitchLocales } from '@/components/_client/SwitchLocales';
 
 export default function Layout({
   children,
@@ -17,7 +16,6 @@ export default function Layout({
           <MobileNavLinks />
           <div className="relative ml-auto flex-1 md:grow-0">
             <div className="flex justify-end gap-4">
-              <SwitchLocales />
               <DarkModeToggle />
             </div>
           </div>

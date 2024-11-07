@@ -31,16 +31,14 @@ import { simpleMatchText } from '@/lib/utils';
 import { GetOrdersResType } from '@/schemaValidations/order.schema';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 type OrderItem = GetOrdersResType['data'][0];
 export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
-  const t = useTranslations();
   return [
     {
       accessorKey: 'tableNumber',
-      header: t('common.tableNumber'),
+      header: 'Số bàn',
       cell: ({ row }) => <div>{row.getValue('tableNumber')}</div>,
       filterFn: (row, columnId, filterValue: string) => {
         if (filterValue === undefined) return true;
@@ -52,13 +50,13 @@ export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
     },
     {
       id: 'guestName',
-      header: t('common.guest'),
+      header: 'Khách',
       cell: function Cell({ row }) {
         const { orderObjectByGuestId } = useOrderContext();
         const guest = row.original.guest;
         return (
           <div>
-            {!guest && t('order.hasBeenDeleted')}
+            {!guest && 'Đã xoá'}
             {guest && (
               <Popover>
                 <PopoverTrigger>
@@ -81,14 +79,14 @@ export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
       filterFn: (row, filterValue: string) => {
         if (!filterValue) return true;
         return simpleMatchText(
-          row.original.guest?.name ?? t('order.hasBeenDeleted'),
+          row.original.guest?.name ?? 'Đã xoá',
           String(filterValue),
         );
       },
     },
     {
       id: 'dishName',
-      header: t('common.dish'),
+      header: 'Món ăn',
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <Popover>
@@ -141,7 +139,7 @@ export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
     },
     {
       accessorKey: 'status',
-      header: t('common.status'),
+      header: 'Trạng thái',
       cell: function Cell({ row }) {
         const { changeStatus } = useOrderContext();
         const changeOrderStatus = async (
@@ -168,7 +166,7 @@ export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
             <SelectContent>
               {OrderStatusValues.map((status) => (
                 <SelectItem key={status} value={status}>
-                  {t(`order.${status}`)}
+                  {status}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -178,12 +176,12 @@ export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
     },
     {
       id: 'orderHandlerName',
-      header: t('order.handler'),
+      header: 'Người xử lí',
       cell: ({ row }) => row.original.orderHandler?.name ?? '',
     },
     {
       accessorKey: 'createdAt',
-      header: t('order.createdUpdatedAt'),
+      header: 'Ngày tạo/ thay đổi',
       cell: ({ row }) => (
         <div className="space-y-2 text-sm">
           <div className="flex items-center space-x-4">
@@ -199,7 +197,7 @@ export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
     },
     {
       id: 'actions',
-      header: t('common.actions'),
+      header: 'Hành động',
       enableHiding: false,
       cell: function Actions({ row }) {
         const { setOrderIdEdit } = useOrderContext();
@@ -220,10 +218,10 @@ export const useOrderTableColumns = (): ColumnDef<OrderItem>[] => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{t('common.actions')}</DropdownMenuLabel>
+              <DropdownMenuLabel>Hành động</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={openEditOrder}>
-                {t('common.edit')}
+                Chỉnh sửa
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

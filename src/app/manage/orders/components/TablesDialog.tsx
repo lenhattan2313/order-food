@@ -15,17 +15,15 @@ import { simpleMatchText } from '@/lib/utils';
 import { useGetTableList } from '@/queries/useTable';
 import { TableListResType } from '@/schemaValidations/table.schema';
 import { ColumnDef } from '@tanstack/react-table';
-import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
 type TableItem = TableListResType['data'][0];
 
 export const useColumns = (): ColumnDef<TableItem>[] => {
-  const t = useTranslations('common');
   return [
     {
       accessorKey: 'number',
-      header: t('tableNumber'),
+      header: 'Bàn số',
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue('number')}</div>
       ),
@@ -39,14 +37,14 @@ export const useColumns = (): ColumnDef<TableItem>[] => {
     },
     {
       accessorKey: 'capacity',
-      header: t('capacity'),
+      header: 'Sức chứa',
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue('capacity')}</div>
       ),
     },
     {
       accessorKey: 'status',
-      header: t('status'),
+      header: 'Trạng thái',
       cell: ({ row }) => (
         <div>{getVietnameseTableStatus(row.getValue('status'))}</div>
       ),
@@ -59,7 +57,6 @@ export function TablesDialog({
 }: {
   onChoose: (table: TableItem) => void;
 }) {
-  const t = useTranslations('order');
   const [open, setOpen] = useState(false);
   const { data, isPending } = useGetTableList();
   const tables = useMemo(
@@ -84,17 +81,17 @@ export function TablesDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{t('change')}</Button>
+        <Button variant="outline">Thay đổi</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-full overflow-auto">
         <DialogHeader>
-          <DialogTitle>{t('pickTable')}</DialogTitle>
+          <DialogTitle>Chọn bàn</DialogTitle>
         </DialogHeader>
         <div>
           <div className="w-full">
             <div className="flex items-center py-4">
               <Input
-                placeholder={t('tableNumber')}
+                placeholder="Bàn số"
                 value={
                   (table.getColumn('number')?.getFilterValue() as string) ?? ''
                 }

@@ -10,7 +10,6 @@ import { formatCurrency } from '@/lib/currency';
 import { useGetIndicatorDashboard } from '@/queries/useIndicator';
 import { format } from 'date-fns';
 import { DollarSign, HandPlatter, Salad, User } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 const initialValue = {
   revenue: 0,
@@ -21,7 +20,6 @@ const initialValue = {
   revenueByDate: [],
 };
 export default function DashboardMain() {
-  const t = useTranslations();
   const [fromDate, setFromDate] = useState(dateRangeDefault.fromDate);
   const [toDate, setToDate] = useState(dateRangeDefault.toDate);
   const resetDateFilter = () => {
@@ -45,50 +43,45 @@ export default function DashboardMain() {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         <div className="flex items-center">
-          <span className="mr-2">{t('common.from')}</span>
+          <span className="mr-2">Từ</span>
           <Input
             type="datetime-local"
-            placeholder={t('common.from')}
+            placeholder="Từ"
             className="text-sm"
             value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
             onChange={(event) => setFromDate(new Date(event.target.value))}
           />
         </div>
         <div className="flex items-center">
-          <span className="mr-2">{t('common.to')}</span>
+          <span className="mr-2">Đến</span>
           <Input
             type="datetime-local"
-            placeholder={t('common.to')}
+            placeholder="Đến"
             value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
             onChange={(event) => setToDate(new Date(event.target.value))}
           />
         </div>
         <Button className="" variant={'outline'} onClick={resetDateFilter}>
-          {t('button.reset')}
+          Reset
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <CardItem
           key="total-revenue"
-          title={t('dashboard.totalRevenue')}
+          title="Tổng doanh thu"
           value={formatCurrency(revenue)}
           icon={DollarSign}
         />
-        <CardItem
-          key="client"
-          title={t('dashboard.client')}
-          value={guestCount}
-          icon={User}
-        />
+        <CardItem key="client" title="Khách" value={guestCount} icon={User} />
         <CardItem
           key="order"
-          title={t('dashboard.order')}
+          title="Đơn hàng"
           value={orderCount}
           icon={Salad}
         />
         <CardItem
           key="table"
-          title={t('dashboard.table')}
+          title="Bàn phục vụ"
           value={servingTableCount}
           icon={HandPlatter}
         />

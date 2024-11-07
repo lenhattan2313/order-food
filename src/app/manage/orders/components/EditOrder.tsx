@@ -23,12 +23,10 @@ import {
   UpdateOrderBodyType,
 } from '@/schemaValidations/order.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function EditOrder() {
-  const t = useTranslations();
   const [selectedDish, setSelectedDish] = useState<
     DishListResType['data'][0] | undefined
   >();
@@ -82,9 +80,9 @@ export default function EditOrder() {
     () =>
       OrderStatusValues.map((status) => ({
         value: status,
-        label: t(`order.${status}`),
+        label: status,
       })),
-    [t],
+    [],
   );
   return (
     <Dialog
@@ -97,7 +95,7 @@ export default function EditOrder() {
     >
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>{t('order.editOrder')}</DialogTitle>
+          <DialogTitle>Chỉnh sửa đơn hàng</DialogTitle>
         </DialogHeader>
         {isPending && <Spinner className="w-full" />}
         <Form {...form}>
@@ -113,7 +111,7 @@ export default function EditOrder() {
                 name="dishId"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-4 items-center justify-items-start gap-4">
-                    <FormLabel>{t('common.dish')}</FormLabel>
+                    <FormLabel>Món ăn</FormLabel>
                     <div className="flex items-center col-span-2 space-x-4">
                       <Avatar className="aspect-square w-[50px] h-[50px] rounded-md object-cover">
                         <AvatarImage
@@ -138,7 +136,7 @@ export default function EditOrder() {
               />
               <FormInput
                 name="quantity"
-                label={t('common.quantity')}
+                label="Số lượng"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 onChange={(e) => {
@@ -156,10 +154,10 @@ export default function EditOrder() {
               />
               <FormSelect
                 name="status"
-                label={t('common.status')}
+                label="Trạng thái"
                 data-testid="select"
                 options={options}
-                placeholder={t('common.status')}
+                placeholder="Trạng thái"
               />
             </div>
           </form>
@@ -170,7 +168,7 @@ export default function EditOrder() {
             form="edit-order-form"
             isLoading={isUpdatePending}
           >
-            {t('common.save')}
+            Lưu
           </Button>
         </DialogFooter>
       </DialogContent>

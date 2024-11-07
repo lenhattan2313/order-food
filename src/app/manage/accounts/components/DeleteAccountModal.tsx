@@ -4,10 +4,7 @@ import { useAccountContext } from '@/context/accountContext';
 import { toast } from '@/hooks/use-toast';
 import { handleApiError } from '@/lib/utils';
 import { useDeleteEmployee } from '@/queries/useAccount';
-import { useTranslations } from 'next-intl';
 export function DeleteAccountModal() {
-  const t = useTranslations('accounts');
-  const tb = useTranslations('button');
   const { setEmployeeDelete, employeeDelete } = useAccountContext();
   const { mutateAsync, isPending } = useDeleteEmployee();
 
@@ -23,18 +20,18 @@ export function DeleteAccountModal() {
   }
   return (
     <Dialog
-      title={t('deleteTitle')}
+      title="Xoá nhân viên?"
       description={
         <>
           <span className="bg-foreground text-primary-foreground rounded px-1">
             {employeeDelete?.name}
           </span>{' '}
-          {t('deleteDesc')}
+          sẽ bị xoá vĩnh viễn
         </>
       }
       footer={[
         <Button onClick={handleDelete} isLoading={isPending} key="continue">
-          {tb('continue')}
+          Tiếp tục
         </Button>,
       ]}
       open={Boolean(employeeDelete)}
