@@ -1,4 +1,3 @@
-import Footer from '@/components/_client/Footer';
 import { AuthProvider } from '@/components/provider/auth-provider';
 import ReactQueryProvider from '@/components/provider/react-query-provider';
 import { ThemeProvider } from '@/components/provider/theme-provider';
@@ -42,8 +41,6 @@ export default function RootLayout({
           >
             <ReactQueryProvider>
               {children}
-              <Footer />
-
               <Toaster />
             </ReactQueryProvider>
           </ThemeProvider>

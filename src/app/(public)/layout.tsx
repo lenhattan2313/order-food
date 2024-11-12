@@ -1,4 +1,5 @@
 import NavItems from '@/app/(public)/NavItem';
+import Footer from '@/components/_client/Footer';
 import { Button } from '@/components/ui/button';
 import DarkModeToggle from '@/components/ui/dark-mode-toggle';
 import {
@@ -75,6 +76,7 @@ export default function Layout({
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
           {children}
         </main>
+        <Footer />
       </div>
       {modal}
     </>

@@ -23,7 +23,7 @@ export const getTableLink = ({
 }) => {
   return (
     envConfig.NEXT_PUBLIC_BASE_URL +
-    `/tables/` +
+    `/guest/tables/` +
     tableNumber +
     '?token=' +
     token
