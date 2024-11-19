@@ -20,7 +20,10 @@ export default function GuestHome() {
         <DarkModeToggle />
       </header>
       <main>
-        <section id="slider" className="slider-container my-4">
+        <section
+          id="slider"
+          className="slider-container my-4 min-h-52 overflow-hidden"
+        >
           <Carousel />
         </section>
         <section id="info">

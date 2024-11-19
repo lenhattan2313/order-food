@@ -7,19 +7,19 @@ export const Service = () => {
       <div className="grid grid-cols-3 gap-4">
         <Button
           variant="ghost"
-          className="flex flex-col items-center gap-2 h-auto p-4 hover:bg-orange-100"
+          className="flex flex-col items-center gap-2 h-auto p-4 hover:bg-orange-100 dark:hover:text-black"
         >
           <div className="w-12 h-12 bg-orange-400 rounded-xl flex items-center justify-center">
             <Receipt className="w-6 h-6 text-white" />
           </div>
-          <span className="text-sm font-medium text-center">
+          <span className="text-sm font-medium text-center ">
             Gọi thanh toán
           </span>
         </Button>
 
         <Button
           variant="ghost"
-          className="flex flex-col items-center gap-2 h-auto p-4 hover:bg-blue-100"
+          className="flex flex-col items-center gap-2 h-auto p-4 hover:bg-blue-100 dark:hover:text-black"
         >
           <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
             <User2 className="w-6 h-6 text-white" />
@@ -29,7 +29,7 @@ export const Service = () => {
 
         <Button
           variant="ghost"
-          className="flex flex-col items-center gap-2 h-auto p-4 hover:bg-green-100"
+          className="flex flex-col items-center gap-2 h-auto p-4 hover:bg-green-100 dark:hover:text-black"
         >
           <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
             <MessageSquare className="w-6 h-6 text-white" />

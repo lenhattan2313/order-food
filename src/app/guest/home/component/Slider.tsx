@@ -13,27 +13,26 @@ const sliderSettings: Settings = {
   speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,
+  autoplay: true,
   customPaging: function (i) {
     return <button className={styles.slickDots} />;
   },
 };
-const images = ['/slider-3.jpg', '/slider-2.jpg', '/slider-1.jpg'];
+const images = ['/slider-1.jpeg', '/slider-2.jpeg', '/slider-3.jpg'];
 export const Carousel = () => {
   return (
-    <div>
-      <Slider {...sliderSettings} className={styles.slickDots}>
-        {images.map((src, index) => (
-          <div key={index} className="!flex justify-center h-48">
-            <Image
-              src={src}
-              alt={`Slide ${index + 1}`}
-              className="object-cover h-full w-full rounded-lg"
-              width={100}
-              height={50}
-            />
-          </div>
-        ))}
-      </Slider>
-    </div>
+    <Slider {...sliderSettings} className={styles.slickDots}>
+      {images.map((src, index) => (
+        <div key={index} className="!flex justify-center h-48">
+          <Image
+            src={src}
+            alt={`Slide ${index + 1}`}
+            className="object-cover h-full w-full rounded-lg"
+            width={100}
+            height={50}
+          />
+        </div>
+      ))}
+    </Slider>
   );
 };

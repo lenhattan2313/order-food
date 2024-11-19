@@ -16,7 +16,9 @@ export const Greeting = () => {
       </p>
       <p className="text-sm text-center">
         Chúng tôi sẽ trả đồ ăn cho bạn tại bàn:{' '}
-        <span className="border py-1 px-2 rounded-full border-black">24</span>
+        <span className="border py-1 px-2 rounded-full border-black dark:border-white">
+          24
+        </span>
       </p>
     </>
   );
