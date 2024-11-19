@@ -43,7 +43,7 @@ export default function GuestLoginForm() {
       decodeRole && setRole(decodeRole.role);
       socket.connect();
       toast({ description: message });
-      router.push('/guest/menu');
+      router.push('/guest/home');
     } catch (error) {
       handleApiError(error, form.setError);
     }

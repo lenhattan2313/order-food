@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function TableNumberPage() {
   return (
-    <div className="flex justify-center items-center flex-col m-8">
+    <div className="flex justify-center items-center flex-col m-4">
       <div className="w-full h-full flex justify-center">
         <Image
           src="/logo.png"

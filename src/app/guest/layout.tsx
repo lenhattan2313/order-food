@@ -1,5 +1,5 @@
 export default function GuestLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <>{children}</>;
+  return <main className="m-4">{children}</main>;
 }
