@@ -11,7 +11,7 @@ export const Greeting = () => {
   //TODO: Create get and update info guest
   return (
     <>
-      <p className="text-md text-center mt-8">
+      <p className="text-md text-center mt-2">
         {greeting} <span className="font-bold text-sky-400">Tan</span>
       </p>
       <p className="text-sm text-center">

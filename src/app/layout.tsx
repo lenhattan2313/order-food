@@ -27,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={'vi'} suppressHydrationWarning>
-      <body className={inter.className}>
+      <body
+        className={`${inter.className} bg-gradient-to-b from-gray-100 to-white dark:from-black dark:to-black min-h-screen`}
+      >
         <NextTopLoader
           showSpinner={false}
           color="hsl(var(--muted-foreground))"
