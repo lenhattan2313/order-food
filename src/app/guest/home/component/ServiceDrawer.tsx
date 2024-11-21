@@ -33,10 +33,10 @@ export function ServiceDrawer({
       <DrawerTrigger asChild>
         <Button
           variant="outline"
-          className={`flex flex-col items-center gap-2 h-auto p-2rounded-lg`}
+          className={`flex flex-col items-center gap-2 h-auto p-4 rounded-lg`}
         >
           <div
-            className={`w-10 h-10 bg-${buttonColor}-500 rounded-sm flex items-center justify-center`}
+            className={`w-10 h-10 ${buttonColor} rounded-sm flex items-center justify-center`}
           >
             <Icon className="w-6 h-6 text-white" />
           </div>
@@ -50,10 +50,7 @@ export function ServiceDrawer({
           </DrawerHeader>
           <div className="p-4">
             {children}
-            <Button
-              className={`w-full mt-6 bg-${buttonColor}-500`}
-              onClick={() => setOpen(false)}
-            >
+            <Button className={`w-full mt-6`} onClick={() => setOpen(false)}>
               Gửi yêu cầu
             </Button>
           </div>

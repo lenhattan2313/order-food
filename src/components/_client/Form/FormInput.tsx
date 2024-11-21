@@ -1,11 +1,11 @@
 import { FormLabel } from '@/components/_client/Form';
+import { Input, InputProps } from '@/components/_client/Form/Input';
 import {
   FormControl,
   FormField,
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { Input, InputProps } from '@/components/ui/input';
 import { ReactNode } from 'react';
 import { useFormContext } from 'react-hook-form';
 
